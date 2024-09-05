@@ -37,7 +37,7 @@ public class PackagePacker {
     }
 
     public static void main(String[] args) {
-        String filePath = "/home/paul/IdeaProjects/ConcoleProcels/input-data.txt";
+        String filePath = "/home/paul/IdeaProjects/ConsoleParcels/input-data.txt";
 
         try {
             List<Package> packages = PackageReader.readPackages(filePath);
