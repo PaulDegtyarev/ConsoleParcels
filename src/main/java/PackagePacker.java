@@ -23,9 +23,9 @@ public class PackagePacker {
                     break;
                 }
             }
-//            if (!placed) {
-//                System.out.println("Warning: Package " + pkg.getId() + " too large to fit in any truck. Skipping.");
-//            }
+            if (!placed) {
+                System.out.println("Warning: Package " + pkg.getId() + " too large to fit in any truck. Skipping.");
+            }
         }
     }
 
