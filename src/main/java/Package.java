@@ -8,14 +8,12 @@ public class Package {
         this.height = lines.length;
 
         this.width = 0;
-        for(String line : lines) {
-            if(line.length() > this.width) {
-                this.width = line.length();
-            }
+        for (String line : lines) {
+            this.width = Math.max(this.width, line.length());
         }
 
-        for(String line : lines) {
-            if(!line.isEmpty()) {
+        for (String line : lines) {
+            if (!line.isEmpty()) {
                 this.id = line.charAt(0);
                 break;
             }
@@ -32,5 +30,9 @@ public class Package {
 
     public char getId() {
         return id;
+    }
+
+    public int getArea() {
+        return width * height;
     }
 }

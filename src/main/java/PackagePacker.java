@@ -11,10 +11,14 @@ public class PackagePacker {
     }
 
     public void packPackages(List<Package> packages) {
+        // Сортировка пакетов по убыванию площади
+        packages.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
+
         for (Package pkg : packages) {
-            System.out.println("height - " + pkg.getHeight());
-            System.out.println("width - " + pkg.getWidth());
+            System.out.println("Trying to place package " + pkg.getId() + " with height " + pkg.getHeight() + " and width " + pkg.getWidth());
+
             boolean placed = false;
+
             for (Truck truck : trucks) {
                 Point position = truck.findPosition(pkg);
                 if (position != null) {
@@ -23,8 +27,14 @@ public class PackagePacker {
                     break;
                 }
             }
+
             if (!placed) {
-                System.out.println("Warning: Package " + pkg.getId() + " too large to fit in any truck. Skipping.");
+                Truck newTruck = new Truck();
+                Point position = newTruck.findPosition(pkg);
+                if (position != null) {
+                    newTruck.place(pkg, position.getX(), position.getY());
+                    trucks.add(newTruck);
+                }
             }
         }
     }

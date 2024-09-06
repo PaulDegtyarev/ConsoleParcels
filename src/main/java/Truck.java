@@ -25,7 +25,6 @@ public class Truck {
             }
         }
 
-        // Проверка наличия опоры снизу только для нижнего ряда пакета
         if (y + pkg.getHeight() < TRUCK_HEIGHT) {
             boolean hasSupport = false;
             for (int j = 0; j < pkg.getWidth(); j++) {
@@ -35,7 +34,7 @@ public class Truck {
                 }
             }
             if (!hasSupport) {
-                return false; // пакет не может "левитировать"
+                return false;
             }
         }
 
@@ -73,9 +72,5 @@ public class Truck {
         }
         System.out.println("++++++++");
         System.out.println();
-    }
-
-    public static int getTruckHeight() {
-        return TRUCK_HEIGHT;
     }
 }
