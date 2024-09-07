@@ -45,9 +45,12 @@ public class Truck {
         if (x + pkg.getWidth() > TRUCK_WIDTH || y + pkg.getHeight() > TRUCK_HEIGHT) {
             throw new IllegalArgumentException("Package does not fit at the specified position");
         }
+        char[][] shape = pkg.getShape();
         for (int i = 0; i < pkg.getHeight(); i++) {
             for (int j = 0; j < pkg.getWidth(); j++) {
-                space[y + i][x + j] = pkg.getId();
+                if (shape[i][j] != ' ') {
+                    space[y + i][x + j] = shape[i][j]; // Копируем каждый символ формы пакета
+                }
             }
         }
     }

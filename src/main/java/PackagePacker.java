@@ -11,7 +11,6 @@ public class PackagePacker {
     }
 
     public void packPackages(List<Package> packages) {
-        // Сортировка пакетов по убыванию площади
         packages.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
 
         for (Package pkg : packages) {
