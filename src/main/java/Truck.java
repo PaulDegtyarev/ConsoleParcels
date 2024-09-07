@@ -26,14 +26,13 @@ public class Truck {
         }
 
         if (y + pkg.getHeight() < TRUCK_HEIGHT) {
-            boolean hasSupport = false;
+            int supportCount = 0;
             for (int j = 0; j < pkg.getWidth(); j++) {
                 if (space[y + pkg.getHeight()][x + j] != ' ') {
-                    hasSupport = true;
-                    break;
+                    supportCount++;
                 }
             }
-            if (!hasSupport) {
+            if (supportCount <= pkg.getWidth() / 2) {
                 return false;
             }
         }
