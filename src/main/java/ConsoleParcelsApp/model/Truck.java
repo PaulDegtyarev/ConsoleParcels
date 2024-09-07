@@ -1,3 +1,5 @@
+package ConsoleParcelsApp.model;
+
 import java.util.Arrays;
 
 public class Truck {
@@ -12,7 +14,7 @@ public class Truck {
         }
     }
 
-    public boolean canFit(Package pkg, int x, int y) {
+    public boolean canFit(Parcel pkg, int x, int y) {
         if (x + pkg.getWidth() > TRUCK_WIDTH || y + pkg.getHeight() > TRUCK_HEIGHT) {
             return false;
         }
@@ -40,9 +42,9 @@ public class Truck {
         return true;
     }
 
-    public void place(Package pkg, int x, int y) {
+    public void place(Parcel pkg, int x, int y) {
         if (x + pkg.getWidth() > TRUCK_WIDTH || y + pkg.getHeight() > TRUCK_HEIGHT) {
-            throw new IllegalArgumentException("Package does not fit at the specified position");
+            throw new IllegalArgumentException("model.Package does not fit at the specified position");
         }
         char[][] shape = pkg.getShape();
         for (int i = 0; i < pkg.getHeight(); i++) {
@@ -54,7 +56,7 @@ public class Truck {
         }
     }
 
-    public Point findPosition(Package pkg) {
+    public Point findPosition(Parcel pkg) {
         for (int y = TRUCK_HEIGHT - pkg.getHeight(); y >= 0; y--) {
             for (int x = 0; x <= TRUCK_WIDTH - pkg.getWidth(); x++) {
                 if (canFit(pkg, x, y)) {

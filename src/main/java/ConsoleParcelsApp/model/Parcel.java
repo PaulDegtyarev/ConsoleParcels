@@ -1,10 +1,12 @@
-public class Package {
+package ConsoleParcelsApp.model;
+
+public class Parcel {
     private int height;
     private int width;
     private char id;
     private char[][] shape;
 
-    public Package(String input) {
+    public Parcel(String input) {
         String[] lines = input.split("\n");
         this.height = lines.length;
 
