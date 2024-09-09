@@ -18,15 +18,16 @@ public class Truck {
         }
         for (int i = 0; i < parcel.getHeight(); i++) {
             for (int j = 0; j < parcel.getWidth(); j++) {
-                if (space[y + i][x + j] != ' ') {
+                if (parcel.getShape()[i][j] != ' ' && space[y + i][x + j] != ' ') {
                     return false;
                 }
             }
         }
+        // Проверка на поддержку снизу
         if (y + parcel.getHeight() < TRUCK_HEIGHT) {
             boolean hasSupport = false;
             for (int j = 0; j < parcel.getWidth(); j++) {
-                if (space[y + parcel.getHeight()][x + j] != ' ') {
+                if (parcel.getShape()[parcel.getHeight() - 1][j] != ' ' && space[y + parcel.getHeight()][x + j] != ' ') {
                     hasSupport = true;
                     break;
                 }
@@ -41,7 +42,6 @@ public class Truck {
         char[][] shape = parcel.getShape();
         for (int i = 0; i < parcel.getHeight(); i++) {
             for (int j = 0; j < parcel.getWidth(); j++) {
-                space[y + i][x + j] = parcel.getId();
                 if (shape[i][j] != ' ') {
                     space[y + i][x + j] = shape[i][j];
                 }
