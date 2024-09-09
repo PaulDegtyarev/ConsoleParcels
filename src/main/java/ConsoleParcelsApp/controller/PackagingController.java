@@ -16,7 +16,7 @@ public class PackagingController {
 
         String filePath = scanner.nextLine();
 
-        System.out.print("Выберите алгоритм (1 - обычный, 2 - один грузовик на одну посылку): ");
+        System.out.print("Выберите алгоритм:\n1 - занимает максимальное пространство грузовика\n2 - один грузовик на одну посылку\n");
 
         int algorithmChoice = scanner.nextInt();
         scanner.nextLine();
