@@ -8,6 +8,7 @@ public class Parcel {
 
     public Parcel(String input) {
         String[] lines = input.split("\n");
+
         this.height = lines.length;
 
         this.width = 0;
@@ -16,7 +17,6 @@ public class Parcel {
         }
 
         this.shape = new char[height][width];
-
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < lines[i].length(); j++) {
                 shape[i][j] = lines[i].charAt(j);

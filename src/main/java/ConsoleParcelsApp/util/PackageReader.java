@@ -1,4 +1,4 @@
-package ConsoleParcelsApp;
+package ConsoleParcelsApp.util;
 
 import ConsoleParcelsApp.model.Parcel;
 
@@ -21,12 +21,13 @@ public class PackageReader {
             "999\n999\n999"
     };
 
-    public static boolean isValidParcel(String input) {
+    public boolean isValidParcel(String input) {
         for (String allowedParcel : ALLOWED_PARCELS) {
             if (input.trim().equals(allowedParcel.trim())) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -41,16 +42,20 @@ public class PackageReader {
                 if (line.trim().isEmpty()) {
                     if (!parcelData.isEmpty()) {
                         String shape = parcelData.toString().trim();
+
                         if (isValidParcel(shape)) {
                             parcels.add(new Parcel(shape));
-                        } else {
-                            System.out.println("Invalid package shape: " + shape);
+                        }
+
+                        else {
                             throw new IllegalArgumentException("Invalid package shape: " + shape);
                         }
 
                         parcelData.setLength(0);
                     }
-                } else {
+                }
+
+                else {
                     parcelData.append(line).append("\n");
                 }
             }
@@ -60,12 +65,14 @@ public class PackageReader {
 
                 if (isValidParcel(shape)) {
                     parcels.add(new Parcel(shape));
-                } else {
-                    System.out.println("Invalid package shape: " + shape);
+                }
+
+                else {
                     throw new IllegalArgumentException("Invalid package shape: " + shape);
                 }
             }
         }
+
         return parcels;
     }
 }

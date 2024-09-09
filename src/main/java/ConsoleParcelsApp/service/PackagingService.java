@@ -1,11 +1,11 @@
 package ConsoleParcelsApp.service;
 
-import ConsoleParcelsApp.model.Parcel;
-
-import java.util.List;
+import java.io.IOException;
 
 public interface PackagingService {
-    void packPackages(List<Parcel> packages);
+
+
+    void packPackages(String filePath) throws IOException;
 
     void printResults();
 }
