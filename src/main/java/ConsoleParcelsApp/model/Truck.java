@@ -6,67 +6,58 @@ public class Truck {
     private static final int TRUCK_WIDTH = 6;
     private static final int TRUCK_HEIGHT = 6;
     private char[][] space;
-
     public Truck() {
         space = new char[TRUCK_HEIGHT][TRUCK_WIDTH];
         for (char[] row : space) {
             Arrays.fill(row, ' ');
         }
     }
-
-    public boolean canFit(Parcel pkg, int x, int y) {
-        if (x + pkg.getWidth() > TRUCK_WIDTH || y + pkg.getHeight() > TRUCK_HEIGHT) {
+    public boolean canFit(Parcel parcel, int x, int y) {
+        if (x + parcel.getWidth() > TRUCK_WIDTH || y + parcel.getHeight() > TRUCK_HEIGHT) {
             return false;
         }
-
-        for (int i = 0; i < pkg.getHeight(); i++) {
-            for (int j = 0; j < pkg.getWidth(); j++) {
+        for (int i = 0; i < parcel.getHeight(); i++) {
+            for (int j = 0; j < parcel.getWidth(); j++) {
                 if (space[y + i][x + j] != ' ') {
                     return false;
                 }
             }
         }
-
-        if (y + pkg.getHeight() < TRUCK_HEIGHT) {
-            int supportCount = 0;
-            for (int j = 0; j < pkg.getWidth(); j++) {
-                if (space[y + pkg.getHeight()][x + j] != ' ') {
-                    supportCount++;
+        if (y + parcel.getHeight() < TRUCK_HEIGHT) {
+            boolean hasSupport = false;
+            for (int j = 0; j < parcel.getWidth(); j++) {
+                if (space[y + parcel.getHeight()][x + j] != ' ') {
+                    hasSupport = true;
+                    break;
                 }
             }
-            if (supportCount <= pkg.getWidth() / 2) {
+            if (!hasSupport) {
                 return false;
             }
         }
-
         return true;
     }
-
-    public void place(Parcel pkg, int x, int y) {
-        if (x + pkg.getWidth() > TRUCK_WIDTH || y + pkg.getHeight() > TRUCK_HEIGHT) {
-            throw new IllegalArgumentException("model.Package does not fit at the specified position");
-        }
-        char[][] shape = pkg.getShape();
-        for (int i = 0; i < pkg.getHeight(); i++) {
-            for (int j = 0; j < pkg.getWidth(); j++) {
+    public void place(Parcel parcel, int x, int y) {
+        char[][] shape = parcel.getShape();
+        for (int i = 0; i < parcel.getHeight(); i++) {
+            for (int j = 0; j < parcel.getWidth(); j++) {
+                space[y + i][x + j] = parcel.getId();
                 if (shape[i][j] != ' ') {
-                    space[y + i][x + j] = shape[i][j]; // Копируем каждый символ формы пакета
+                    space[y + i][x + j] = shape[i][j];
                 }
             }
         }
     }
-
-    public Point findPosition(Parcel pkg) {
-        for (int y = TRUCK_HEIGHT - pkg.getHeight(); y >= 0; y--) {
-            for (int x = 0; x <= TRUCK_WIDTH - pkg.getWidth(); x++) {
-                if (canFit(pkg, x, y)) {
+    public Point findPosition(Parcel parcel) {
+        for (int y = TRUCK_HEIGHT - parcel.getHeight(); y >= 0; y--) {
+            for (int x = 0; x <= TRUCK_WIDTH - parcel.getWidth(); x++) {
+                if (canFit(parcel, x, y)) {
                     return new Point(x, y);
                 }
             }
         }
         return null;
     }
-
     public void print() {
         System.out.println("+      +");
         for (char[] row : space) {

@@ -1,18 +1,18 @@
-package ConsoleParcelsApp.packer.impl;
+package ConsoleParcelsApp.service.impl;
 
 
 import ConsoleParcelsApp.model.Parcel;
 import ConsoleParcelsApp.model.Point;
 import ConsoleParcelsApp.model.Truck;
-import ConsoleParcelsApp.packer.ParcelPacker;
+import ConsoleParcelsApp.service.PackagingService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptimizedParcelPackerImpl implements ParcelPacker {
+public class OptimizedPackagingServiceImpl implements PackagingService {
     private List<Truck> trucks;
 
-    public OptimizedParcelPackerImpl() {
+    public OptimizedPackagingServiceImpl() {
         trucks = new ArrayList<>();
         trucks.add(new Truck());
     }
@@ -23,9 +23,7 @@ public class OptimizedParcelPackerImpl implements ParcelPacker {
 
         for (Parcel parcel : packages) {
             System.out.println("Trying to place package " + parcel.getId() + " with height " + parcel.getHeight() + " and width " + parcel.getWidth());
-
             boolean placed = false;
-
             for (Truck truck : trucks) {
                 Point position = truck.findPosition(parcel);
                 if (position != null) {
@@ -34,7 +32,6 @@ public class OptimizedParcelPackerImpl implements ParcelPacker {
                     break;
                 }
             }
-
             if (!placed) {
                 Truck newTruck = new Truck();
                 Point position = newTruck.findPosition(parcel);

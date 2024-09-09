@@ -1,17 +1,17 @@
-package ConsoleParcelsApp.packer.impl;
+package ConsoleParcelsApp.service.impl;
 
 import ConsoleParcelsApp.model.Parcel;
 import ConsoleParcelsApp.model.Point;
 import ConsoleParcelsApp.model.Truck;
-import ConsoleParcelsApp.packer.ParcelPacker;
+import ConsoleParcelsApp.service.PackagingService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleParcelPackerImpl implements ParcelPacker {
+public class SinglePackagingServiceImpl implements PackagingService {
     private List<Truck> trucks;
 
-    public SingleParcelPackerImpl() {
+    public SinglePackagingServiceImpl() {
         trucks = new ArrayList<>();
     }
 
@@ -21,12 +21,8 @@ public class SingleParcelPackerImpl implements ParcelPacker {
             Truck truck = new Truck();
             Point position = truck.findPosition(parcel);
 
-            if (position == null) {
-                System.out.println("Package " + parcel.getId() + " does not fit in a single truck.");
-            } else {
-                truck.place(parcel, position.getX(), position.getY());
-                trucks.add(truck);
-            }
+            truck.place(parcel, position.getX(), position.getY());
+            trucks.add(truck);
         }
     }
 

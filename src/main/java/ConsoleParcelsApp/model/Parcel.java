@@ -22,13 +22,11 @@ public class Parcel {
                 shape[i][j] = lines[i].charAt(j);
             }
 
-            // Заполнение пробелами оставшегося места, если строка короче максимальной ширины
             for (int j = lines[i].length(); j < width; j++) {
                 shape[i][j] = ' ';
             }
         }
 
-        // Устанавливаем id как первый символ первой непустой строки
         for (String line : lines) {
             if (!line.isEmpty()) {
                 this.id = line.charAt(0);
