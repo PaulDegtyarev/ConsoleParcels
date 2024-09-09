@@ -31,7 +31,7 @@ public class PackageReaderTest {
     }
 
     @Test
-    public void readPackagesSuccess() throws IOException {
+    void readPackagesSuccess() throws IOException {
         String filePath = "src/test/resources/input/valid-input-data.txt";
 
         List<Parcel> parcels = packageReader.readPackages(filePath);
