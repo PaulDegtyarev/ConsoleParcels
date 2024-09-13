@@ -1,12 +1,15 @@
 package ConsoleParcelsApp.service;
 
+import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.impl.OptimizedPackagingServiceImpl;
+import ConsoleParcelsApp.util.PackageReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 public class OptimizedPackagingServiceImplTest {
@@ -15,13 +18,13 @@ public class OptimizedPackagingServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        service = new OptimizedPackagingServiceImpl();
+        service = new OptimizedPackagingServiceImpl(new PackageReader());
     }
 
     @Test
-    public void packPackagesSuccess() throws IOException {
-        service.packPackages(filePath);
+    public void packPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
+        List<Truck> expectedResult = service.packPackages(filePath);
 
-        assertEquals(1, service.getTrucks().size());
+        assertThat(expectedResult.size()).isEqualTo(1);
     }
 }

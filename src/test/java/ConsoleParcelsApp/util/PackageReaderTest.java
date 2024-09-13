@@ -13,25 +13,25 @@ public class PackageReaderTest {
     private PackageReader packageReader = new PackageReader();
 
     @Test
-    void readPackagesShouldThrowIOExceptionWhenFileDoesNotExist() {
+    void readPackages_withNonExistenceFile_shouldThrowRuntimeException() {
         String filePath = "/home/non-existent-file.txt";
 
         assertThrows(
-                IOException.class,
+                RuntimeException.class,
                 () -> packageReader.readPackages(filePath));
     }
 
     @Test
-    void readPackagesShouldReturnIllegalArgumentExceptionWhenDataIsWrong() {
+    void readPackages_withWrongData_shouldReturnRuntimeException() {
         String filePath = "src/test/resources/input/wrong-input-data.txt";
 
         assertThrows(
-                IllegalArgumentException.class,
+                RuntimeException.class,
                 () -> packageReader.readPackages(filePath));
     }
 
     @Test
-    void readPackagesSuccess() throws IOException {
+    void readPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
         String filePath = "src/test/resources/input/valid-input-data.txt";
 
         List<Parcel> parcels = packageReader.readPackages(filePath);

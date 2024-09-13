@@ -11,19 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OptimizedPackagingServiceImpl implements PackagingService {
-    private List<Truck> trucks;
-    private PackageReader packageReader = new PackageReader();
+    private PackageReader packageReader;
 
-    public OptimizedPackagingServiceImpl() {
-        trucks = new ArrayList<>();
-        trucks.add(new Truck());
+    public OptimizedPackagingServiceImpl(PackageReader packageReader) {
+        this.packageReader = packageReader;
+
     }
 
     @Override
-    public void packPackages(String filePath) throws IOException {
+    public List<Truck> packPackages(String filePath) throws IOException {
         List<Parcel> parcels = packageReader.readPackages(filePath);
 
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
+
+        List<Truck> trucks = new ArrayList<>();
+        trucks.add(new Truck());
 
         for (Parcel parcel : parcels) {
             System.out.println("Trying to place package " + parcel.getId() + " with height " + parcel.getHeight() + " and width " + parcel.getWidth());
@@ -51,18 +53,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
                 }
             }
         }
-    }
 
-    @Override
-    public void printResults() {
-        for (int i = 0; i < trucks.size(); i++) {
-            System.out.println("Truck " + (i + 1) + ":");
-
-            trucks.get(i).print();
-        }
-    }
-
-    public List<Truck> getTrucks() {
         return trucks;
     }
 }

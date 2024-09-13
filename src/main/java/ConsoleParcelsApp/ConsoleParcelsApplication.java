@@ -6,6 +6,6 @@ public class ConsoleParcelsApplication {
     private static PackagingController packagingController = new PackagingController();
 
     public static void main(String[] args) {
-        packagingController.getUserRequest();
+        packagingController.handleUserSelection();
     }
 }

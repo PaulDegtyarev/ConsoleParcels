@@ -21,7 +21,7 @@ public class PackageReader {
             "999\n999\n999"
     };
 
-    public boolean isValidParcel(String input) {
+    private boolean isValidParcel(String input) {
         for (String allowedParcel : ALLOWED_PARCELS) {
             if (input.trim().equals(allowedParcel.trim())) {
                 return true;
@@ -31,7 +31,7 @@ public class PackageReader {
         return false;
     }
 
-    public List<Parcel> readPackages(String filename) throws IOException {
+    public List<Parcel> readPackages(String filename) {
         List<Parcel> parcels = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -48,7 +48,7 @@ public class PackageReader {
                         }
 
                         else {
-                            throw new IllegalArgumentException("Invalid package shape: " + shape);
+                            throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                         }
 
                         parcelData.setLength(0);
@@ -68,9 +68,13 @@ public class PackageReader {
                 }
 
                 else {
-                    throw new IllegalArgumentException("Invalid package shape: " + shape);
+                    throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                 }
             }
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return parcels;

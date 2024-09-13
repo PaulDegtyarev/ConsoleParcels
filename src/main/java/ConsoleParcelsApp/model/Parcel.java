@@ -1,5 +1,8 @@
 package ConsoleParcelsApp.model;
 
+import lombok.Getter;
+
+@Getter
 public class Parcel {
     private int height;
     private int width;
@@ -33,22 +36,6 @@ public class Parcel {
                 break;
             }
         }
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public char getId() {
-        return id;
-    }
-
-    public char[][] getShape() {
-        return shape;
     }
 
     public int getArea() {

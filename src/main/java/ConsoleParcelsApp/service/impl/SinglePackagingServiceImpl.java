@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SinglePackagingServiceImpl implements PackagingService {
-    private List<Truck> trucks;
-    private PackageReader packageReader = new PackageReader();
+    private PackageReader packageReader;
 
-    public SinglePackagingServiceImpl() {
-        trucks = new ArrayList<>();
+    public SinglePackagingServiceImpl(PackageReader packageReader) {
+        this.packageReader = packageReader;
     }
 
     @Override
-    public void packPackages(String filePath) throws IOException {
+    public List<Truck> packPackages(String filePath) throws IOException {
         List<Parcel> parcels = packageReader.readPackages(filePath);
+
+        List<Truck> trucks = new ArrayList<>();
 
         for (Parcel parcel : parcels) {
             Truck truck = new Truck();
@@ -31,18 +32,7 @@ public class SinglePackagingServiceImpl implements PackagingService {
 
             trucks.add(truck);
         }
-    }
 
-    @Override
-    public void printResults() {
-        for (int i = 0; i < trucks.size(); i++) {
-            System.out.println("Truck " + (i + 1) + ":");
-
-            trucks.get(i).print();
-        }
-    }
-
-    public List<Truck> getTrucks() {
         return trucks;
     }
 }

@@ -2,7 +2,7 @@ package ConsoleParcelsApp.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParcelTest {
@@ -20,14 +20,16 @@ public class ParcelTest {
                 {'7', '7', '7', ' '},
                 {'7', '7', '7', '7'}
         };
-        assertArrayEquals(expectedShape, parcel.getShape());
+
+        assertThat(expectedShape).isEqualTo(parcel.getShape());
     }
 
     @Test
     public void testParcelArea() {
         String input = "33\n33";
         Parcel parcel = new Parcel(input);
-        assertEquals(4, parcel.getArea());
+
+        assertThat(parcel.getArea()).isEqualTo(4);
     }
 
 }
