@@ -9,6 +9,7 @@ import ConsoleParcelsApp.util.PackageReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SinglePackagingServiceImpl implements PackagingService {
     private PackageReader packageReader;
@@ -26,9 +27,9 @@ public class SinglePackagingServiceImpl implements PackagingService {
         for (Parcel parcel : parcels) {
             Truck truck = new Truck();
 
-            Point position = truck.findPosition(parcel);
+            Optional<Point> position = truck.findPosition(parcel);
 
-            truck.place(parcel, position.getX(), position.getY());
+            truck.place(parcel, position.get().getX(), position.get().getY());
 
             trucks.add(truck);
         }

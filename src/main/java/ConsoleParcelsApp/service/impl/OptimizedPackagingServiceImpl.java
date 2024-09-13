@@ -9,6 +9,7 @@ import ConsoleParcelsApp.util.PackageReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OptimizedPackagingServiceImpl implements PackagingService {
     private PackageReader packageReader;
@@ -33,10 +34,10 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
             boolean placed = false;
 
             for (Truck truck : trucks) {
-                Point position = truck.findPosition(parcel);
+                Optional<Point> position = truck.findPosition(parcel);
 
-                if (position != null) {
-                    truck.place(parcel, position.getX(), position.getY());
+                if (position.isPresent()) {
+                    truck.place(parcel, position.get().getX(), position.get().getY());
                     placed = true;
                     break;
                 }
@@ -45,10 +46,10 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
             if (!placed) {
                 Truck newTruck = new Truck();
 
-                Point position = newTruck.findPosition(parcel);
+                Optional<Point> position = newTruck.findPosition(parcel);
 
-                if (position != null) {
-                    newTruck.place(parcel, position.getX(), position.getY());
+                if (position.isPresent()) {
+                    newTruck.place(parcel, position.get().getX(), position.get().getY());
                     trucks.add(newTruck);
                 }
             }

@@ -1,6 +1,7 @@
 package ConsoleParcelsApp.model;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Truck {
     private static final int TRUCK_WIDTH = 6;
@@ -56,16 +57,16 @@ public class Truck {
         }
     }
 
-    public Point findPosition(Parcel parcel) {
+    public Optional<Point> findPosition(Parcel parcel) {
         for (int y = TRUCK_HEIGHT - parcel.getHeight(); y >= 0; y--) {
             for (int x = 0; x <= TRUCK_WIDTH - parcel.getWidth(); x++) {
                 if (canFit(parcel, x, y)) {
-                    return new Point(x, y);
+                    return Optional.of(new Point(x, y));
                 }
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public void print() {
