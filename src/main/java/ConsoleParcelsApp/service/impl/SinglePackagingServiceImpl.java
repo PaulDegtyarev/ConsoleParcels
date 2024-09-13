@@ -6,7 +6,6 @@ import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.PackagingService;
 import ConsoleParcelsApp.util.PackageReader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public class SinglePackagingServiceImpl implements PackagingService {
     }
 
     @Override
-    public List<Truck> packPackages(String filePath) throws IOException {
+    public List<Truck> packPackages(String filePath) {
         List<Parcel> parcels = packageReader.readPackages(filePath);
 
         List<Truck> trucks = new ArrayList<>();

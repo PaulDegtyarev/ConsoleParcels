@@ -7,7 +7,6 @@ import ConsoleParcelsApp.service.PackagingService;
 import ConsoleParcelsApp.service.PrintTruckResultService;
 import ConsoleParcelsApp.service.impl.PrintTruckResultServiceImpl;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,13 +31,8 @@ public class PackagingController {
             default -> throw new IllegalArgumentException("Неверный выбор алгоритма");
         };
 
-
-        try {
-            List<Truck> trucks = packagingService.packPackages(filePath);
-            printTruckResultService.printResults(trucks);
-            handleUserSelection();
-        } catch (IOException e) {
-            System.out.println("Error reading input file: " + e.getMessage());
-        }
+        List<Truck> trucks = packagingService.packPackages(filePath);
+        printTruckResultService.printResults(trucks);
+        handleUserSelection();
     }
 }

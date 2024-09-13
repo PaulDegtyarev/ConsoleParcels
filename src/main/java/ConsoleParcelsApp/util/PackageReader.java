@@ -45,17 +45,13 @@ public class PackageReader {
 
                         if (isValidParcel(shape)) {
                             parcels.add(new Parcel(shape));
-                        }
-
-                        else {
+                        } else {
                             throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                         }
 
                         parcelData.setLength(0);
                     }
-                }
-
-                else {
+                } else {
                     parcelData.append(line).append("\n");
                 }
             }
@@ -65,9 +61,7 @@ public class PackageReader {
 
                 if (isValidParcel(shape)) {
                     parcels.add(new Parcel(shape));
-                }
-
-                else {
+                } else {
                     throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                 }
             }
