@@ -1,19 +1,23 @@
 package ConsoleParcelsApp.controller;
 
 import ConsoleParcelsApp.factory.PackagingServiceFactory;
-import ConsoleParcelsApp.factory.impl.PackagingServiceFactoryImpl;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.PackagingService;
 import ConsoleParcelsApp.service.PrintTruckResultService;
-import ConsoleParcelsApp.service.impl.PrintTruckResultServiceImpl;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class PackagingController {
     private Scanner scanner = new Scanner(System.in);
-    private PackagingServiceFactory packagingServiceFactory = new PackagingServiceFactoryImpl();
-    private PrintTruckResultService printTruckResultService = new PrintTruckResultServiceImpl();
+    private PackagingServiceFactory packagingServiceFactory;
+    private PrintTruckResultService printTruckResultService;
+
+    public PackagingController(PackagingServiceFactory packagingServiceFactory, PrintTruckResultService printTruckResultService) {
+        this.packagingServiceFactory = packagingServiceFactory;
+        this.printTruckResultService = printTruckResultService;
+    }
+
 
     public void handleUserSelection() {
         System.out.print("Введите путь к файлу: ");
