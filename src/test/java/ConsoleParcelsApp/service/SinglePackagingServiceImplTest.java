@@ -22,7 +22,7 @@ public class SinglePackagingServiceImplTest {
 
     @Test
     public void packPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
-        List<Truck> expectedResult = service.packPackages(filePath);
+        List<Truck> expectedResult = service.packPackages(filePath,2 );
 
         assertThat(expectedResult.size()).isEqualTo(6);
     }

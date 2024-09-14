@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PackagingService {
 
-    List<Truck> packPackages(String filePath);
+    List<Truck> packPackages(String filePath, int numberOfCars);
 }

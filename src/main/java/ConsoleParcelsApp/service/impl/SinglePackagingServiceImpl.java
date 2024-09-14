@@ -18,7 +18,7 @@ public class SinglePackagingServiceImpl implements PackagingService {
     }
 
     @Override
-    public List<Truck> packPackages(String filePath) {
+    public List<Truck> packPackages(String filePath, int numberOfCars) {
         List<Parcel> parcels = packageReader.readPackages(filePath);
 
         List<Truck> trucks = new ArrayList<>();

@@ -18,7 +18,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
     }
 
     @Override
-    public List<Truck> packPackages(String filePath) {
+    public List<Truck> packPackages(String filePath, int numberOfCars) {
         List<Parcel> parcels = packageReader.readPackages(filePath);
 
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
