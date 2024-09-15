@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class OptimizedPackagingServiceImplTest {
@@ -22,9 +23,16 @@ public class OptimizedPackagingServiceImplTest {
     }
 
     @Test
-    public void packPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
+    void packPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
         List<Truck> expectedResult = service.packPackages(filePath, 2);
 
-        assertThat(expectedResult.size()).isEqualTo(1);
+        assertThat(expectedResult.size()).isEqualTo(2);
+    }
+
+    @Test
+    void packPackage_withDataThatDoesNotFitInOneTruck_shouldThrowRunTimeException() {
+        filePath = "src/test/resources/input/input-data-does-not-fit-in-one-truck.txt";
+
+        assertThrows(RuntimeException.class, () -> service.packPackages(filePath, 1));
     }
 }

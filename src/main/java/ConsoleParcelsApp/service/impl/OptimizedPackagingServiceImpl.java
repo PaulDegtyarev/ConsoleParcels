@@ -24,7 +24,9 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
 
         List<Truck> trucks = new ArrayList<>();
-        trucks.add(new Truck());
+        for (int i = 0; i < numberOfCars; i++) {
+            trucks.add(new Truck());
+        }
 
         for (Parcel parcel : parcels) {
             System.out.println("Trying to place package " + parcel.getId() + " with height " + parcel.getHeight() + " and width " + parcel.getWidth());
@@ -42,14 +44,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
             }
 
             if (!placed) {
-                Truck newTruck = new Truck();
-
-                Optional<Point> position = newTruck.findPosition(parcel);
-
-                if (position.isPresent()) {
-                    newTruck.place(parcel, position.get().getX(), position.get().getY());
-                    trucks.add(newTruck);
-                }
+                throw new RuntimeException("Не удалось разместить посылку");
             }
         }
 
