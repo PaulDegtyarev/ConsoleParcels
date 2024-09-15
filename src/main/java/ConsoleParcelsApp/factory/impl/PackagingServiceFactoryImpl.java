@@ -3,7 +3,7 @@ package ConsoleParcelsApp.factory.impl;
 import ConsoleParcelsApp.factory.PackagingServiceFactory;
 import ConsoleParcelsApp.service.PackagingService;
 import ConsoleParcelsApp.service.impl.OptimizedPackagingServiceImpl;
-import ConsoleParcelsApp.service.impl.SinglePackagingServiceImpl;
+import ConsoleParcelsApp.service.impl.BalancedLoadingServiceImpl;
 import ConsoleParcelsApp.util.PackageReader;
 
 public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
@@ -14,6 +14,6 @@ public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
 
     @Override
     public PackagingService createSinglePackagingService() {
-        return new SinglePackagingServiceImpl(new PackageReader());
+        return new BalancedLoadingServiceImpl(new PackageReader());
     }
 }

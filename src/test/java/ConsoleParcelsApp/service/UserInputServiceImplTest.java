@@ -42,11 +42,11 @@ public class UserInputServiceImplTest {
 
     @Test
     void requestForFilePath_withValidInput_shouldReturnValidOutput() {
-        when(scanner.nextLine()).thenReturn("/src/test/resources/input/valid-input-data.txt");
+        when(scanner.nextLine()).thenReturn("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
 
         String expectedResponse = userInputService.requestForFilePath();
 
-        assertThat(expectedResponse).isEqualTo("/src/test/resources/input/valid-input-data.txt");
+        assertThat(expectedResponse).isEqualTo("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
     }
 
     @Test

@@ -32,7 +32,7 @@ public class PackageReaderTest {
 
     @Test
     void readPackages_withCorrectInput_shouldReturnCorrectOutput() throws IOException {
-        String filePath = "src/test/resources/input/valid-input-data.txt";
+        String filePath = "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
 
         List<Parcel> parcels = packageReader.readPackages(filePath);
 

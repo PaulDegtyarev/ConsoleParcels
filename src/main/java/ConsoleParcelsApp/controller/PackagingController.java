@@ -30,10 +30,15 @@ public class PackagingController {
 
         PackagingService packagingService = packagingSelectionService.selectPackagingService(algorithmChoice);
 
-        List<Truck> trucks = packagingService.packPackages(filePath, numberOfCars);
+        try {
+            List<Truck> trucks = packagingService.packPackages(filePath, numberOfCars);
 
-        printTruckResultService.printResults(trucks);
+            printTruckResultService.printResults(trucks);
 
-        handleUserSelection();
+            handleUserSelection();
+        } catch (RuntimeException runtimeException) {
+            log.error(runtimeException.getMessage());
+            handleUserSelection();
+        }
     }
 }

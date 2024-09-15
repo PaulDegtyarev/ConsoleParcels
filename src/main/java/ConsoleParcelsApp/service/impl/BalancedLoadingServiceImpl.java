@@ -7,13 +7,14 @@ import ConsoleParcelsApp.service.PackagingService;
 import ConsoleParcelsApp.util.PackageReader;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class OptimizedPackagingServiceImpl implements PackagingService {
+public class BalancedLoadingServiceImpl implements PackagingService {
     private PackageReader packageReader;
 
-    public OptimizedPackagingServiceImpl(PackageReader packageReader) {
+    public BalancedLoadingServiceImpl(PackageReader packageReader) {
         this.packageReader = packageReader;
     }
 
@@ -21,7 +22,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
     public List<Truck> packPackages(String filePath, int numberOfCars) {
         List<Parcel> parcels = packageReader.readPackages(filePath);
 
-        parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
+        parcels.sort(Comparator.comparingInt(Parcel::getArea).reversed());
 
         List<Truck> trucks = new ArrayList<>();
 
@@ -30,21 +31,22 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
         }
 
         for (Parcel parcel : parcels) {
-            System.out.println("Trying to place package " + parcel.getId() + " with height " + parcel.getHeight() + " and width " + parcel.getWidth());
-
-            boolean placed = false;
+            Optional<Truck> bestTruck = Optional.empty();
+            Optional<Point> bestPosition = Optional.empty();
 
             for (Truck truck : trucks) {
                 Optional<Point> position = truck.findPosition(parcel);
-
                 if (position.isPresent()) {
-                    truck.place(parcel, position.get().getX(), position.get().getY());
-                    placed = true;
-                    break;
+                    if (bestTruck.isEmpty() || truck.getUsedSpace() < bestTruck.get().getUsedSpace()) {
+                        bestTruck = Optional.of(truck);
+                        bestPosition = position;
+                    }
                 }
             }
 
-            if (!placed) {
+            if (bestTruck.isPresent()) {
+                bestTruck.get().place(parcel, bestPosition.get().getX(), bestPosition.get().getY());
+            } else {
                 throw new RuntimeException("Не удалось разместить посылку");
             }
         }

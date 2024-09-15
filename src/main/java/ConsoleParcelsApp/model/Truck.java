@@ -81,4 +81,16 @@ public class Truck {
         System.out.println("++++++++");
         System.out.println();
     }
+
+    public int getUsedSpace() {
+        int usedSpace = 0;
+        for (char[] row : space) {
+            for (char cell : row) {
+                if (cell != ' ') {
+                    usedSpace++;
+                }
+            }
+        }
+        return usedSpace;
+    }
 }

@@ -51,8 +51,7 @@ public class UserInputServiceImpl implements UserInputService {
                 System.out.println("""
                         Выберите алгоритм:
                         1 - занимает максимальное пространство грузовика
-                        2 - один грузовик на одну посылку
-                        3 - равномерная погрузка посылок по грузовикам
+                        2 - равномерная погрузка посылок по грузовикам
                         """);
 
                 algorithmChoice = Integer.parseInt(scanner.nextLine());
