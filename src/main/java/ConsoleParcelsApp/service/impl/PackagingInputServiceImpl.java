@@ -1,16 +1,16 @@
 package ConsoleParcelsApp.service.impl;
 
-import ConsoleParcelsApp.service.UserInputService;
+import ConsoleParcelsApp.service.PackagingInputService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
-public class UserInputServiceImpl implements UserInputService {
-    private static final Logger log = LogManager.getLogger(UserInputServiceImpl.class);
+public class PackagingInputServiceImpl implements PackagingInputService {
+    private static final Logger log = LogManager.getLogger(PackagingInputServiceImpl.class);
     private Scanner scanner;
 
-    public UserInputServiceImpl(Scanner scanner) {
+    public PackagingInputServiceImpl(Scanner scanner) {
         this.scanner = scanner;
     }
 

@@ -1,6 +1,8 @@
 package ConsoleParcelsApp.model;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class Truck {

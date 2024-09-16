@@ -1,6 +1,6 @@
 package ConsoleParcelsApp.service;
 
-import ConsoleParcelsApp.service.impl.UserInputServiceImpl;
+import ConsoleParcelsApp.service.impl.PackagingInputServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,21 +10,21 @@ import java.util.Scanner;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
-public class UserInputServiceImplTest {
-    private UserInputService userInputService;
+public class PackagingInputServiceImplTest {
+    private PackagingInputService packagingInputService;
     private Scanner scanner;
 
     @BeforeEach
     void setUp() {
         scanner = Mockito.mock(Scanner.class);
-        userInputService = new UserInputServiceImpl(scanner);
+        packagingInputService = new PackagingInputServiceImpl(scanner);
     }
 
     @Test
     void requestForNumberOfCars_withValidInput_shouldReturnValidOutput() {
         when(scanner.nextLine()).thenReturn("5");
 
-        int expectedResponse = userInputService.requestForNumberOfCars();
+        int expectedResponse = packagingInputService.requestForNumberOfCars();
 
         assertThat(expectedResponse).isEqualTo(5);
     }
@@ -33,7 +33,7 @@ public class UserInputServiceImplTest {
     void requestForNumberOfCars_withWrongInputThanCorrectInput_shouldStartTwoTimes() {
         when(scanner.nextLine()).thenReturn("abc", "5");
 
-        int expectedResponse = userInputService.requestForNumberOfCars();
+        int expectedResponse = packagingInputService.requestForNumberOfCars();
 
         verify(scanner, times(2)).nextLine();
 
@@ -44,7 +44,7 @@ public class UserInputServiceImplTest {
     void requestForFilePath_withValidInput_shouldReturnValidOutput() {
         when(scanner.nextLine()).thenReturn("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
 
-        String expectedResponse = userInputService.requestForFilePath();
+        String expectedResponse = packagingInputService.requestForFilePath();
 
         assertThat(expectedResponse).isEqualTo("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
     }
@@ -53,7 +53,7 @@ public class UserInputServiceImplTest {
     void requestForAlgorithmChoice_withValidInput_shouldReturnValidOutput() {
         when(scanner.nextLine()).thenReturn("1");
 
-        int expectedResponse = userInputService.requestForAlgorithmChoice();
+        int expectedResponse = packagingInputService.requestForAlgorithmChoice();
 
         assertThat(expectedResponse).isEqualTo(1);
     }
@@ -62,7 +62,7 @@ public class UserInputServiceImplTest {
     void requestForAlgorithmChoice_withInvalidInputThanCorrectInput_shouldStartTwoTimes() {
         when(scanner.nextLine()).thenReturn("abc", "5");
 
-        int expectedResponse = userInputService.requestForAlgorithmChoice();
+        int expectedResponse = packagingInputService.requestForAlgorithmChoice();
 
         verify(scanner, times(2)).nextLine();
 
