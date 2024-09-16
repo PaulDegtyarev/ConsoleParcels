@@ -93,4 +93,8 @@ public class Truck {
         }
         return usedSpace;
     }
+
+    public char[][] getSpace() {
+        return space;
+    }
 }
