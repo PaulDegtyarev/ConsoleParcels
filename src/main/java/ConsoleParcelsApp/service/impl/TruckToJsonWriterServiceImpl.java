@@ -19,19 +19,26 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     @Override
     public void writeTruckToJson(List<Truck> trucks) {
         try {
-            List<Map<String, Object>> truckList = new ArrayList<>();
-            for (int i = 0; i < trucks.size(); i++) {
-                Truck truck = trucks.get(i);
+            File file = new File("data/trucks.json");
+
+            Map<String, Object> data;
+            if (file.exists() && file.length() > 0) {
+                data = objectMapper.readValue(file, Map.class);
+            } else {
+                data = new HashMap<>();
+                data.put("trucks", new ArrayList<>());
+            }
+
+            List<Map<String, Object>> truckList = (List<Map<String, Object>>) data.get("trucks");
+
+            for (Truck truck : trucks) {
                 Map<String, Object> truckMap = new HashMap<>();
-                truckMap.put("truckId", i + 1);
+                truckMap.put("truckId", truckList.size() + 1);
                 truckMap.put("packages", getPackages(truck));
                 truckList.add(truckMap);
             }
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("trucks", truckList);
-
-            objectMapper.writeValue(new File("data/trucks.json"), data);
+            objectMapper.writeValue(file, data);
 
         } catch (IOException e) {
             log.error("Ошибка при записи в JSON: {}", e.getMessage(), e);
@@ -45,9 +52,13 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
         for (char[] row : space) {
             List<Character> rowList = new ArrayList<>();
             for (char c : row) {
-                rowList.add(c);
+                if (c != ' ') {
+                    rowList.add(c);
+                }
             }
-            packages.add(rowList);
+            if (!rowList.isEmpty()) {
+                packages.add(rowList);
+            }
         }
         return packages;
     }
