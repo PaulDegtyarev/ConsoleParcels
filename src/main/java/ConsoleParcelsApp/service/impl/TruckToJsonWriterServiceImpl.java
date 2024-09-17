@@ -52,13 +52,9 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
         for (char[] row : space) {
             List<Character> rowList = new ArrayList<>();
             for (char c : row) {
-                if (c != ' ') {
-                    rowList.add(c);
-                }
+                rowList.add(c);
             }
-            if (!rowList.isEmpty()) {
-                packages.add(rowList);
-            }
+            packages.add(rowList);
         }
         return packages;
     }
