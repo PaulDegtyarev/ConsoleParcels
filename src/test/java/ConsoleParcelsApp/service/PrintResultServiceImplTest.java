@@ -1,7 +1,7 @@
 package ConsoleParcelsApp.service;
 
 import ConsoleParcelsApp.model.Truck;
-import ConsoleParcelsApp.service.impl.PrintTruckResultServiceImpl;
+import ConsoleParcelsApp.service.impl.PrintResultServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -11,20 +11,20 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class PrintTruckResultServiceImplTest {
+public class PrintResultServiceImplTest {
     @Test
-    void printResults_withValidTrucks_printsCorrectOutput() {
+    void printPackagingResults_withValidTrucks_printsCorrectOutput() {
         List<Truck> trucks = new ArrayList<>();
         trucks.add(new Truck());
         trucks.add(new Truck());
 
-        PrintTruckResultServiceImpl service = new PrintTruckResultServiceImpl();
+        PrintResultServiceImpl service = new PrintResultServiceImpl();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        service.printResults(trucks);
+        service.printPackagingResults(trucks);
 
         System.setOut(originalSystemOut);
 

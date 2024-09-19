@@ -1,6 +1,6 @@
 package ConsoleParcelsApp.service;
 
-public interface PackagingInputService {
+public interface UserInteractionService {
     int requestForNumberOfCars();
 
     String requestForFilePath();

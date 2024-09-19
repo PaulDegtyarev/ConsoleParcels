@@ -1,0 +1,6 @@
+2024-09-19 02:58:11 INFO  ConsoleParcelsApplication:23 - Запуск приложения ConsoleParcelsApplication
+2024-09-19 02:58:11 INFO  CargoManagementController:30 - Начата обработка выбора упаковки или распаковки
+2024-09-19 02:58:26 INFO  CargoManagementController:43 - Пользователь выбрал распаковку
+2024-09-19 02:58:26 INFO  CargoManagementController:93 - Начало процесса распаковки
+2024-09-19 02:58:28 INFO  CargoManagementController:102 - Распаковка завершена. Распаковано 2 машин
+2024-09-19 02:58:28 INFO  CargoManagementController:30 - Начата обработка выбора упаковки или распаковки

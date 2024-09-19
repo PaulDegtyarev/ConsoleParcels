@@ -1,5 +1,6 @@
 package ConsoleParcelsApp.service.impl;
 
+import ConsoleParcelsApp.dto.UnPackedTruckDto;
 import ConsoleParcelsApp.service.UnPackagingService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,17 +12,18 @@ import java.util.*;
 
 @Log4j2
 public class UnPackagingServiceImpl implements UnPackagingService {
-    private static final String TRUCK_FILE_PATH = "data/trucks.json";
-
     @Override
-    public void unpackTruck() throws IOException {
+    public List<UnPackedTruckDto> unpackTruck(String filePath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(new File(TRUCK_FILE_PATH));
+        JsonNode rootNode = objectMapper.readTree(new File(filePath));
 
         JsonNode trucksNode = rootNode.get("trucks");
 
+        List<UnPackedTruckDto> unPackedTrucks = new ArrayList<>();
+
         for (JsonNode truckNode : trucksNode) {
             int truckId = truckNode.get("truckId").asInt();
+
             JsonNode packagesNode = truckNode.get("packages");
 
             Map<String, Integer> packageCounters = new HashMap<>();
@@ -37,8 +39,10 @@ public class UnPackagingServiceImpl implements UnPackagingService {
 
             Map<String, Integer> finalCounts = calculatePackageCounts(packageCounters);
 
-            printFormattedResults(truckId, finalCounts);
+            unPackedTrucks.add(new UnPackedTruckDto(truckId, finalCounts));
         }
+
+        return unPackedTrucks;
     }
 
     private Map<String, Integer> calculatePackageCounts(Map<String, Integer> packageCounters) {
@@ -80,23 +84,5 @@ public class UnPackagingServiceImpl implements UnPackagingService {
         }
 
         return finalCounts;
-    }
-
-    private void printFormattedResults(int truckId, Map<String, Integer> finalCounts) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Грузовик ").append(truckId).append(":\n");
-
-        for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
-            String packageId = entry.getKey();
-            int count = entry.getValue();
-
-            if (count > 0) {
-                builder.append(packageId).append(" - ").append(count).append(" шт.\n");
-            } else {
-                builder.append(packageId).append("\n");
-            }
-        }
-
-        System.out.println(builder.toString());
     }
 }

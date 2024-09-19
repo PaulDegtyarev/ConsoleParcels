@@ -1,7 +1,12 @@
 package ConsoleParcelsApp.service;
 
+import ConsoleParcelsApp.dto.UnPackedTruckDto;
+
 import java.io.IOException;
+import java.util.List;
 
 public interface UnPackagingService {
-    void unpackTruck() throws IOException;
+
+
+    List<UnPackedTruckDto> unpackTruck(String filePath) throws IOException;
 }
