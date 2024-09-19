@@ -1,6 +1,7 @@
 package ConsoleParcelsApp.service;
 
 import ConsoleParcelsApp.factory.PackagingServiceFactory;
+import ConsoleParcelsApp.factory.impl.TruckFactoryImpl;
 import ConsoleParcelsApp.service.impl.OptimizedPackagingServiceImpl;
 import ConsoleParcelsApp.service.impl.PackagingSelectionServiceImpl;
 import ConsoleParcelsApp.util.PackageReader;
@@ -23,7 +24,9 @@ public class PackagingSelectionServiceImplTest {
 
     @Test
     void selectPackagingService_withValidInput_shouldReturnValidOutput() {
-        when(packagingServiceFactory.createOptimizedPackagingService()).thenReturn(new OptimizedPackagingServiceImpl(new PackageReader()));
+        when(packagingServiceFactory.createOptimizedPackagingService()).thenReturn(new OptimizedPackagingServiceImpl(
+                new PackageReader(),
+                new TruckFactoryImpl()));
 
         PackagingService actualResponse = packagingSelectionService.selectPackagingService(1);
 

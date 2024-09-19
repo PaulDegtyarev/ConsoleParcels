@@ -1,18 +1,17 @@
 package ConsoleParcelsApp.util;
 
+import ConsoleParcelsApp.exception.FileNotFoundException;
+import ConsoleParcelsApp.exception.PackageShapeException;
 import ConsoleParcelsApp.model.Parcel;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Log4j2
 public class PackageReader {
     private static final String[] ALLOWED_PARCELS = {
             "1",
@@ -50,7 +49,9 @@ public class PackageReader {
 
                         if (isValidParcel(shape)) {
                             parcels.add(new Parcel(shape));
+                            log.info("Посылка с формой {} добавлена в список", shape);
                         } else {
+                            log.error("Неверная форма посылки: {}", shape);
                             throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                         }
 
@@ -66,14 +67,18 @@ public class PackageReader {
 
                 if (isValidParcel(shape)) {
                     parcels.add(new Parcel(shape));
+                    log.info("Посылка с формой {} добавлена в список", shape);
                 } else {
+                    log.error("Неверная форма посылки: {}", shape);
                     throw new IllegalArgumentException("Неверная форма посылки: " + shape);
                 }
             }
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            log.error("Ошибка валидации посылки: {}", illegalArgumentException.getMessage());
+            throw new PackageShapeException(illegalArgumentException.getMessage());
+        } catch (IOException ioException) {
+            log.error("Ошибка при чтении файла: {}", ioException.getMessage());
+            throw new FileNotFoundException(ioException.getMessage());
         }
 
         return parcels;

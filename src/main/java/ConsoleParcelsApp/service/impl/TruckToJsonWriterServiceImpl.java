@@ -1,5 +1,6 @@
 package ConsoleParcelsApp.service.impl;
 
+import ConsoleParcelsApp.exception.FileWriteException;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.TruckToJsonWriterService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,38 +16,56 @@ import java.util.Map;
 @Log4j2
 public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String FILE_NAME = "data/trucks.json";
 
     @Override
     public void writeTruckToJson(List<Truck> trucks) {
+        log.info("Начало процесса записи грузовиков в JSON файл");
+
+        File file = new File(FILE_NAME);
+        Map<String, Object> data = readOrCreateJsonData(file);
+
+        List<Map<String, Object>> truckList = (List<Map<String, Object>>) data.get("trucks");
+        addTrucksToData(trucks, truckList);
+
         try {
-            File file = new File("data/trucks.json");
-
-            Map<String, Object> data;
-            if (file.exists() && file.length() > 0) {
-                data = objectMapper.readValue(file, Map.class);
-            } else {
-                data = new HashMap<>();
-                data.put("trucks", new ArrayList<>());
-            }
-
-            List<Map<String, Object>> truckList = (List<Map<String, Object>>) data.get("trucks");
-
-            for (Truck truck : trucks) {
-                Map<String, Object> truckMap = new HashMap<>();
-                truckMap.put("truckId", truckList.size() + 1);
-                truckMap.put("packages", getPackages(truck));
-                truckList.add(truckMap);
-            }
-
             objectMapper.writeValue(file, data);
-
+            log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), FILE_NAME);
         } catch (IOException e) {
-            log.error("Ошибка при записи в JSON: {}", e.getMessage(), e);
-            throw new RuntimeException("Ошибка при записи данных грузовиков в JSON", e);
+            log.error("Ошибка при записи в JSON файл: {}", e.getMessage(), e);
+            throw new FileWriteException("Ошибка при записи данных грузовиков в JSON");
         }
     }
 
-    private List<List<Character>> getPackages(Truck truck) {
+    private Map<String, Object> readOrCreateJsonData(File file) {
+        Map<String, Object> data = new HashMap<>();
+
+        if (file.exists() && file.length() > 0) {
+            try {
+                data = objectMapper.readValue(file, Map.class);
+                log.debug("Файл JSON существует и был прочитан");
+            } catch (IOException e) {
+                log.error("Ошибка при чтении существующего JSON файла, создается новый", e);
+            }
+        } else {
+            data.put("trucks", new ArrayList<>());
+            log.debug("Создан новый JSON объект для данных грузовиков");
+        }
+
+        return data;
+    }
+
+    private void addTrucksToData(List<Truck> trucks, List<Map<String, Object>> truckList) {
+        for (Truck truck : trucks) {
+            Map<String, Object> truckMap = new HashMap<>();
+            truckMap.put("truckId", truckList.size() + 1);
+            truckMap.put("packages", convertTruckSpaceToPackageList(truck));
+            truckList.add(truckMap);
+            log.trace("Добавлен грузовик с ID: {}", truckList.size());
+        }
+    }
+
+    private List<List<Character>> convertTruckSpaceToPackageList(Truck truck) {
         List<List<Character>> packages = new ArrayList<>();
         char[][] space = truck.getSpace();
         for (char[] row : space) {
@@ -56,6 +75,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
             }
             packages.add(rowList);
         }
+        log.trace("Конвертированы данные пространства грузовика в список пакетов.");
         return packages;
     }
 }

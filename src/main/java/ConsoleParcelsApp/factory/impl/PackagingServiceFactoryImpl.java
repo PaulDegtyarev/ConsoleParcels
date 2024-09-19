@@ -9,11 +9,17 @@ import ConsoleParcelsApp.util.PackageReader;
 public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
     @Override
     public PackagingService createOptimizedPackagingService() {
-        return new OptimizedPackagingServiceImpl(new PackageReader());
+        return new OptimizedPackagingServiceImpl(
+                new PackageReader(),
+                new TruckFactoryImpl()
+        );
     }
 
     @Override
     public PackagingService createSinglePackagingService() {
-        return new BalancedLoadingServiceImpl(new PackageReader());
+        return new BalancedLoadingServiceImpl(
+                new PackageReader(),
+                new TruckFactoryImpl()
+        );
     }
 }

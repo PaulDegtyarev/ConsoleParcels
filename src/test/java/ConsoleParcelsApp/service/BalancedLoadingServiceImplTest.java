@@ -1,5 +1,6 @@
 package ConsoleParcelsApp.service;
 
+import ConsoleParcelsApp.factory.impl.TruckFactoryImpl;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.impl.BalancedLoadingServiceImpl;
 import ConsoleParcelsApp.util.PackageReader;
@@ -18,7 +19,10 @@ public class BalancedLoadingServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        service = new BalancedLoadingServiceImpl(new PackageReader());
+        service = new BalancedLoadingServiceImpl(
+                new PackageReader(),
+                new TruckFactoryImpl()
+        );
     }
 
     @Test

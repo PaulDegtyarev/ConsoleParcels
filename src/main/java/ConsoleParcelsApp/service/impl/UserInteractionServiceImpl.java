@@ -1,13 +1,12 @@
 package ConsoleParcelsApp.service.impl;
 
 import ConsoleParcelsApp.service.UserInteractionService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
 
+@Log4j2
 public class UserInteractionServiceImpl implements UserInteractionService {
-    private static final Logger log = LogManager.getLogger(UserInteractionServiceImpl.class);
     private Scanner scanner;
 
     public UserInteractionServiceImpl(Scanner scanner) {

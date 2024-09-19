@@ -1,6 +1,7 @@
 package ConsoleParcelsApp.controller;
 
 import ConsoleParcelsApp.dto.UnPackedTruckDto;
+import ConsoleParcelsApp.exception.*;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.*;
 import lombok.extern.log4j.Log4j2;
@@ -30,7 +31,6 @@ public class CargoManagementController {
         log.info("Начата обработка выбора упаковки или распаковки");
 
         int userChoice = receivingUserRequestService.requestUserChoice();
-
         log.debug("Получен выбор пользователя: {}", userChoice);
 
         switch (userChoice) {
@@ -54,58 +54,47 @@ public class CargoManagementController {
         log.info("Начало процесса упаковки");
 
         int numberOfCars = userInteractionService.requestForNumberOfCars();
-
         log.debug("Количество машин для упаковки: {}", numberOfCars);
 
         String filePath = userInteractionService.requestForFilePath();
-
         log.debug("Путь к файлу с посылками: {}", filePath);
 
         int algorithmChoice = userInteractionService.requestForAlgorithmChoice();
-
         log.debug("Выбранный алгоритм упаковки: {}", algorithmChoice);
 
         log.info("Начинается упаковка {} машин из файла {}", numberOfCars, filePath);
-
         PackagingService packagingService = packagingSelectionService.selectPackagingService(algorithmChoice);
-
         log.debug("Выбран сервис для упаковки: {}", packagingService);
 
         try {
             List<Truck> trucks = packagingService.packPackages(filePath, numberOfCars);
-
             log.info("Упаковка завершена. Упаковано {} грузовиков", trucks.size());
 
             printResultService.printPackagingResults(trucks);
-
             log.debug("Результаты упаковки напечатаны");
 
             truckToJsonWriterService.writeTruckToJson(trucks);
-
             log.info("Запись результатов упаковки в JSON завершена");
 
-        } catch (RuntimeException runtimeException) {
-            log.error(runtimeException.getMessage());
+        } catch (PackingException | FileWriteException | PackageShapeException | FileNotFoundException packingException) {
+            log.error(packingException.getMessage());
         }
     }
 
-    private void unpackTruck() throws IOException {
+    private void unpackTruck() {
         log.info("Начало процесса распаковки");
 
         String filePath = userInteractionService.requestForFilePath();
-
         log.debug("Путь к файлу с данными для распаковки: {}", filePath);
 
         try {
             List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(filePath);
-
             log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
 
             printResultService.printUnPackagingResults(unpackedTrucks);
-
             log.debug("Результаты распаковки напечатаны");
-        } catch (IOException ioException) {
-            log.error("Ошибка при чтении файла {}: {}", filePath, ioException.getMessage());
+        } catch (FileReadException fileReadException) {
+            log.error("Ошибка при чтении файла {}: {}", filePath, fileReadException.getMessage());
             unpackTruck();
         }
     }

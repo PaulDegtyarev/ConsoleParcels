@@ -1,5 +1,6 @@
 package ConsoleParcelsApp.service;
 
+import ConsoleParcelsApp.factory.impl.TruckFactoryImpl;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.impl.OptimizedPackagingServiceImpl;
 import ConsoleParcelsApp.util.PackageReader;
@@ -19,7 +20,9 @@ public class OptimizedPackagingServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        service = new OptimizedPackagingServiceImpl(new PackageReader());
+        service = new OptimizedPackagingServiceImpl(
+                new PackageReader(),
+                new TruckFactoryImpl());
     }
 
     @Test

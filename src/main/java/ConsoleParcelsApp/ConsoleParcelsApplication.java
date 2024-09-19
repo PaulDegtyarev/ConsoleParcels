@@ -1,6 +1,7 @@
 package ConsoleParcelsApp;
 
 import ConsoleParcelsApp.controller.CargoManagementController;
+import ConsoleParcelsApp.factory.impl.DelimeterFactoryImpl;
 import ConsoleParcelsApp.factory.impl.PackagingServiceFactoryImpl;
 import ConsoleParcelsApp.service.impl.*;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +17,7 @@ public class ConsoleParcelsApplication {
             new PackagingSelectionServiceImpl(new PackagingServiceFactoryImpl()),
             new PrintResultServiceImpl(),
             new TruckToJsonWriterServiceImpl(),
-            new UnPackagingServiceImpl()
+            new UnPackagingServiceImpl(new DelimeterFactoryImpl())
     );
 
     public static void main(String[] args) throws IOException {
