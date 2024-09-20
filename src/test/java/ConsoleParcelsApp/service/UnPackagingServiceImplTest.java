@@ -33,7 +33,7 @@ public class UnPackagingServiceImplTest {
     }
 
     @Test
-    void unpackTruck_fileNotFound() {
+    void unpackTruck_withWrongFilePath_shouldReturnFileReadException() {
         String filePath = "non_existent_file.json";
         assertThrows(FileReadException.class, () -> unPackagingService.unpackTruck(filePath));
     }

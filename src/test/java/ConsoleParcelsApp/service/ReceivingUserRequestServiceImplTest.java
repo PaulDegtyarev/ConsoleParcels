@@ -31,7 +31,7 @@ public class ReceivingUserRequestServiceImplTest {
     }
 
     @Test
-    void requestUserChoice_withInvalidInputThenValidInput_shouldReturnValidChoice() {
+    void requestUserChoice_withInvalidInputThenValidInput_shouldStartTwoTimesAndReturnValidChoice() {
         when(scanner.nextLine()).thenReturn("invalid", "2");
 
         int expectedResult = 2;

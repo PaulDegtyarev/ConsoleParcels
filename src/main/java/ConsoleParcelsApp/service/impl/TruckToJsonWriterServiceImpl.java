@@ -16,13 +16,13 @@ import java.util.Map;
 @Log4j2
 public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
-    private static final String FILE_NAME = "data/trucks.json";
 
     @Override
     public void writeTruckToJson(List<Truck> trucks) {
         log.info("Начало процесса записи грузовиков в JSON файл");
 
-        File file = new File(FILE_NAME);
+        String filePath = "data/trucks.json";
+        File file = new File(filePath);
         Map<String, Object> data = readOrCreateJsonData(file);
 
         List<Map<String, Object>> truckList = (List<Map<String, Object>>) data.get("trucks");
@@ -30,7 +30,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
 
         try {
             objectMapper.writeValue(file, data);
-            log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), FILE_NAME);
+            log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), filePath);
         } catch (IOException e) {
             log.error("Ошибка при записи в JSON файл: {}", e.getMessage(), e);
             throw new FileWriteException("Ошибка при записи данных грузовиков в JSON");

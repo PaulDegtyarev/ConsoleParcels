@@ -18,6 +18,7 @@ public class TruckFactoryImpl implements TruckFactory {
             trucks.add(truck);
             log.debug("Создан грузовик №{}", i + 1);
         }
+
         return trucks;
     }
 }
