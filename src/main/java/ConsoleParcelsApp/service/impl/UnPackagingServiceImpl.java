@@ -102,7 +102,7 @@ public class UnPackagingServiceImpl implements UnPackagingService {
             }
         }
 
-        log.trace("Рассчитаны финальные количества пакетов.");
+        log.trace("Рассчитаны финальные количества пакетов");
         return finalCounts;
     }
 }

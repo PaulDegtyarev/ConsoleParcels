@@ -1,5 +1,6 @@
 package ConsoleParcelsApp.service;
 
+import ConsoleParcelsApp.exception.PackingException;
 import ConsoleParcelsApp.factory.impl.TruckFactoryImpl;
 import ConsoleParcelsApp.model.Truck;
 import ConsoleParcelsApp.service.impl.OptimizedPackagingServiceImpl;
@@ -33,9 +34,9 @@ public class OptimizedPackagingServiceImplTest {
     }
 
     @Test
-    void packPackage_withDataThatDoesNotFitInOneTruck_shouldThrowRunTimeException() {
+    void packPackage_withDataThatDoesNotFitInOneTruck_shouldThrowPackingException() {
         filePath = "src/test/resources/input/input-data-does-not-fit-in-one-truck.txt";
 
-        assertThrows(RuntimeException.class, () -> service.packPackages(filePath, 1));
+        assertThrows(PackingException.class, () -> service.packPackages(filePath, 1));
     }
 }

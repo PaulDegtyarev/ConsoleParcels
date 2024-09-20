@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Log4j2
 public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
     private static final String FILE_NAME = "data/trucks.json";
 
     @Override
@@ -67,6 +67,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
 
     private List<List<Character>> convertTruckSpaceToPackageList(Truck truck) {
         List<List<Character>> packages = new ArrayList<>();
+
         char[][] space = truck.getSpace();
         for (char[] row : space) {
             List<Character> rowList = new ArrayList<>();
@@ -75,6 +76,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
             }
             packages.add(rowList);
         }
+
         log.trace("Конвертированы данные пространства грузовика в список пакетов.");
         return packages;
     }

@@ -176,3 +176,146 @@
 2024-09-19 22:57:34 INFO  TruckToJsonWriterServiceImpl:33 - Успешно записано 1 грузовиков в файл data/trucks.json
 2024-09-19 22:57:34 INFO  CargoManagementController:77 - Запись результатов упаковки в JSON завершена
 2024-09-19 22:57:34 INFO  CargoManagementController:31 - Начата обработка выбора упаковки или распаковки
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:29 - Начало упаковки: файл = src/test/resources/input/valid-input-data-for-balanced-loading-service.txt, количество автомобилей = 2
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:70 - Посылка с формой 333 добавлена в список
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@3eb81efb размещена в грузовике ConsoleParcelsApp.model.Truck@1ae8bcbc на позиции (0, 5)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@6cdba6dc размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (0, 5)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@30c8681 размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (1, 5)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@5cdec700 размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (2, 5)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:41 - Упаковка завершена успешно. Все посылки размещены.
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:29 - Начало упаковки: файл = src/test/resources/input/input-data-does-not-fit-in-one-truck.txt, количество автомобилей = 1
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  PackageReader:70 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@332796d3 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (0, 3)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@3cdf2c61 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (3, 3)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@13ad5cd3 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (0, 0)
+2024-09-20 13:02:50 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@1c33c17b размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (3, 0)
+2024-09-20 13:02:50 ERROR BalancedLoadingServiceImpl:63 - Не удалось разместить посылку: ConsoleParcelsApp.model.Parcel@5bf0fe62
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:29 - Начало упаковки: файл = src/test/resources/input/valid-input-data-for-balanced-loading-service.txt, количество автомобилей = 2
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:70 - Посылка с формой 333 добавлена в список
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@3eb81efb размещена в грузовике ConsoleParcelsApp.model.Truck@1ae8bcbc на позиции (0, 5)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@6cdba6dc размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (0, 5)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@30c8681 размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (1, 5)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@5cdec700 размещена в грузовике ConsoleParcelsApp.model.Truck@7d3d101b на позиции (2, 5)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:41 - Упаковка завершена успешно. Все посылки размещены.
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:29 - Начало упаковки: файл = src/test/resources/input/input-data-does-not-fit-in-one-truck.txt, количество автомобилей = 1
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  PackageReader:70 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@332796d3 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (0, 3)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@3cdf2c61 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (3, 3)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@13ad5cd3 размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (0, 0)
+2024-09-20 13:04:40 INFO  BalancedLoadingServiceImpl:60 - Посылка ConsoleParcelsApp.model.Parcel@1c33c17b размещена в грузовике ConsoleParcelsApp.model.Truck@4f0100a7 на позиции (3, 0)
+2024-09-20 13:04:40 ERROR BalancedLoadingServiceImpl:63 - Не удалось разместить посылку: ConsoleParcelsApp.model.Parcel@5bf0fe62
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:27 - Начало упаковки: файл = src/test/resources/input/valid-input-data-for-optimized-loading-service.txt, количество автомобилей = 2
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 666
+666 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 55555 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 1 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:70 - Посылка с формой 333 добавлена в список
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 9 размещена в грузовике на позиции (0, 3)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 6 размещена в грузовике на позиции (3, 4)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 5 размещена в грузовике на позиции (0, 2)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 3 размещена в грузовике на позиции (3, 3)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 1 размещена в грузовике на позиции (5, 2)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 1 размещена в грузовике на позиции (0, 1)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:39 - Упаковка завершена успешно. Все посылки размещены.
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:27 - Начало упаковки: файл = src/test/resources/input/input-data-does-not-fit-in-one-truck.txt, количество автомобилей = 1
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:52 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  PackageReader:70 - Посылка с формой 999
+999
+999 добавлена в список
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 9 размещена в грузовике на позиции (0, 3)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 9 размещена в грузовике на позиции (3, 3)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 9 размещена в грузовике на позиции (0, 0)
+2024-09-20 13:05:33 INFO  OptimizedPackagingServiceImpl:53 - Посылка 9 размещена в грузовике на позиции (3, 0)
+2024-09-20 13:05:33 ERROR OptimizedPackagingServiceImpl:56 - Не удалось разместить посылку: 9
+2024-09-20 13:06:43 INFO  PackagingSelectionServiceImpl:22 - Создан OptimizedPackagingService
+2024-09-20 13:07:49 INFO  PackagingSelectionServiceImpl:22 - Создан OptimizedPackagingService
+2024-09-20 13:08:30 INFO  PackagingSelectionServiceImpl:22 - Создан OptimizedPackagingService
+2024-09-20 13:08:55 INFO  PrintResultServiceImpl:15 - Начало печати результатов упаковки для 2 грузовиков
+2024-09-20 13:08:55 INFO  PrintResultServiceImpl:24 - Завершение печати результатов упаковки
+2024-09-20 13:09:53 INFO  PrintResultServiceImpl:15 - Начало печати результатов упаковки для 2 грузовиков
+2024-09-20 13:09:53 INFO  PrintResultServiceImpl:24 - Завершение печати результатов упаковки
+2024-09-20 13:15:34 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 1
+2024-09-20 13:17:19 ERROR ReceivingUserRequestServiceImpl:28 - For input string: "invalid"
+2024-09-20 13:17:19 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 2
+2024-09-20 13:17:27 ERROR ReceivingUserRequestServiceImpl:28 - For input string: "invalid"
+2024-09-20 13:17:27 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 2
+2024-09-20 13:17:27 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 1
+2024-09-20 13:18:20 ERROR ReceivingUserRequestServiceImpl:28 - For input string: "invalid"
+2024-09-20 13:18:20 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 2
+2024-09-20 13:18:20 INFO  ReceivingUserRequestServiceImpl:32 - Пользователь выбрал опцию: 1
+2024-09-20 13:45:23 INFO  TruckToJsonWriterServiceImpl:23 - Начало процесса записи грузовиков в JSON файл
+2024-09-20 13:45:23 INFO  TruckToJsonWriterServiceImpl:33 - Успешно записано 2 грузовиков в файл data/trucks.json
+2024-09-20 13:46:47 INFO  TruckToJsonWriterServiceImpl:23 - Начало процесса записи грузовиков в JSON файл
+2024-09-20 13:46:47 INFO  TruckToJsonWriterServiceImpl:33 - Успешно записано 2 грузовиков в файл data/trucks.json
+2024-09-20 13:48:56 INFO  TruckToJsonWriterServiceImpl:23 - Начало процесса записи грузовиков в JSON файл
+2024-09-20 13:48:56 INFO  TruckToJsonWriterServiceImpl:33 - Успешно записано 2 грузовиков в файл data/trucks.json
+2024-09-20 13:54:53 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: src/test/resources/input/truck-to-test-unpacking.json
+2024-09-20 13:54:53 INFO  UnPackagingServiceImpl:40 - Завершение процесса распаковки. Обработано 1 грузовиков.
+2024-09-20 13:59:33 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: src/test/resources/input/truck-to-test-unpacking.json
+2024-09-20 13:59:33 INFO  UnPackagingServiceImpl:40 - Завершение процесса распаковки. Обработано 1 грузовиков.
+2024-09-20 13:59:33 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: src/test/resources/input/invalid-json-file-to-unpacking.json
+2024-09-20 14:00:24 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: /home/paul/IdeaProjects/ConsoleParcels/src/test/resources/input/invalid-json-file-to-unpacking.json
+2024-09-20 14:01:10 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: non_existent_file.json
+2024-09-20 14:01:10 ERROR UnPackagingServiceImpl:48 - Ошибка при чтении JSON файла: non_existent_file.json
+2024-09-20 14:01:17 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: src/test/resources/input/truck-to-test-unpacking.json
+2024-09-20 14:01:17 INFO  UnPackagingServiceImpl:40 - Завершение процесса распаковки. Обработано 1 грузовиков.
+2024-09-20 14:01:17 INFO  UnPackagingServiceImpl:26 - Начало процесса распаковки грузовиков из файла: non_existent_file.json
+2024-09-20 14:01:17 ERROR UnPackagingServiceImpl:48 - Ошибка при чтении JSON файла: non_existent_file.json

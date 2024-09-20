@@ -13,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class PrintResultServiceImplTest {
     @Test
-    void printPackagingResults_withValidTrucks_printsCorrectOutput() {
+    void printPackagingResults_withValidTrucks_shouldPrintCorrectOutput() {
         List<Truck> trucks = new ArrayList<>();
         trucks.add(new Truck());
         trucks.add(new Truck());
