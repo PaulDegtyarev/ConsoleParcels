@@ -1,7 +1,7 @@
 package ru.liga.parcels.util;
 
 
-public enum UserChoice {
+public enum UserCommand {
     PACK,
     UNPACK,
     EXIT

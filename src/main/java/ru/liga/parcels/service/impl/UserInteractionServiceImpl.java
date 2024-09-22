@@ -2,6 +2,7 @@ package ru.liga.parcels.service.impl;
 
 import ru.liga.parcels.service.UserInteractionService;
 import lombok.extern.log4j.Log4j2;
+import ru.liga.parcels.util.UserAlgorithmChoice;
 
 import java.util.Scanner;
 
@@ -42,23 +43,24 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public int requestForAlgorithmChoice() {
+    public UserAlgorithmChoice requestForAlgorithmChoice() {
         int algorithmChoice = 0;
+        UserAlgorithmChoice userAlgorithmChoice = null;
 
         while (algorithmChoice == 0) {
-            try {
-                System.out.println("""
+            System.out.println("""
                         Выберите алгоритм:
                         1 - занимает максимальное пространство грузовика
-                        2 - равномерная погрузка посылок по грузовикам
-                        """);
-
+                        2 - равномерная погрузка посылок по грузовикам""");
+            try {
                 algorithmChoice = Integer.parseInt(scanner.nextLine());
+                userAlgorithmChoice = UserAlgorithmChoice.values()[algorithmChoice - 1];
             } catch (NumberFormatException numberFormatException) {
                 log.error("Введен неверный номер алгоритма");
+                algorithmChoice = 0;
             }
         }
 
-        return algorithmChoice;
+        return userAlgorithmChoice;
     }
 }

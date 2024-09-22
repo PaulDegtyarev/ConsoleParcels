@@ -1,8 +1,8 @@
 package ru.liga.parcels.service;
 
-import ru.liga.parcels.util.UserChoice;
+import ru.liga.parcels.util.UserCommand;
 
 public interface ReceivingUserRequestService {
 
-    UserChoice requestUserChoice();
+    UserCommand requestUserChoice();
 }

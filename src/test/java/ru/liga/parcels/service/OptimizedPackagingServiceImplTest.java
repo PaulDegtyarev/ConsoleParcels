@@ -5,11 +5,9 @@ import ru.liga.parcels.factory.impl.TruckFactoryImpl;
 import ru.liga.parcels.model.Parcel;
 import ru.liga.parcels.model.Truck;
 import ru.liga.parcels.service.impl.OptimizedPackagingServiceImpl;
-import ru.liga.parcels.util.PackageReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,6 @@ public class OptimizedPackagingServiceImplTest {
     @BeforeEach
     public void setUp() {
         service = new OptimizedPackagingServiceImpl(
-                new PackageReader(),
                 new TruckFactoryImpl());
     }
 

@@ -1,7 +1,5 @@
-package ru.liga.parcels.dto;
+package ru.liga.parcels.model;
 
-import ru.liga.parcels.model.Point;
-import ru.liga.parcels.model.Truck;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class TruckPlacementDto {
+public class TruckPlacement {
     private Truck truck;
     private Point position;
 }

@@ -5,6 +5,7 @@ import ru.liga.parcels.service.impl.UserInteractionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.liga.parcels.util.UserAlgorithmChoice;
 
 import java.util.Scanner;
 
@@ -43,30 +44,31 @@ public class UserInteractionServiceImplTest {
 
     @Test
     void requestForFilePath_withValidInput_shouldReturnValidOutput() {
-        when(scanner.nextLine()).thenReturn("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
+        String filePath = "/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
+        when(scanner.nextLine()).thenReturn(filePath);
 
         String expectedResponse = userInteractionService.requestForFilePath();
 
-        assertThat(expectedResponse).isEqualTo("/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt");
+        assertThat(expectedResponse).isEqualTo(filePath);
     }
 
     @Test
     void requestForAlgorithmChoice_withValidInput_shouldReturnValidOutput() {
         when(scanner.nextLine()).thenReturn("1");
 
-        int expectedResponse = userInteractionService.requestForAlgorithmChoice();
+        UserAlgorithmChoice expectedResponse = userInteractionService.requestForAlgorithmChoice();
 
-        assertThat(expectedResponse).isEqualTo(1);
+        assertThat(expectedResponse).isEqualTo(UserAlgorithmChoice.MAX_SPACE);
     }
 
     @Test
     void requestForAlgorithmChoice_withInvalidInputThanCorrectInput_shouldStartTwoTimes() {
-        when(scanner.nextLine()).thenReturn("abc", "5");
+        when(scanner.nextLine()).thenReturn("abc", "2");
 
-        int expectedResponse = userInteractionService.requestForAlgorithmChoice();
+        UserAlgorithmChoice expectedResponse = userInteractionService.requestForAlgorithmChoice();
 
         verify(scanner, times(2)).nextLine();
 
-        assertThat(expectedResponse).isEqualTo(5);
+        assertThat(expectedResponse).isEqualTo(UserAlgorithmChoice.EVEN_LOADING);
     }
 }

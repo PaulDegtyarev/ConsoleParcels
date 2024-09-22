@@ -4,6 +4,7 @@ import ru.liga.parcels.factory.PackagingServiceFactory;
 import ru.liga.parcels.service.PackagingSelectionService;
 import ru.liga.parcels.service.PackagingService;
 import lombok.extern.log4j.Log4j2;
+import ru.liga.parcels.util.UserAlgorithmChoice;
 
 @Log4j2
 public class PackagingSelectionServiceImpl implements PackagingSelectionService {
@@ -14,20 +15,19 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
     }
 
     @Override
-    public PackagingService selectPackagingService(int algorithmChoice) {
+    public PackagingService selectPackagingService(UserAlgorithmChoice algorithmChoice) {
         log.debug("Начинается выбор сервис для упаковки по номеру алгоритма: {}", algorithmChoice);
 
         return switch (algorithmChoice) {
-            case 1 -> {
+            case MAX_SPACE -> {
                 log.info("Создан OptimizedPackagingService");
                 yield packagingServiceFactory.createOptimizedPackagingService();
 
             }
-            case 2 -> {
+            case EVEN_LOADING -> {
                 log.info("Создан SinglePackagingService");
                 yield packagingServiceFactory.createSinglePackagingService();
             }
-            default -> throw new IllegalStateException("Нет такого номера алгоритма " + algorithmChoice);
         };
     }
 }

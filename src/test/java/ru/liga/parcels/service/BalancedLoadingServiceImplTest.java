@@ -5,7 +5,6 @@ import ru.liga.parcels.factory.impl.TruckFactoryImpl;
 import ru.liga.parcels.model.Parcel;
 import ru.liga.parcels.model.Truck;
 import ru.liga.parcels.service.impl.BalancedLoadingServiceImpl;
-import ru.liga.parcels.util.PackageReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,6 @@ public class BalancedLoadingServiceImplTest {
     @BeforeEach
     public void setUp() {
         service = new BalancedLoadingServiceImpl(
-                new PackageReader(),
                 new TruckFactoryImpl()
         );
     }

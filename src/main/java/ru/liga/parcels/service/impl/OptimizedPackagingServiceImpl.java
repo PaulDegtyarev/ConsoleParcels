@@ -6,7 +6,6 @@ import ru.liga.parcels.model.Parcel;
 import ru.liga.parcels.model.Point;
 import ru.liga.parcels.model.Truck;
 import ru.liga.parcels.service.PackagingService;
-import ru.liga.parcels.util.PackageReader;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Optional;
 public class OptimizedPackagingServiceImpl implements PackagingService {
     private TruckFactory truckFactory;
 
-    public OptimizedPackagingServiceImpl(PackageReader packageReader, TruckFactory truckFactory) {
+    public OptimizedPackagingServiceImpl(TruckFactory truckFactory) {
         this.truckFactory = truckFactory;
     }
 
@@ -46,8 +45,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
             log.info("Посылка {} размещена в грузовике на позиции ({}, {})",
                     parcel.getId(), position.getX(), position.getY());
         }, () -> {
-            log.error("Не удалось разместить посылку: {}", parcel.getId());
-            throw new PackingException("Не удалось разместить посылку: " + parcel.getId());
+            throw new PackingException("Не удалось разместить посылку: " + parcel);
         });
     }
 }

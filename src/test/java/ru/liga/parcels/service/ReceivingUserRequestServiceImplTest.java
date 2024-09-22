@@ -1,11 +1,10 @@
 package ru.liga.parcels.service;
 
-import ru.liga.parcels.service.ReceivingUserRequestService;
 import ru.liga.parcels.service.impl.ReceivingUserRequestServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.liga.parcels.util.UserChoice;
+import ru.liga.parcels.util.UserCommand;
 
 import java.util.Scanner;
 
@@ -26,8 +25,8 @@ public class ReceivingUserRequestServiceImplTest {
     void requestUserChoice_withValidInput_shouldReturnValidOutput() {
         when(scanner.nextLine()).thenReturn("1");
 
-        UserChoice expectedResponse = UserChoice.PACK;
-        UserChoice actualResponse = receivingUserRequestService.requestUserChoice();
+        UserCommand expectedResponse = UserCommand.PACK;
+        UserCommand actualResponse = receivingUserRequestService.requestUserChoice();
 
         assertThat(expectedResponse).isEqualTo(actualResponse);
     }
@@ -36,8 +35,8 @@ public class ReceivingUserRequestServiceImplTest {
     void requestUserChoice_withInvalidInputThenValidInput_shouldStartTwoTimesAndReturnValidChoice() {
         when(scanner.nextLine()).thenReturn("invalid", "2");
 
-        UserChoice expectedResult = UserChoice.UNPACK;
-        UserChoice choice = receivingUserRequestService.requestUserChoice();
+        UserCommand expectedResult = UserCommand.UNPACK;
+        UserCommand choice = receivingUserRequestService.requestUserChoice();
 
         assertThat(expectedResult).isEqualTo(choice);
     }

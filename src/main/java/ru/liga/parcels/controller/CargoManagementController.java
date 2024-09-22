@@ -7,7 +7,8 @@ import ru.liga.parcels.model.Truck;
 import lombok.extern.log4j.Log4j2;
 import ru.liga.parcels.service.*;
 import ru.liga.parcels.util.PackageReader;
-import ru.liga.parcels.util.UserChoice;
+import ru.liga.parcels.util.UserAlgorithmChoice;
+import ru.liga.parcels.util.UserCommand;
 
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class CargoManagementController {
         boolean running = true;
 
         while (running) {
-            UserChoice userChoice = receivingUserRequestService.requestUserChoice();
-            log.debug("Получен выбор пользователя: {}", userChoice);
+            UserCommand userCommand = receivingUserRequestService.requestUserChoice();
+            log.debug("Получен выбор пользователя: {}", userCommand);
 
-            switch (userChoice) {
+            switch (userCommand) {
                 case PACK:
                     log.info("Пользователь выбрал упаковку");
                     packTheTruck();
@@ -52,7 +53,7 @@ public class CargoManagementController {
                     log.info("Пользователь выбрал выход из приложения");
                     running = false;
                 default:
-                    log.warn("Некорректный параметр выбора пользователя: {}. Ожидается значение 1 - 3.", userChoice);
+                    log.warn("Некорректный параметр выбора пользователя: {}. Ожидается значение 1 - 3.", userCommand);
                     break;
             }
         }
@@ -67,7 +68,7 @@ public class CargoManagementController {
         String filePath = userInteractionService.requestForFilePath();
         log.debug("Путь к файлу с посылками: {}", filePath);
 
-        int algorithmChoice = userInteractionService.requestForAlgorithmChoice();
+        UserAlgorithmChoice algorithmChoice = userInteractionService.requestForAlgorithmChoice();
         log.debug("Выбранный алгоритм упаковки: {}", algorithmChoice);
 
         log.info("Начинается упаковка {} машин из файла {}", numberOfCars, filePath);

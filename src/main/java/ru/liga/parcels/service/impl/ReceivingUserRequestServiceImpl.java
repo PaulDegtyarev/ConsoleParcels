@@ -2,7 +2,7 @@ package ru.liga.parcels.service.impl;
 
 import ru.liga.parcels.service.ReceivingUserRequestService;
 import lombok.extern.log4j.Log4j2;
-import ru.liga.parcels.util.UserChoice;
+import ru.liga.parcels.util.UserCommand;
 
 import java.util.Scanner;
 
@@ -15,9 +15,9 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
     }
 
     @Override
-    public UserChoice requestUserChoice() {
+    public UserCommand requestUserChoice() {
         int userInput = 0;
-        UserChoice userChoice = null;
+        UserCommand userCommand = null;
 
         while (userInput == 0) {
             System.out.println("""
@@ -27,7 +27,7 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
 
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
-                userChoice = UserChoice.values()[userInput - 1];
+                userCommand = UserCommand.values()[userInput - 1];
             } catch (NumberFormatException numberFormatException) {
                 log.error("Пользователь ввел не число: {}", userInput);
             } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
@@ -36,8 +36,8 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
             }
         }
 
-        log.info("Пользователь выбрал опцию: {}", userChoice);
+        log.info("Пользователь выбрал опцию: {}", userCommand);
 
-        return userChoice;
+        return userCommand;
     }
 }
