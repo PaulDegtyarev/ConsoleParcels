@@ -7,7 +7,6 @@ public interface UserInteractionService {
 
     String requestForInputFilePath();
 
-
     UserAlgorithmChoice requestForAlgorithmChoice();
 
     String requestForFilePathToWrite();

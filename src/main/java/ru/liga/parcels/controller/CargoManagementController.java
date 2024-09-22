@@ -81,7 +81,6 @@ public class CargoManagementController {
         PackagingService packagingService = packagingSelectionService.selectPackagingService(algorithmChoice);
         log.debug("Выбран сервис для упаковки: {}", packagingService);
 
-
         List<Truck> trucks = null;
         try {
             log.info("Начало упаковки: файл = {}, количество автомобилей = {}", inputFilePath, numberOfCars);
@@ -108,7 +107,6 @@ public class CargoManagementController {
         log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
 
         List<UnPackedTruckDto> unpackedTrucks = null;
-
         try {
             unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
             log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());

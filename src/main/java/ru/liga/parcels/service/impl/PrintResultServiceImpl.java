@@ -56,7 +56,7 @@ public class PrintResultServiceImpl implements PrintResultService {
 
             System.out.println(builder);
             log.info("Завершение печати результатов распаковки");
-                },() -> log.debug("Посылки не были распакованы")
+            }, () -> log.debug("Посылки не были распакованы")
         );
     }
 }

@@ -70,4 +70,14 @@ public class UserInteractionServiceImplTest {
 
         assertThat(expectedResponse).isEqualTo(UserAlgorithmChoice.EVEN_LOADING);
     }
+
+    @Test
+    void requestForFilePathToWrite_withValidInput_shouldReturnCorrectOutput() {
+        String filePath = "correctPath";
+        when(scanner.nextLine()).thenReturn(filePath);
+
+        String expectedResult = userInteractionService.requestForFilePathToWrite();
+
+        assertThat(expectedResult).isEqualTo(filePath);
+    }
 }

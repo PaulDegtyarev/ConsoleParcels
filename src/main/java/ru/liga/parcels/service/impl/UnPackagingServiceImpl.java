@@ -45,7 +45,6 @@ public class UnPackagingServiceImpl implements UnPackagingService {
         try {
             return objectMapper.readTree(new File(filePath));
         } catch (IOException e) {
-            log.error("Ошибка при чтении JSON файла: {}", filePath);
             throw new FileReadException("Ошибка при чтении JSON файла: {}\", filePath");
         }
     }

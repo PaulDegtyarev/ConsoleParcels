@@ -37,7 +37,6 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
         }
 
         log.info("Пользователь выбрал опцию: {}", userCommand);
-
         return userCommand;
     }
 }
