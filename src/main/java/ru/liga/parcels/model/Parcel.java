@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class Parcel {
-    private int height;
-    private int width;
-    private char id;
+    private final int height;
+    private final int width;
+    private final char id;
     private char[][] shape;
 
     public Parcel(String input) {
@@ -14,10 +14,18 @@ public class Parcel {
 
         this.height = lines.length;
 
-        this.width = 0;
+        int maxWidth = 0;
+        char parcelId = ' ';
+
         for (String line : lines) {
-            this.width = Math.max(this.width, line.length());
+            if (!line.isEmpty() && parcelId == ' ') {
+                parcelId = line.charAt(0);
+            }
+            maxWidth = Math.max(maxWidth, line.length());
         }
+
+        this.width = maxWidth;
+        this.id = parcelId;
 
         this.shape = new char[height][width];
         for (int i = 0; i < height; i++) {
@@ -27,13 +35,6 @@ public class Parcel {
 
             for (int j = lines[i].length(); j < width; j++) {
                 shape[i][j] = ' ';
-            }
-        }
-
-        for (String line : lines) {
-            if (!line.isEmpty()) {
-                this.id = line.charAt(0);
-                break;
             }
         }
     }

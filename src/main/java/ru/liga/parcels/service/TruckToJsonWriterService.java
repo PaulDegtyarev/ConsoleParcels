@@ -5,5 +5,5 @@ import ru.liga.parcels.model.Truck;
 import java.util.List;
 
 public interface TruckToJsonWriterService {
-    void writeTruckToJson(List<Truck> trucks);
+    void writeTruckToJson(List<Truck> trucks, String filePath);
 }

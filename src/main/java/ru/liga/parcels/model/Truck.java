@@ -6,7 +6,7 @@ import java.util.Optional;
 public class Truck {
     private static final int TRUCK_WIDTH = 6;
     private static final int TRUCK_HEIGHT = 6;
-    private char[][] space;
+    private final char[][] space;
 
     public Truck() {
         space = new char[TRUCK_HEIGHT][TRUCK_WIDTH];

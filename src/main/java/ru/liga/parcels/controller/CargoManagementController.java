@@ -11,6 +11,7 @@ import ru.liga.parcels.util.UserAlgorithmChoice;
 import ru.liga.parcels.util.UserCommand;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 public class CargoManagementController {
@@ -43,15 +44,18 @@ public class CargoManagementController {
             switch (userCommand) {
                 case PACK:
                     log.info("Пользователь выбрал упаковку");
-                    packTheTruck();
+                    Optional<List<Truck>> trucks = packTheTruck();
+                    printResultService.printPackagingResults(trucks);
                     break;
                 case UNPACK:
                     log.info("Пользователь выбрал распаковку");
-                    unpackTruck();
+                    Optional<List<UnPackedTruckDto>> unpackedTrucks = unpackTruck();
+                    printResultService.printUnPackagingResults(unpackedTrucks);
                     break;
                 case EXIT:
                     log.info("Пользователь выбрал выход из приложения");
                     running = false;
+                    break;
                 default:
                     log.warn("Некорректный параметр выбора пользователя: {}. Ожидается значение 1 - 3.", userCommand);
                     break;
@@ -59,56 +63,58 @@ public class CargoManagementController {
         }
     }
 
-    private void packTheTruck() {
+    private Optional<List<Truck>> packTheTruck() {
         log.info("Начало процесса упаковки");
 
         int numberOfCars = userInteractionService.requestForNumberOfCars();
         log.debug("Количество машин для упаковки: {}", numberOfCars);
 
-        String filePath = userInteractionService.requestForFilePath();
-        log.debug("Путь к файлу с посылками: {}", filePath);
+        String inputFilePath = userInteractionService.requestForInputFilePath();
+        log.debug("Путь к файлу с посылками: {}", inputFilePath);
 
         UserAlgorithmChoice algorithmChoice = userInteractionService.requestForAlgorithmChoice();
         log.debug("Выбранный алгоритм упаковки: {}", algorithmChoice);
 
-        log.info("Начинается упаковка {} машин из файла {}", numberOfCars, filePath);
+        String filePathToWrite = userInteractionService.requestForFilePathToWrite();
+
+        log.info("Начинается упаковка {} машин из файла {}", numberOfCars, inputFilePath);
         PackagingService packagingService = packagingSelectionService.selectPackagingService(algorithmChoice);
         log.debug("Выбран сервис для упаковки: {}", packagingService);
 
-        try {
-            log.info("Начало упаковки: файл = {}, количество автомобилей = {}", filePath, numberOfCars);
-            List<Parcel> parcels = packageReader.readPackages(filePath);
-            log.debug("Прочитано {} посылок из файла {}", parcels.size(), filePath);
+        List<Truck> trucks = null;
 
-            List<Truck> trucks = packagingService.packPackages(parcels, numberOfCars);
+        try {
+            log.info("Начало упаковки: файл = {}, количество автомобилей = {}", inputFilePath, numberOfCars);
+            List<Parcel> parcels = packageReader.readPackages(inputFilePath);
+            log.debug("Прочитано {} посылок из файла {}", parcels.size(), inputFilePath);
+
+            trucks = packagingService.packPackages(parcels, numberOfCars);
             log.info("Упаковка завершена. Упаковано {} грузовиков", trucks.size());
 
-            printResultService.printPackagingResults(trucks);
-            log.debug("Результаты упаковки напечатаны");
-
-            truckToJsonWriterService.writeTruckToJson(trucks);
+            truckToJsonWriterService.writeTruckToJson(trucks, filePathToWrite);
             log.info("Запись результатов упаковки в JSON завершена");
-
-        } catch (PackingException | FileWriteException | PackageShapeException | FileNotFoundException packingException) {
+        } catch (PackingException | FileWriteException | PackageShapeException |
+                 FileNotFoundException packingException) {
             log.error(packingException.getMessage());
         }
+
+        return Optional.ofNullable(trucks);
     }
 
-    private void unpackTruck() {
+    private Optional<List<UnPackedTruckDto>> unpackTruck() {
         log.info("Начало процесса распаковки");
 
-        String filePath = userInteractionService.requestForFilePath();
-        log.debug("Путь к файлу с данными для распаковки: {}", filePath);
+        String filePathToUnpack = userInteractionService.requestForInputFilePath();
+        log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
 
         try {
-            List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(filePath);
+            List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
             log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
-
-            printResultService.printUnPackagingResults(unpackedTrucks);
-            log.debug("Результаты распаковки напечатаны");
         } catch (FileReadException fileReadException) {
-            log.error("Ошибка при чтении файла {}: {}", filePath, fileReadException.getMessage());
+            log.error("Ошибка при чтении файла {}: {}", filePathToUnpack, fileReadException.getMessage());
             unpackTruck();
         }
+
+        return unpackTruck();
     }
 }

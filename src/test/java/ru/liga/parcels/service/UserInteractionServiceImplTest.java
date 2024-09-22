@@ -1,6 +1,5 @@
 package ru.liga.parcels.service;
 
-import ru.liga.parcels.service.UserInteractionService;
 import ru.liga.parcels.service.impl.UserInteractionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,11 +42,11 @@ public class UserInteractionServiceImplTest {
     }
 
     @Test
-    void requestForFilePath_withValidInput_shouldReturnValidOutput() {
+    void requestForInputFilePath_withValidInput_shouldReturnValidOutput() {
         String filePath = "/src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
         when(scanner.nextLine()).thenReturn(filePath);
 
-        String expectedResponse = userInteractionService.requestForFilePath();
+        String expectedResponse = userInteractionService.requestForInputFilePath();
 
         assertThat(expectedResponse).isEqualTo(filePath);
     }

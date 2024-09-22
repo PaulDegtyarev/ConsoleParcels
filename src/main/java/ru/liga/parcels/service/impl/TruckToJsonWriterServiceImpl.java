@@ -18,10 +18,9 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void writeTruckToJson(List<Truck> trucks) {
+    public void writeTruckToJson(List<Truck> trucks, String filePath) {
         log.info("Начало процесса записи грузовиков в JSON файл");
 
-        String filePath = "data/trucks.json";
         File file = new File(filePath);
         Map<String, Object> data = readOrCreateJsonData(file);
 

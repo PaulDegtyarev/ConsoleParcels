@@ -32,14 +32,14 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     }
 
     @Override
-    public String requestForFilePath() {
-        String filePath;
+    public String requestForInputFilePath() {
+        String inputFilePath;
 
-        System.out.println("Введите путь к файлу: ");
+        System.out.println("Введите путь к файлу откуда брать данные для упаковки: ");
 
-        filePath = scanner.nextLine();
+        inputFilePath = scanner.nextLine();
 
-        return filePath;
+        return inputFilePath;
     }
 
     @Override
@@ -62,5 +62,16 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         }
 
         return userAlgorithmChoice;
+    }
+
+    @Override
+    public String requestForFilePathToWrite() {
+        String filePathToWrite;
+
+        System.out.println("Введите путь к файлу для записи загруженных грузовиков: ");
+
+        filePathToWrite = scanner.nextLine();
+
+        return filePathToWrite;
     }
 }

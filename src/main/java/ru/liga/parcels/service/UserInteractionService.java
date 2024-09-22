@@ -5,8 +5,10 @@ import ru.liga.parcels.util.UserAlgorithmChoice;
 public interface UserInteractionService {
     int requestForNumberOfCars();
 
-    String requestForFilePath();
+    String requestForInputFilePath();
 
 
     UserAlgorithmChoice requestForAlgorithmChoice();
+
+    String requestForFilePathToWrite();
 }

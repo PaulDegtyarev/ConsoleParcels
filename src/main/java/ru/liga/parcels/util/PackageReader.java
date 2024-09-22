@@ -51,8 +51,7 @@ public class PackageReader {
                             parcels.add(new Parcel(shape));
                             log.info("Посылка с формой {} добавлена в список", shape);
                         } else {
-                            log.error("Неверная форма посылки: {}", shape);
-                            throw new IllegalArgumentException("Неверная форма посылки: " + shape);
+                            throw new PackageShapeException("Неверная форма посылки: " + shape);
                         }
 
                         parcelData.setLength(0);
@@ -69,16 +68,12 @@ public class PackageReader {
                     parcels.add(new Parcel(shape));
                     log.info("Посылка с формой {} добавлена в список", shape);
                 } else {
-                    log.error("Неверная форма посылки: {}", shape);
-                    throw new IllegalArgumentException("Неверная форма посылки: " + shape);
+                    throw new PackageShapeException("Неверная форма посылки: " + shape);
                 }
             }
-        } catch (IllegalArgumentException illegalArgumentException) {
-            log.error("Ошибка валидации посылки: {}", illegalArgumentException.getMessage());
-            throw new PackageShapeException(illegalArgumentException.getMessage());
+
         } catch (IOException ioException) {
-            log.error("Ошибка при чтении файла: {}", ioException.getMessage());
-            throw new FileNotFoundException(ioException.getMessage());
+            throw new FileNotFoundException("Файл не найден");
         }
 
         return parcels;
