@@ -81,8 +81,8 @@ public class CargoManagementController {
         PackagingService packagingService = packagingSelectionService.selectPackagingService(algorithmChoice);
         log.debug("Выбран сервис для упаковки: {}", packagingService);
 
-        List<Truck> trucks = null;
 
+        List<Truck> trucks = null;
         try {
             log.info("Начало упаковки: файл = {}, количество автомобилей = {}", inputFilePath, numberOfCars);
             List<Parcel> parcels = packageReader.readPackages(inputFilePath);
@@ -107,14 +107,15 @@ public class CargoManagementController {
         String filePathToUnpack = userInteractionService.requestForInputFilePath();
         log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
 
+        List<UnPackedTruckDto> unpackedTrucks = null;
+
         try {
-            List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
+            unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
             log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
         } catch (FileReadException fileReadException) {
             log.error("Ошибка при чтении файла {}: {}", filePathToUnpack, fileReadException.getMessage());
-            unpackTruck();
         }
 
-        return unpackTruck();
+        return Optional.ofNullable(unpackedTrucks);
     }
 }
