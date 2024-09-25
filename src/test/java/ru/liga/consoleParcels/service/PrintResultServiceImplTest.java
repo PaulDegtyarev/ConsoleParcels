@@ -19,15 +19,13 @@ public class PrintResultServiceImplTest {
         trucks.add(new Truck());
         trucks.add(new Truck());
 
-        Optional<List<Truck>> optionalTrucks = Optional.of(trucks);
-
         PrintResultServiceImpl service = new PrintResultServiceImpl();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream originalSystemOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        service.printPackagingResults(optionalTrucks);
+        service.printPackagingResults(trucks);
 
         System.setOut(originalSystemOut);
 

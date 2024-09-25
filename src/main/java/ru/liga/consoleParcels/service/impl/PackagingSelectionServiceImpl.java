@@ -6,22 +6,22 @@ import ru.liga.consoleParcels.service.PackagingService;
 import lombok.extern.log4j.Log4j2;
 import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
 public class PackagingSelectionServiceImpl implements PackagingSelectionService {
     private PackagingServiceFactory packagingServiceFactory;
-    private final Map<UserAlgorithmChoice, PackagingService> serviceMap = initializeServiceMap();
+    private Map<UserAlgorithmChoice, PackagingService> serviceMap = new HashMap<>();
 
     public PackagingSelectionServiceImpl(PackagingServiceFactory packagingServiceFactory) {
         this.packagingServiceFactory = packagingServiceFactory;
+        initializeServiceMap();
     }
 
-    private Map<UserAlgorithmChoice, PackagingService> initializeServiceMap() {
+    private void initializeServiceMap() {
         serviceMap.put(UserAlgorithmChoice.MAX_SPACE, packagingServiceFactory.createOptimizedPackagingService());
         serviceMap.put(UserAlgorithmChoice.EVEN_LOADING, packagingServiceFactory.createSinglePackagingService());
-
-        return serviceMap;
     }
 
     @Override

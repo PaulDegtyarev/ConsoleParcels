@@ -24,28 +24,30 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
-        List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
-
-        parcels.forEach(parcel -> processParcel(parcel, trucks));
+        List<Truck> trucks = loadTrucks(parcels, numberOfCars);
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
     }
 
-    private void processParcel(Parcel parcel, List<Truck> trucks) {
-        log.trace("Обработка посылки: {}", parcel.getId());
+    private List<Truck> loadTrucks(List<Parcel> parcels, int numberOfCars) {
+        List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
 
-        Optional<Truck> truckWithSpace = trucks.stream()
-                .filter(truck -> truck.findPosition(parcel).isPresent())
-                .findFirst();
+        parcels.stream()
+                .peek(parcel -> log.trace("Обработка посылки: {}", parcel.getId()))
+                .forEach(parcel -> trucks.stream()
+                        .filter(truck -> truck.findPosition(parcel).isPresent())
+                        .findFirst()
+                        .ifPresentOrElse(truck -> {
+                            Point position = truck.findPosition(parcel).orElseThrow();
+                            truck.place(parcel, position.getX(), position.getY());
+                            log.info("Посылка {} размещена в грузовике на позиции ({}, {})",
+                                    parcel.getId(), position.getX(), position.getY());
+                        }, () -> {
+                            throw new PackingException("Не удалось разместить посылку: " + parcel);
+                        })
+                );
 
-        truckWithSpace.ifPresentOrElse(truck -> {
-            Point position = truck.findPosition(parcel).get();
-            truck.place(parcel, position.getX(), position.getY());
-            log.info("Посылка {} размещена в грузовике на позиции ({}, {})",
-                    parcel.getId(), position.getX(), position.getY());
-        }, () -> {
-            throw new PackingException("Не удалось разместить посылку: " + parcel);
-        });
+        return trucks;
     }
 }

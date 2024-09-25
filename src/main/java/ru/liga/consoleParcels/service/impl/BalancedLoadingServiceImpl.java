@@ -26,33 +26,37 @@ public class BalancedLoadingServiceImpl implements PackagingService {
         parcels.sort(Comparator.comparingInt(Parcel::getArea).reversed());
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
-        List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
-
-        parcels.forEach(parcel -> processParcel(parcel, trucks));
+        List<Truck> trucks = loadTrucks(parcels, numberOfCars);
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
     }
 
-    private void processParcel(Parcel parcel, List<Truck> trucks) {
-        log.trace("Обработка посылки: {}", parcel.getId());
+    private List<Truck> loadTrucks(List<Parcel> parcels, int numberOfCars) {
+        List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
 
-        Optional<TruckPlacement> bestPlacement = trucks.stream()
-                .map(truck -> {
-                    Optional<Point> position = truck.findPosition(parcel);
-                    return position.map(point -> new TruckPlacement(truck, point));
-                })
-                .flatMap(Optional::stream)
-                .min(Comparator.comparingInt(tp -> tp.getTruck().getUsedSpace()));
+        parcels.stream()
+                .peek(parcel -> log.trace("Обработка посылки: {}", parcel.getId()))
+                .forEach(parcel -> {
+                    Optional<TruckPlacement> bestPlacement = trucks.stream()
+                            .map(truck -> {
+                                Optional<Point> position = truck.findPosition(parcel);
+                                return position.map(point -> new TruckPlacement(truck, point));
+                            })
+                            .flatMap(Optional::stream)
+                            .min(Comparator.comparingInt(tp -> tp.getTruck().getUsedSpace()));
 
-        bestPlacement.ifPresentOrElse(truckPlacement -> {
-            Truck truck = truckPlacement.getTruck();
-            Point position = truckPlacement.getPosition();
-            truck.place(parcel, position.getX(), position.getY());
-            log.info("Посылка {} размещена в грузовике {} на позиции ({}, {})",
-                    parcel, truck, position.getX(), position.getY());
-        }, () -> {
-            throw new PackingException("Не удалось разместить посылку: " + parcel);
-        });
+                    bestPlacement.ifPresentOrElse(truckPlacement -> {
+                        Truck truck = truckPlacement.getTruck();
+                        Point position = truckPlacement.getPosition();
+                        truck.place(parcel, position.getX(), position.getY());
+                        log.info("Посылка {} размещена в грузовике на позиции ({}, {})",
+                                parcel.getId(), position.getX(), position.getY());
+                    }, () -> {
+                        throw new PackingException("Не удалось разместить посылку: " + parcel.getId());
+                    });
+                });
+
+        return trucks;
     }
 }

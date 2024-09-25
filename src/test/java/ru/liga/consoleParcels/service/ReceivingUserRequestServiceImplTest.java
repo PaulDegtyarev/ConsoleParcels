@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service;
 
+import ru.liga.consoleParcels.builder.impl.PackagingCommandBuilderImpl;
 import ru.liga.consoleParcels.service.impl.ReceivingUserRequestServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,9 @@ public class ReceivingUserRequestServiceImplTest {
     @BeforeEach
     void setUp() {
         scanner = Mockito.mock(Scanner.class);
-        receivingUserRequestService = new ReceivingUserRequestServiceImpl(scanner);
+        receivingUserRequestService = new ReceivingUserRequestServiceImpl(
+                scanner,
+                new PackagingCommandBuilderImpl(scanner));
     }
 
     @Test
