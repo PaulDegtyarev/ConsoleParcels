@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels;
 
+import ru.liga.consoleParcels.builder.impl.PackagingCommandBuilderImpl;
 import ru.liga.consoleParcels.controller.CargoManagementController;
 import ru.liga.consoleParcels.factory.impl.DelimeterFactoryImpl;
 import ru.liga.consoleParcels.factory.impl.PackagingServiceFactoryImpl;
@@ -18,10 +19,10 @@ public class ConsoleParcelsApplication {
         Scanner scanner = new Scanner(System.in);
         new CargoManagementController(
                 new ReceivingUserRequestServiceImpl(
-                        scanner
-                ),
-                new UserInteractionServiceImpl(
-                        scanner
+                        scanner,
+                        new PackagingCommandBuilderImpl(
+                                scanner
+                        )
                 ),
                 new PackagingSelectionServiceImpl(
                         new PackagingServiceFactoryImpl()

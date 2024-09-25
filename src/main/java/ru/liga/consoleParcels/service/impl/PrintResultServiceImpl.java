@@ -7,35 +7,37 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Log4j2
 public class PrintResultServiceImpl implements PrintResultService {
     @Override
-    public void printPackagingResults(Optional<List<Truck>> trucks) {
-        trucks.ifPresentOrElse(presentTrucks -> {
-            log.info("Начало печати результатов упаковки для {} грузовиков", presentTrucks.size());
+    public void printPackagingResults(List<Truck> trucks) {
+        if (trucks.isEmpty()) {
+            log.debug("Посылки не были упакованы");
+        } else {
+            log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
 
-            for (int i = 0; i < presentTrucks.size(); i++) {
+            for (int i = 0; i < trucks.size(); i++) {
                 log.debug("Печать информации для грузовика {}", i + 1);
                 System.out.println("Truck " + (i + 1) + ":");
 
-                System.out.println(presentTrucks.get(i).toConsoleFormat());
+                System.out.println(trucks.get(i).toConsoleFormat());
             }
 
             log.info("Завершение печати результатов упаковки");
-            }, () -> log.debug("Посылки не были упакованы")
-        );
+        }
     }
 
     @Override
-    public void printUnPackagingResults(Optional<List<UnPackedTruckDto>> unPackedTrucks) {
-        unPackedTrucks.ifPresentOrElse(presentUnpackedTruck -> {
-            log.info("Начало печати результатов распаковки для {} грузовиков", presentUnpackedTruck.size());
+    public void printUnPackagingResults(List<UnPackedTruckDto> unPackedTrucks) {
+        if (unPackedTrucks.isEmpty()) {
+            log.debug("Посылки не были распакованы");
+        } else {
+            log.info("Начало печати результатов распаковки для {} грузовиков", unPackedTrucks.size());
 
             StringBuilder builder = new StringBuilder();
 
-            for (UnPackedTruckDto unPackedTruck : presentUnpackedTruck) {
+            for (UnPackedTruckDto unPackedTruck : unPackedTrucks) {
                 int truckId = unPackedTruck.getTruckId();
                 Map<String, Integer> finalCounts = unPackedTruck.getPackageCounts();
 
@@ -56,7 +58,6 @@ public class PrintResultServiceImpl implements PrintResultService {
 
             System.out.println(builder);
             log.info("Завершение печати результатов распаковки");
-            }, () -> log.debug("Посылки не были распакованы")
-        );
+        }
     }
 }
