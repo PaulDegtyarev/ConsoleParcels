@@ -66,7 +66,7 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
                 userAlgorithmChoice = UserAlgorithmChoice.values()[algorithmChoice - 1];
 
                 this.algorithmChoice = userAlgorithmChoice;
-            } catch (NumberFormatException numberFormatException) {
+            } catch (NumberFormatException | IndexOutOfBoundsException numberFormatException) {
                 log.error("Введен неверный номер алгоритма");
                 algorithmChoice = 0;
             }

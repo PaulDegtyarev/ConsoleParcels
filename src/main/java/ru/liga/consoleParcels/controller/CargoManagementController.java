@@ -53,7 +53,7 @@ public class CargoManagementController {
                     PackagingService packagingService = packagingSelectionService.selectPackagingService(packagingParameters.getAlgorithmChoice());
                     log.debug("Выбран сервис для упаковки: {}", packagingService);
 
-                    List<Truck> trucks = new ArrayList<>();
+                    List<Truck> trucks;
                     try {
                         List<Parcel> parcels = packageReader.readPackages(packagingParameters.getInputFilePath());
                         log.debug("Прочитано {} посылок из файла {}", parcels.size(), packagingParameters.getInputFilePath());
@@ -67,6 +67,7 @@ public class CargoManagementController {
                     } catch (PackingException | FileWriteException | PackageShapeException |
                              FileNotFoundException packingException) {
                         log.error(packingException.getMessage());
+                        break;
                     }
 
                     if (trucks.isEmpty()) {

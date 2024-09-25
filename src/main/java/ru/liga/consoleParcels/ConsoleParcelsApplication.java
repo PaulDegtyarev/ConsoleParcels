@@ -16,12 +16,12 @@ public class ConsoleParcelsApplication {
     public static void main(String[] args) {
         log.info("Запуск приложения ConsoleParcelsApplication");
 
-        Scanner scanner = new Scanner(System.in);
+
         new CargoManagementController(
                 new ReceivingUserRequestServiceImpl(
-                        scanner,
+                        new Scanner(System.in),
                         new PackagingCommandBuilderImpl(
-                                scanner
+                                new Scanner(System.in)
                         )
                 ),
                 new PackagingSelectionServiceImpl(
