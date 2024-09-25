@@ -51,7 +51,7 @@ public class PackageReader {
                             parcels.add(new Parcel(shape));
                             log.info("Посылка с формой {} добавлена в список", shape);
                         } else {
-                            throw new PackageShapeException("Неверная форма посылки: " + shape);
+                            throw new PackageShapeException(String.format("Неверная форма посылки: %s, из файла: %s", shape, filename));
                         }
 
                         parcelData.setLength(0);
@@ -68,12 +68,12 @@ public class PackageReader {
                     parcels.add(new Parcel(shape));
                     log.info("Посылка с формой {} добавлена в список", shape);
                 } else {
-                    throw new PackageShapeException("Неверная форма посылки: " + shape);
+                    throw new PackageShapeException(String.format("Неверная форма посылки: %s, из файла: %s", shape, filename));
                 }
             }
 
         } catch (IOException ioException) {
-            throw new FileNotFoundException("Файл не найден");
+            throw new FileNotFoundException(String.format("Файл %s не найден", filename));
         }
 
         return parcels;
