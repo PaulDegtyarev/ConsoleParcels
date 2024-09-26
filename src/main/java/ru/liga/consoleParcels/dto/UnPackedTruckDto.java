@@ -14,4 +14,5 @@ import java.util.Map;
 public class UnPackedTruckDto {
     private int truckId;
     private Map<String, Integer> packageCounts;
+    private List<List<String>> packageLayout;
 }

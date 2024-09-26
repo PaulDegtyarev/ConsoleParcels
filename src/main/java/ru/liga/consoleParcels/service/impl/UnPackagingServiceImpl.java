@@ -31,9 +31,24 @@ public class UnPackagingServiceImpl implements UnPackagingService {
         List<UnPackedTruckDto> unPackedTrucks = new ArrayList<>();
         for (JsonNode truckNode : trucksNode) {
             int truckId = truckNode.get("truckId").asInt();
-            Map<String, Integer> packageCounters = countPackages(truckNode.get("packages"));
+            JsonNode packagesNode = truckNode.get("packages");
+
+            // Сохраняем расположение посылок как список списков
+            List<List<String>> packageLayout = new ArrayList<>();
+            for (JsonNode packageRow : packagesNode) {
+                List<String> row = new ArrayList<>();
+                for (JsonNode packageElement : packageRow) {
+                    row.add(packageElement.isTextual() ? packageElement.asText() : " ");
+                }
+                packageLayout.add(row);
+            }
+
+            // Подсчитываем количество каждого типа посылок
+            Map<String, Integer> packageCounters = countPackages(packagesNode);
             Map<String, Integer> finalCounts = calculatePackageCounts(packageCounters);
-            unPackedTrucks.add(new UnPackedTruckDto(truckId, finalCounts));
+
+            // Передаем расположение посылок в DTO
+            unPackedTrucks.add(new UnPackedTruckDto(truckId, finalCounts, packageLayout));
             log.debug("Обработан грузовик с ID: {}", truckId);
         }
 

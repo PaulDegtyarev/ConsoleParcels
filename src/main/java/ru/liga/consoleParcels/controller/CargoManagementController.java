@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.exception.*;
@@ -108,22 +109,40 @@ public class CargoManagementController {
                         for (UnPackedTruckDto unPackedTruck : unpackedTrucks) {
                             int truckId = unPackedTruck.getTruckId();
                             Map<String, Integer> finalCounts = unPackedTruck.getPackageCounts();
+                            List<List<String>> packageLayout = unPackedTruck.getPackageLayout();  // Получаем расположение посылок
 
                             log.debug("Генерация строки для грузовика ID: {}", truckId);
-                            builder.append("Грузовик ").append(truckId).append(":\n");
 
+                            // Добавляем верхнюю границу и информацию о грузовике
+
+                            builder.append("Грузовик ").append(truckId).append(":");
+                            builder.append("\n");
+
+                            // Выводим схему расположения посылок в грузовике
+                            for (List<String> row : packageLayout) {
+                                builder.append("+");  // Левая граница строки
+                                for (String packageId : row) {
+                                    builder.append(packageId);  // Выводим каждую ячейку с пакетом
+                                }
+                                builder.append("+\n");  // Правая граница строки
+                            }
+
+                            // Выводим итоговое количество посылок
+                            builder.append("++++++++\n");
+                            builder.append("Количество посылок: \n");
                             for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
                                 String packageId = entry.getKey();
                                 int count = entry.getValue();
 
                                 if (count > 0) {
                                     builder.append(packageId).append(" - ").append(count).append(" шт.\n");
-                                } else {
-                                    builder.append(packageId).append("\n");
                                 }
                             }
+
+                            builder.append("\n");
                         }
 
+                        // Выводим на экран результат
                         System.out.println(builder);
                         log.info("Завершение печати результатов распаковки");
                     }
