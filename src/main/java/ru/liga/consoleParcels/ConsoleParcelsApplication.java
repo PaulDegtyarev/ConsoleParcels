@@ -28,7 +28,6 @@ public class ConsoleParcelsApplication {
                         new PackagingServiceFactoryImpl()
                 ),
                 new PackageReader(),
-                new PrintResultServiceImpl(),
                 new TruckToJsonWriterServiceImpl(),
                 new UnPackagingServiceImpl(
                         new DelimeterFactoryImpl()

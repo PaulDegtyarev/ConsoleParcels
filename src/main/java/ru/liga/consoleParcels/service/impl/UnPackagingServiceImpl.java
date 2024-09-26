@@ -51,14 +51,20 @@ public class UnPackagingServiceImpl implements UnPackagingService {
 
     private Map<String, Integer> countPackages(JsonNode packagesNode) {
         Map<String, Integer> packageCounters = new HashMap<>();
+
         for (JsonNode packageGroup : packagesNode) {
-            Iterator<JsonNode> packageIterator = packageGroup.elements();
-            while (packageIterator.hasNext()) {
-                String packageId = packageIterator.next().asText();
-                packageCounters.put(packageId, packageCounters.getOrDefault(packageId, 0) + 1);
+            if (packageGroup.isArray()) { // Проверяем, что это массив
+                for (JsonNode packageElement : packageGroup) {
+                    if (packageElement.isTextual()) { // Проверяем, что это текст
+                        String packageId = packageElement.asText();
+                        packageCounters.put(packageId, packageCounters.getOrDefault(packageId, 0) + 1);
+
+                        System.out.print(packageId); // Выводим каждый элемент без пробела
+                    }
+                }
+                System.out.println(); // Перевод строки после каждого внутреннего массива
             }
         }
-
         log.trace("Подсчитаны пакеты для одного грузовика");
         return packageCounters;
     }

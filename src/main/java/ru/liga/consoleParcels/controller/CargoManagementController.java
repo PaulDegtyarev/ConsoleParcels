@@ -19,15 +19,13 @@ public class CargoManagementController {
     private ReceivingUserRequestService receivingUserRequestService;
     private PackagingSelectionService packagingSelectionService;
     private PackageReader packageReader;
-    private PrintResultService printResultService;
     private TruckToJsonWriterService truckToJsonWriterService;
     private UnPackagingService unPackagingService;
 
-    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, PrintResultService printResultService, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService) {
+    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService) {
         this.receivingUserRequestService = receivingUserRequestService;
         this.packagingSelectionService = packagingSelectionService;
         this.packageReader = packageReader;
-        this.printResultService = printResultService;
         this.truckToJsonWriterService = truckToJsonWriterService;
         this.unPackagingService = unPackagingService;
     }
