@@ -33,7 +33,6 @@ public class UnPackagingServiceImpl implements UnPackagingService {
             int truckId = truckNode.get("truckId").asInt();
             JsonNode packagesNode = truckNode.get("packages");
 
-            // Сохраняем расположение посылок как список списков
             List<List<String>> packageLayout = new ArrayList<>();
             for (JsonNode packageRow : packagesNode) {
                 List<String> row = new ArrayList<>();
@@ -43,11 +42,9 @@ public class UnPackagingServiceImpl implements UnPackagingService {
                 packageLayout.add(row);
             }
 
-            // Подсчитываем количество каждого типа посылок
             Map<String, Integer> packageCounters = countPackages(packagesNode);
             Map<String, Integer> finalCounts = calculatePackageCounts(packageCounters);
 
-            // Передаем расположение посылок в DTO
             unPackedTrucks.add(new UnPackedTruckDto(truckId, finalCounts, packageLayout));
             log.debug("Обработан грузовик с ID: {}", truckId);
         }
@@ -68,19 +65,13 @@ public class UnPackagingServiceImpl implements UnPackagingService {
         Map<String, Integer> packageCounters = new HashMap<>();
 
         for (JsonNode packageGroup : packagesNode) {
-            if (packageGroup.isArray()) { // Проверяем, что это массив
-                for (JsonNode packageElement : packageGroup) {
-                    if (packageElement.isTextual()) { // Проверяем, что это текст
-                        String packageId = packageElement.asText();
-                        packageCounters.put(packageId, packageCounters.getOrDefault(packageId, 0) + 1);
-
-                        System.out.print(packageId); // Выводим каждый элемент без пробела
-                    }
-                }
-                System.out.println(); // Перевод строки после каждого внутреннего массива
+            for (JsonNode packageElement : packageGroup) {
+                String packageId = packageElement.asText();
+                packageCounters.put(packageId, packageCounters.getOrDefault(packageId, 0) + 1);
+                log.debug("Посылка {} положена", packageId);
             }
         }
-        log.trace("Подсчитаны пакеты для одного грузовика");
+        log.trace("Подсчитаны посылки для одного грузовика");
         return packageCounters;
     }
 
