@@ -5,6 +5,7 @@ import ru.liga.consoleParcels.controller.CargoManagementController;
 import ru.liga.consoleParcels.factory.impl.DelimeterFactoryImpl;
 import ru.liga.consoleParcels.factory.impl.PackagingServiceFactoryImpl;
 import lombok.extern.log4j.Log4j2;
+import ru.liga.consoleParcels.formatter.impl.DefaultPrintResultFormatter;
 import ru.liga.consoleParcels.service.impl.*;
 import ru.liga.consoleParcels.service.impl.PackageReader;
 
@@ -31,7 +32,8 @@ public class ConsoleParcelsApplication {
                 new TruckToJsonWriterServiceImpl(),
                 new UnPackagingServiceImpl(
                         new DelimeterFactoryImpl()
-                )
+                ),
+                new DefaultPrintResultFormatter()
         ).handlePackagingOrUnpackingSelection();
     }
 }

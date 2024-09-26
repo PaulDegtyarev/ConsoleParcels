@@ -1,9 +1,9 @@
 package ru.liga.consoleParcels.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.exception.*;
+import ru.liga.consoleParcels.formatter.PrintResultFormatter;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 import lombok.extern.log4j.Log4j2;
@@ -11,9 +11,7 @@ import ru.liga.consoleParcels.service.*;
 import ru.liga.consoleParcels.service.impl.PackageReader;
 import ru.liga.consoleParcels.model.UserCommand;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Log4j2
 public class CargoManagementController {
@@ -22,13 +20,15 @@ public class CargoManagementController {
     private PackageReader packageReader;
     private TruckToJsonWriterService truckToJsonWriterService;
     private UnPackagingService unPackagingService;
+    private PrintResultFormatter printResultFormatter;
 
-    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService) {
+    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService, PrintResultFormatter printResultFormatter) {
         this.receivingUserRequestService = receivingUserRequestService;
         this.packagingSelectionService = packagingSelectionService;
         this.packageReader = packageReader;
         this.truckToJsonWriterService = truckToJsonWriterService;
         this.unPackagingService = unPackagingService;
+        this.printResultFormatter = printResultFormatter;
     }
 
     public void handlePackagingOrUnpackingSelection() {
@@ -69,20 +69,13 @@ public class CargoManagementController {
                         break;
                     }
 
-                    if (trucks.isEmpty()) {
-                        log.debug("Посылки не были упакованы");
-                    } else {
-                        log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
+                    log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
 
-                        for (int i = 0; i < trucks.size(); i++) {
-                            log.debug("Печать информации для грузовика {}", i + 1);
-                            System.out.println("Truck " + (i + 1) + ":");
+                    StringBuilder packagingResult = printResultFormatter.transferPackagingResultsToConsole(trucks);
 
-                            System.out.println(trucks.get(i).toConsoleFormat());
-                        }
+                    System.out.println(packagingResult);
+                    log.info("Завершение печати результатов упаковки");
 
-                        log.info("Завершение печати результатов упаковки");
-                    }
                     break;
                 case UNPACK:
                     log.info("Пользователь выбрал распаковку");
@@ -91,61 +84,20 @@ public class CargoManagementController {
                     String filePathToUnpack = receivingUserRequestService.requestForFilePathToUnpackTruck();
                     log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
 
-                    List<UnPackedTruckDto> unpackedTrucks = new ArrayList<>();
+                    List<UnPackedTruckDto> unpackedTrucks;
                     try {
                         unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
                         log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
                     } catch (FileReadException fileReadException) {
                         log.error("Ошибка при чтении файла {}: {}", filePathToUnpack, fileReadException.getMessage());
+                        break;
                     }
 
-                    if (unpackedTrucks.isEmpty()) {
-                        log.debug("Посылки не были распакованы");
-                    } else {
-                        log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
+                    log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
+                    StringBuilder unPackagingResult = printResultFormatter.transferUnpackingResultsToConsole(unpackedTrucks);
 
-                        StringBuilder builder = new StringBuilder();
-
-                        for (UnPackedTruckDto unPackedTruck : unpackedTrucks) {
-                            int truckId = unPackedTruck.getTruckId();
-                            Map<String, Integer> finalCounts = unPackedTruck.getPackageCounts();
-                            List<List<String>> packageLayout = unPackedTruck.getPackageLayout();  // Получаем расположение посылок
-
-                            log.debug("Генерация строки для грузовика ID: {}", truckId);
-
-                            // Добавляем верхнюю границу и информацию о грузовике
-
-                            builder.append("Грузовик ").append(truckId).append(":");
-                            builder.append("\n");
-
-                            // Выводим схему расположения посылок в грузовике
-                            for (List<String> row : packageLayout) {
-                                builder.append("+");  // Левая граница строки
-                                for (String packageId : row) {
-                                    builder.append(packageId);  // Выводим каждую ячейку с пакетом
-                                }
-                                builder.append("+\n");  // Правая граница строки
-                            }
-
-                            // Выводим итоговое количество посылок
-                            builder.append("++++++++\n");
-                            builder.append("Количество посылок: \n");
-                            for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
-                                String packageId = entry.getKey();
-                                int count = entry.getValue();
-
-                                if (count > 0) {
-                                    builder.append(packageId).append(" - ").append(count).append(" шт.\n");
-                                }
-                            }
-
-                            builder.append("\n");
-                        }
-
-                        // Выводим на экран результат
-                        System.out.println(builder);
-                        log.info("Завершение печати результатов распаковки");
-                    }
+                    System.out.println(unPackagingResult);
+                    log.info("Завершение печати результатов распаковки");
                     break;
                 case EXIT:
                     log.info("Пользователь выбрал выход из приложения");

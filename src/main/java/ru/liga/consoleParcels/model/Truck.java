@@ -69,23 +69,6 @@ public class Truck {
         return Optional.empty();
     }
 
-    public String toConsoleFormat() {
-        StringBuilder result = new StringBuilder();
-
-        result.append("+      +\n");
-
-        for (char[] row : space) {
-            result.append("+");
-            result.append(new String(row));
-            result.append("+\n");
-        }
-
-        result.append("++++++++\n");
-        result.append("\n");
-
-        return result.toString();
-    }
-
     public int getUsedSpace() {
         int usedSpace = 0;
         for (char[] row : space) {
