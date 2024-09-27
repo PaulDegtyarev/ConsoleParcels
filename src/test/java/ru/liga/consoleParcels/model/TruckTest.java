@@ -32,22 +32,14 @@ public class TruckTest {
     }
 
     @Test
-    void toConsoleFormat_withCorrectInput_shouldReturnCorrectOutput() {
-        Parcel parcel = new Parcel("1\n22");
-        truck.place(parcel, 0, 0);
-
-        String actualOutput = truck.toConsoleFormat();
-
-        String expectedOutput = "+      +\n" +
-                "+1     +\n" +
-                "+22    +\n" +
-                "+      +\n" +
-                "+      +\n" +
-                "+      +\n" +
-                "+      +\n" +
-                "++++++++\n" +
-                "\n";
-
-        assertThat(actualOutput).isEqualTo(expectedOutput);
+    void place_shouldPlaceParcelCorrectly() {
+        Parcel parcel = new Parcel("333\n333");
+        truck.place(parcel, 1, 2);
+        assertThat(truck.getSpace()[2][1]).isEqualTo('3');
+        assertThat(truck.getSpace()[2][2]).isEqualTo('3');
+        assertThat(truck.getSpace()[2][3]).isEqualTo('3');
+        assertThat(truck.getSpace()[3][1]).isEqualTo('3');
+        assertThat(truck.getSpace()[3][2]).isEqualTo('3');
+        assertThat(truck.getSpace()[3][3]).isEqualTo('3');
     }
 }

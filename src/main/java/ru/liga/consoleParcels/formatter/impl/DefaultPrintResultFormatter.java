@@ -54,7 +54,7 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             }
 
             builder.append("++++++++\n");
-            builder.append("Количество посылок: \n");
+            builder.append("Количество посылок:\n");
             for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
                 String packageId = entry.getKey();
                 int count = entry.getValue();

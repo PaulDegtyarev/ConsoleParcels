@@ -7,7 +7,6 @@ import ru.liga.consoleParcels.service.TruckToJsonWriterService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,16 +31,14 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
         }
 
         try {
-            List<Map<String, Object>> truckList = new ArrayList<>();  // Always start with a fresh list to overwrite
+            List<Map<String, Object>> truckList = new ArrayList<>();
 
-            // No need to read existing data since we're overwriting
             addTrucksToData(trucks, truckList);
 
             Map<String, Object> data = new HashMap<>();
             data.put("trucks", truckList);
 
-            // Overwrite the file (or create if it doesn't exist)
-            objectMapper.writeValue(Files.newOutputStream(path), data); // Use newOutputStream
+            objectMapper.writeValue(Files.newOutputStream(path), data);
 
             log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), filePath);
 
