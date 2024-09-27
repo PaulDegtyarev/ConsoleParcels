@@ -4,6 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Представляет размещение посылки в грузовике.
+ *
+ * Содержит информацию о грузовике и позиции, в которой
+ * размещена посылка.
+ *
+ * Класс использует Lombok annotations для автоматической
+ * генерации getter-ов, конструкторов и других методов.
+ */
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor

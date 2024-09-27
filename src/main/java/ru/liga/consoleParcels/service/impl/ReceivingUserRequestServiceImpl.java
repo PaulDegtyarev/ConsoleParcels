@@ -8,16 +8,40 @@ import ru.liga.consoleParcels.model.UserCommand;
 
 import java.util.Scanner;
 
+/**
+ * Реализация сервиса для получения запросов от пользователя.
+ *
+ * Этот сервис использует {@link Scanner} для считывания
+ * ввода пользователя и {@link PackagingCommandBuilder} для
+ * создания объекта {@link PackagingParametersDto} с
+ * параметрами упаковки.
+ *
+ * @see ReceivingUserRequestService
+ */
 @Log4j2
 public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestService {
     private Scanner scanner;
     private PackagingCommandBuilder packagingCommandBuilder;
 
+    /**
+     * Конструктор сервиса получения запросов от пользователя.
+     *
+     * @param scanner                  Сканер для считывания
+     *                                 ввода пользователя.
+     * @param packagingCommandBuilder Билдер для создания
+     *                               объекта
+     *                               {@link PackagingParametersDto}.
+     */
     public ReceivingUserRequestServiceImpl(Scanner scanner, PackagingCommandBuilder packagingCommandBuilder) {
         this.scanner = scanner;
         this.packagingCommandBuilder = packagingCommandBuilder;
     }
 
+    /**
+     * Запрашивает у пользователя выбор действия.
+     *
+     * @return Выбранное пользователем действие.
+     */
     @Override
     public UserCommand requestUserChoice() {
         int userInput = 0;
@@ -44,6 +68,12 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
         return userCommand;
     }
 
+    /**
+     * Запрашивает у пользователя параметры для упаковки.
+     *
+     * @return Объект {@link PackagingParametersDto},
+     *         содержащий параметры для упаковки.
+     */
     @Override
     public PackagingParametersDto requestParametersForPacking() {
         return packagingCommandBuilder
@@ -54,6 +84,12 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
                 .build();
     }
 
+    /**
+     * Запрашивает у пользователя путь к файлу для распаковки
+     * грузовика.
+     *
+     * @return Путь к файлу для распаковки грузовика.
+     */
     @Override
     public String requestForFilePathToUnpackTruck() {
         System.out.println("Введите путь к файлу откуда брать данные для распаковки: ");

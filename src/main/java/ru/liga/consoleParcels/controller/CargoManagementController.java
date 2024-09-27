@@ -13,6 +13,13 @@ import ru.liga.consoleParcels.model.UserCommand;
 
 import java.util.List;
 
+/**
+ * Контроллер, отвечающий за управление логикой упаковки и распаковки грузов.
+ *
+ * Контроллер обрабатывает выбор пользователя между упаковкой и распаковкой,
+ * запрашивает необходимые параметры, вызывает соответствующие сервисы
+ * и выводит результаты на консоль.
+ */
 @Log4j2
 public class CargoManagementController {
     private ReceivingUserRequestService receivingUserRequestService;
@@ -22,6 +29,16 @@ public class CargoManagementController {
     private UnPackagingService unPackagingService;
     private PrintResultFormatter printResultFormatter;
 
+    /**
+     * Конструктор контроллера.
+     *
+     * @param receivingUserRequestService Сервис для получения запросов от пользователя.
+     * @param packagingSelectionService  Сервис для выбора сервиса упаковки.
+     * @param packageReader              Сервис для чтения данных о посылках из файла.
+     * @param truckToJsonWriterService   Сервис для записи данных о грузовиках в JSON.
+     * @param unPackagingService         Сервис для распаковки грузовиков.
+     * @param printResultFormatter       Сервис для форматирования результатов упаковки/распаковки.
+     */
     public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService, PrintResultFormatter printResultFormatter) {
         this.receivingUserRequestService = receivingUserRequestService;
         this.packagingSelectionService = packagingSelectionService;
@@ -31,6 +48,12 @@ public class CargoManagementController {
         this.printResultFormatter = printResultFormatter;
     }
 
+    /**
+     * Обрабатывает выбор пользователя между упаковкой и распаковкой.
+     *
+     * Метод запрашивает выбор пользователя, обрабатывает его и вызывает
+     * соответствующие сервисы для выполнения операции упаковки или распаковки.
+     */
     public void handlePackagingOrUnpackingSelection() {
         log.info("Начата обработка выбора упаковки или распаковки");
         boolean isRunning = true;

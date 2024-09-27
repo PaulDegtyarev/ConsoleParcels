@@ -7,6 +7,11 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 
 import java.util.Scanner;
 
+/**
+ * Реализация билдера для создания параметров упаковки.
+ *
+ * @see PackagingCommandBuilder
+ */
 @Log4j2
 public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
     private int numberOfCars;
@@ -15,10 +20,20 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
     private String filePathToWrite;
     private Scanner scanner;
 
+    /**
+     * Конструктор билдера.
+     *
+     * @param scanner Сканер для считывания ввода пользователя.
+     */
     public PackagingCommandBuilderImpl(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    /**
+     * Устанавливает количество машин, на которые нужно загрузить посылки.
+     *
+     * @return Объект билдера для дальнейшей настройки.
+     */
     @Override
     public PackagingCommandBuilderImpl setNumberOfCars() {
         int numberOfCars = 0;
@@ -38,6 +53,11 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
         return this;
     }
 
+    /**
+     * Устанавливает путь к файлу, откуда нужно брать данные для упаковки.
+     *
+     * @return Объект билдера для дальнейшей настройки.
+     */
     @Override
     public PackagingCommandBuilderImpl setInputFilePath() {
         String inputFilePath;
@@ -51,6 +71,11 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
         return this;
     }
 
+    /**
+     * Устанавливает выбор алгоритма упаковки.
+     *
+     * @return Объект билдера для дальнейшей настройки.
+     */
     @Override
     public PackagingCommandBuilderImpl setAlgorithmChoice() {
         int algorithmChoice = 0;
@@ -75,6 +100,11 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
         return this;
     }
 
+    /**
+     * Устанавливает путь к файлу, куда нужно записать результаты упаковки.
+     *
+     * @return Объект билдера для дальнейшей настройки.
+     */
     @Override
     public PackagingCommandBuilderImpl setFilePathToWrite() {
         String filePathToWrite;
@@ -88,6 +118,11 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
         return this;
     }
 
+    /**
+     * Создает объект {@link PackagingParametersDto} с заданными параметрами.
+     *
+     * @return Объект {@link PackagingParametersDto}.
+     */
     @Override
     public PackagingParametersDto build() {
         return new PackagingParametersDto(

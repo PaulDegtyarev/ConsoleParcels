@@ -16,10 +16,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Реализация сервиса для записи данных о грузовиках в JSON
+ * файл.
+ *
+ * Этот сервис использует {@link ObjectMapper} для
+ * сериализации данных о грузовиках в JSON формат и
+ * записывает их в файл по заданному пути.
+ *
+ * @see TruckToJsonWriterService
+ */
 @Log4j2
 public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Записывает данные о грузовиках в JSON файл.
+     *
+     * @param trucks   Список грузовиков, данные о которых
+     *                 нужно записать.
+     * @param filePath Путь к файлу, в который нужно записать
+     *                 данные.
+     * @throws FileWriteException Если произошла ошибка при
+     *                           записи в файл.
+     */
     @Override
     public void writeTruckToJson(List<Truck> trucks, String filePath) {
         log.info("Начало процесса записи грузовиков в JSON файл: {}", filePath);

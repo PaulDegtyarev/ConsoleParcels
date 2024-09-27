@@ -11,6 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сервис для чтения данных о посылках из файла.
+ *
+ * Этот класс считывает данные о посылках из текстового файла,
+ * где каждая посылка представлена набором строк,
+ * описывающих ее форму. Затем он создает объекты {@link Parcel}
+ * на основе этих данных и возвращает их в виде списка.
+ */
 @Log4j2
 public class PackageReader {
     private static final String[] ALLOWED_PARCELS = {
@@ -35,6 +43,21 @@ public class PackageReader {
         return false;
     }
 
+    /**
+     * Считывает данные о посылках из файла.
+     *
+     * Считывает данные из файла построчно, формируя данные о
+     * форме посылки. Затем проверяет, является ли форма
+     * допустимой, и создает объект {@link Parcel}, если форма
+     * допустима.
+     *
+     * @param filename Имя файла, из которого нужно считать данные.
+     * @return Список объектов {@link Parcel}, представляющих
+     *         считанные посылки.
+     * @throws FileNotFoundException Если файл не найден.
+     * @throws PackageShapeException Если форма одной из посылок
+     *                              недопустима.
+     */
     public List<Parcel> readPackages(String filename) {
         List<Parcel> parcels = new ArrayList<>();
 

@@ -9,11 +9,29 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Реализация сервиса для выбора сервиса упаковки.
+ *
+ * Этот сервис хранит карту, связывающую варианты выбора
+ * алгоритма пользователя с конкретными сервисами упаковки.
+ * В зависимости от варианта выбора пользователя, он
+ * возвращает соответствующий сервис упаковки.
+ *
+ * @see PackagingSelectionService
+ */
 @Log4j2
 public class PackagingSelectionServiceImpl implements PackagingSelectionService {
     private PackagingServiceFactory packagingServiceFactory;
     private Map<UserAlgorithmChoice, PackagingService> serviceMap = new HashMap<>();
 
+    /**
+     * Конструктор сервиса выбора сервиса упаковки.
+     *
+     * Инициализирует карту сервисов упаковки.
+     *
+     * @param packagingServiceFactory Фабрика для создания
+     *                              сервисов упаковки.
+     */
     public PackagingSelectionServiceImpl(PackagingServiceFactory packagingServiceFactory) {
         this.packagingServiceFactory = packagingServiceFactory;
         initializeServiceMap();
@@ -24,6 +42,15 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
         serviceMap.put(UserAlgorithmChoice.EVEN_LOADING, packagingServiceFactory.createSinglePackagingService());
     }
 
+    /**
+     * Выбирает сервис упаковки в зависимости от выбранного
+     * пользователем алгоритма.
+     *
+     * @param algorithmChoice Выбранный пользователем алгоритм
+     *                       упаковки.
+     * @return Сервис упаковки, соответствующий выбранному
+     *         алгоритму.
+     */
     @Override
     public PackagingService selectPackagingService(UserAlgorithmChoice algorithmChoice) {
         log.debug("Начинается выбор сервис для упаковки по номеру алгоритма: {}", algorithmChoice);

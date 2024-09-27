@@ -13,14 +13,37 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса упаковки с равномерной загрузкой.
+ *
+ * Этот сервис сортирует посылки по площади в порядке убывания
+ * и затем распределяет их по грузовикам, выбирая для каждой
+ * посылки грузовик с наименьшим заполненным пространством.
+ *
+ * @see PackagingService
+ */
 @Log4j2
 public class BalancedLoadingServiceImpl implements PackagingService {
     private TruckFactory truckFactory;
 
+    /**
+     * Конструктор сервиса упаковки с равномерной загрузкой.
+     *
+     * @param truckFactory Фабрика для создания грузовиков.
+     */
     public BalancedLoadingServiceImpl(TruckFactory truckFactory) {
         this.truckFactory = truckFactory;
     }
 
+    /**
+     * Упаковывает список посылок в заданное количество грузовиков,
+     * стараясь равномерно распределить их по грузовикам.
+     *
+     * @param parcels      Список посылок, которые нужно упаковать.
+     * @param numberOfCars Количество грузовиков, в которые нужно
+     *                    упаковать посылки.
+     * @return Список грузовиков с упакованными посылками.
+     */
     @Override
     public List<Truck> packPackages(List<Parcel> parcels, int numberOfCars) {
         parcels.sort(Comparator.comparingInt(Parcel::getArea).reversed());

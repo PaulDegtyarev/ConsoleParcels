@@ -2,6 +2,12 @@ package ru.liga.consoleParcels.model;
 
 import lombok.Getter;
 
+/**
+ * Представляет посылку с определенными характеристиками.
+ *
+ * Посылка имеет высоту, ширину, идентификатор и форму,
+ * которая представлена двумерным массивом символов.
+ */
 @Getter
 public class Parcel {
     private final int height;
@@ -9,6 +15,15 @@ public class Parcel {
     private final char id;
     private char[][] shape;
 
+    /**
+     * Создает объект Parcel из строки ввода.
+     *
+     * Строка ввода должна представлять форму посылки, где каждый
+     * символ в строке представляет часть формы, а каждая новая
+     * строка - новую строку формы.
+     *
+     * @param input Строка, представляющая форму посылки.
+     */
     public Parcel(String input) {
         String[] lines = input.split("\n");
 
@@ -39,10 +54,20 @@ public class Parcel {
         }
     }
 
+    /**
+     * Возвращает площадь посылки.
+     *
+     * @return Площадь посылки (ширина * высота).
+     */
     public int getArea() {
         return width * height;
     }
 
+    /**
+     * Возвращает строковое представление посылки.
+     *
+     * @return Строковое представление посылки, содержащее ее идентификатор.
+     */
     @Override
     public String toString() {
         return "Parcel{" +

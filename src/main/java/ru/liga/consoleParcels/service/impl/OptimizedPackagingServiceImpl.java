@@ -11,14 +11,37 @@ import lombok.extern.log4j.Log4j2;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса оптимизированной упаковки.
+ *
+ * Этот сервис сортирует посылки по площади в порядке убывания
+ * и затем пытается разместить каждую посылку в первом
+ * найденном свободном пространстве в грузовиках.
+ *
+ * @see PackagingService
+ */
 @Log4j2
 public class OptimizedPackagingServiceImpl implements PackagingService {
     private TruckFactory truckFactory;
 
+    /**
+     * Конструктор сервиса оптимизированной упаковки.
+     *
+     * @param truckFactory Фабрика для создания грузовиков.
+     */
     public OptimizedPackagingServiceImpl(TruckFactory truckFactory) {
         this.truckFactory = truckFactory;
     }
 
+    /**
+     * Упаковывает список посылок в заданное количество грузовиков,
+     * стараясь максимально заполнить каждый грузовик.
+     *
+     * @param parcels      Список посылок, которые нужно упаковать.
+     * @param numberOfCars Количество грузовиков, в которые нужно
+     *                    упаковать посылки.
+     * @return Список грузовиков с упакованными посылками.
+     */
     @Override
     public List<Truck> packPackages(List<Parcel> parcels, int numberOfCars) {
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
