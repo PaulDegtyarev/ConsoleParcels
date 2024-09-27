@@ -83,9 +83,9 @@ public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
 
         while (algorithmChoice == 0) {
             System.out.println("""
-                        Выберите алгоритм:
-                        1 - занимает максимальное пространство грузовика
-                        2 - равномерная погрузка посылок по грузовикам""");
+                    Выберите алгоритм:
+                    1 - занимает максимальное пространство грузовика
+                    2 - равномерная погрузка посылок по грузовикам""");
             try {
                 algorithmChoice = Integer.parseInt(scanner.nextLine());
                 userAlgorithmChoice = UserAlgorithmChoice.values()[algorithmChoice - 1];

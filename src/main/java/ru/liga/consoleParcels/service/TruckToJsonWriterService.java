@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Сервис для записи данных о грузовиках в JSON файл.
- *
+ * <p>
  * Этот интерфейс определяет метод для записи списка
  * грузовиков в JSON файл по заданному пути.
  */
@@ -20,7 +20,7 @@ public interface TruckToJsonWriterService {
      * @param filePath Путь к файлу, в который нужно записать
      *                 данные.
      * @throws FileWriteException Если произошла ошибка при
-     *                           записи в файл.
+     *                            записи в файл.
      */
     void writeTruckToJson(List<Truck> trucks, String filePath);
 }

@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  * Реализация сервиса для получения запросов от пользователя.
- *
+ * <p>
  * Этот сервис использует {@link Scanner} для считывания
  * ввода пользователя и {@link PackagingCommandBuilder} для
  * создания объекта {@link PackagingParametersDto} с
@@ -26,11 +26,11 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
     /**
      * Конструктор сервиса получения запросов от пользователя.
      *
-     * @param scanner                  Сканер для считывания
-     *                                 ввода пользователя.
+     * @param scanner                 Сканер для считывания
+     *                                ввода пользователя.
      * @param packagingCommandBuilder Билдер для создания
-     *                               объекта
-     *                               {@link PackagingParametersDto}.
+     *                                объекта
+     *                                {@link PackagingParametersDto}.
      */
     public ReceivingUserRequestServiceImpl(Scanner scanner, PackagingCommandBuilder packagingCommandBuilder) {
         this.scanner = scanner;
@@ -49,9 +49,9 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
 
         while (userInput == 0) {
             System.out.println("""
-                1 - упаковать посылки в грузовик
-                2 - распоковать грузовик и вывести количество посылок в нем
-                3 - выйти из приложения""");
+                    1 - упаковать посылки в грузовик
+                    2 - распоковать грузовик и вывести количество посылок в нем
+                    3 - выйти из приложения""");
 
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
@@ -72,7 +72,7 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
      * Запрашивает у пользователя параметры для упаковки.
      *
      * @return Объект {@link PackagingParametersDto},
-     *         содержащий параметры для упаковки.
+     * содержащий параметры для упаковки.
      */
     @Override
     public PackagingParametersDto requestParametersForPacking() {

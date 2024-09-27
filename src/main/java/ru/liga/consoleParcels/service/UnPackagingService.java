@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Сервис для распаковки грузовиков из JSON файла.
- *
+ * <p>
  * Этот интерфейс определяет метод для распаковки данных
  * о грузовиках из JSON файла и возвращает список
  * объектов {@link UnPackedTruckDto}, представляющих
@@ -20,10 +20,10 @@ public interface UnPackagingService {
      * @param filePath Путь к файлу JSON, содержащему данные
      *                 о грузовиках.
      * @return Список объектов {@link UnPackedTruckDto},
-     *         представляющих информацию о каждом
-     *         распакованном грузовике.
+     * представляющих информацию о каждом
+     * распакованном грузовике.
      * @throws FileReadException Если произошла ошибка при
-     *                          чтении файла.
+     *                           чтении файла.
      */
     List<UnPackedTruckDto> unpackTruck(String filePath);
 }

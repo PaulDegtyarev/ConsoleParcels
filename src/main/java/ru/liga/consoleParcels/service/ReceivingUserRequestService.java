@@ -5,7 +5,7 @@ import ru.liga.consoleParcels.model.UserCommand;
 
 /**
  * Сервис для получения запросов от пользователя.
- *
+ * <p>
  * Этот интерфейс определяет методы для получения от
  * пользователя выбора действия (упаковка, распаковка,
  * выход) и необходимых параметров для выполнения этих
@@ -23,7 +23,7 @@ public interface ReceivingUserRequestService {
      * Запрашивает у пользователя параметры для упаковки.
      *
      * @return Объект {@link PackagingParametersDto},
-     *         содержащий параметры для упаковки.
+     * содержащий параметры для упаковки.
      */
     PackagingParametersDto requestParametersForPacking();
 

@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Реализация сервиса для записи данных о грузовиках в JSON
  * файл.
- *
+ * <p>
  * Этот сервис использует {@link ObjectMapper} для
  * сериализации данных о грузовиках в JSON формат и
  * записывает их в файл по заданному пути.
@@ -38,7 +38,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
      * @param filePath Путь к файлу, в который нужно записать
      *                 данные.
      * @throws FileWriteException Если произошла ошибка при
-     *                           записи в файл.
+     *                            записи в файл.
      */
     @Override
     public void writeTruckToJson(List<Truck> trucks, String filePath) {
@@ -68,7 +68,7 @@ public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
         }
     }
 
-    private void addTrucksToData (List<Truck> trucks, List<Map<String, Object>> truckList){
+    private void addTrucksToData(List<Truck> trucks, List<Map<String, Object>> truckList) {
         int nextTruckId = truckList.size() + 1;
         for (Truck truck : trucks) {
             Map<String, Object> truckMap = new HashMap<>();

@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Реализация сервиса для распаковки грузовиков из JSON
  * файла.
- *
+ * <p>
  * Этот сервис считывает данные о грузовиках из JSON
  * файла, обрабатывает их и возвращает список объектов
  * {@link UnPackedTruckDto}, представляющих информацию о
@@ -32,7 +32,7 @@ public class UnPackagingServiceImpl implements UnPackagingService {
      * Конструктор сервиса распаковки грузовиков.
      *
      * @param delimeterFactory Фабрика для создания
-     *                        разделителей.
+     *                         разделителей.
      */
     public UnPackagingServiceImpl(DelimeterFactory delimeterFactory) {
         this.delimeterFactory = delimeterFactory;
@@ -44,10 +44,10 @@ public class UnPackagingServiceImpl implements UnPackagingService {
      * @param filePath Путь к файлу JSON, содержащему данные
      *                 о грузовиках.
      * @return Список объектов {@link UnPackedTruckDto},
-     *         представляющих информацию о каждом
-     *         распакованном грузовике.
+     * представляющих информацию о каждом
+     * распакованном грузовике.
      * @throws FileReadException Если произошла ошибка при
-     *                          чтении файла.
+     *                           чтении файла.
      */
     @Override
     public List<UnPackedTruckDto> unpackTruck(String filePath) {

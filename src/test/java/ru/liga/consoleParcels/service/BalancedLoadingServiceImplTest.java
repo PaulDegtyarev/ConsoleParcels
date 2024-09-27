@@ -33,7 +33,7 @@ public class BalancedLoadingServiceImplTest {
                 new Parcel("333")
         ));
 
-        List<Truck> expectedResult = service.packPackages(parcels,2);
+        List<Truck> expectedResult = service.packPackages(parcels, 2);
 
         assertThat(expectedResult.size()).isEqualTo(2);
     }

@@ -4,7 +4,7 @@ import ru.liga.consoleParcels.factory.DelimeterFactory;
 
 /**
  * Реализация фабрики для создания разделителя.
- *
+ * <p>
  * Эта фабрика создает разделитель на основе идентификатора посылки.
  *
  * @see DelimeterFactory

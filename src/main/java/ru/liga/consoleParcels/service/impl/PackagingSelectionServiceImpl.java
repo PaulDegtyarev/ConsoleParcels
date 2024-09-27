@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Реализация сервиса для выбора сервиса упаковки.
- *
+ * <p>
  * Этот сервис хранит карту, связывающую варианты выбора
  * алгоритма пользователя с конкретными сервисами упаковки.
  * В зависимости от варианта выбора пользователя, он
@@ -26,11 +26,11 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
 
     /**
      * Конструктор сервиса выбора сервиса упаковки.
-     *
+     * <p>
      * Инициализирует карту сервисов упаковки.
      *
      * @param packagingServiceFactory Фабрика для создания
-     *                              сервисов упаковки.
+     *                                сервисов упаковки.
      */
     public PackagingSelectionServiceImpl(PackagingServiceFactory packagingServiceFactory) {
         this.packagingServiceFactory = packagingServiceFactory;
@@ -47,9 +47,9 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
      * пользователем алгоритма.
      *
      * @param algorithmChoice Выбранный пользователем алгоритм
-     *                       упаковки.
+     *                        упаковки.
      * @return Сервис упаковки, соответствующий выбранному
-     *         алгоритму.
+     * алгоритму.
      */
     @Override
     public PackagingService selectPackagingService(UserAlgorithmChoice algorithmChoice) {

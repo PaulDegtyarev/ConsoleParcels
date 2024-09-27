@@ -25,7 +25,6 @@ public class DefaultPrintResultFormatterTest {
 
     @Test
     void transferPackagingResultsToConsole_withValidTrucks_shouldFormatCorrectly() {
-        // Подготовка моков для Truck
         Truck truck1 = mock(Truck.class);
         Truck truck2 = mock(Truck.class);
 
@@ -43,23 +42,21 @@ public class DefaultPrintResultFormatterTest {
 
         List<Truck> trucks = List.of(truck1, truck2);
 
-        // Вызов тестируемого метода
         StringBuilder result = formatter.transferPackagingResultsToConsole(trucks);
 
-        // Проверяем, что форматированная строка содержит правильные данные
         String expectedOutput = """
                 Грузовик 1:
                 +1  +
                 +22 +
                 +333+
                 ++++++++
-
+                
                 Грузовик 2:
                 +4  +
                 +55 +
                 +666+
                 ++++++++
-
+                
                 """;
 
         assertThat(result.toString()).isEqualTo(expectedOutput);
@@ -67,11 +64,9 @@ public class DefaultPrintResultFormatterTest {
 
     @Test
     void transferUnpackingResultsToConsole_withValidUnPackedTrucks_shouldFormatCorrectly() {
-        // Подготовка моков для UnPackedTruckDto
         UnPackedTruckDto unpackedTruck1 = mock(UnPackedTruckDto.class);
         UnPackedTruckDto unpackedTruck2 = mock(UnPackedTruckDto.class);
 
-        // Мокируем первый грузовик
         when(unpackedTruck1.getTruckId()).thenReturn(1);
         when(unpackedTruck1.getPackageLayout()).thenReturn(Arrays.asList(
                 Arrays.asList("1", " ", " "),
@@ -84,7 +79,6 @@ public class DefaultPrintResultFormatterTest {
         packageCounts1.put("3", 3);
         when(unpackedTruck1.getPackageCounts()).thenReturn(packageCounts1);
 
-        // Мокируем второй грузовик
         when(unpackedTruck2.getTruckId()).thenReturn(2);
         when(unpackedTruck2.getPackageLayout()).thenReturn(Arrays.asList(
                 Arrays.asList("4", " ", " "),
@@ -99,32 +93,30 @@ public class DefaultPrintResultFormatterTest {
 
         List<UnPackedTruckDto> unpackedTrucks = List.of(unpackedTruck1, unpackedTruck2);
 
-        // Вызов тестируемого метода
         StringBuilder result = formatter.transferUnpackingResultsToConsole(unpackedTrucks);
 
-        // Проверяем, что форматированная строка содержит правильные данные
         String expectedOutput = """
-        Грузовик 1:
-        +1  +
-        +22 +
-        +333+
-        ++++++++
-        Количество посылок:
-        1 - 1 шт.
-        2 - 2 шт.
-        3 - 3 шт.
-        
-        Грузовик 2:
-        +4  +
-        +55 +
-        +666+
-        ++++++++
-        Количество посылок:
-        4 - 1 шт.
-        5 - 2 шт.
-        6 - 3 шт.
-        
-        """;
+                Грузовик 1:
+                +1  +
+                +22 +
+                +333+
+                ++++++++
+                Количество посылок:
+                1 - 1 шт.
+                2 - 2 шт.
+                3 - 3 шт.
+                
+                Грузовик 2:
+                +4  +
+                +55 +
+                +666+
+                ++++++++
+                Количество посылок:
+                4 - 1 шт.
+                5 - 2 шт.
+                6 - 3 шт.
+                
+                """;
 
         assertThat(result.toString()).isEqualTo(expectedOutput);
     }

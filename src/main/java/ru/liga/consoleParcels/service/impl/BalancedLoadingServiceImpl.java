@@ -1,13 +1,13 @@
 package ru.liga.consoleParcels.service.impl;
 
-import ru.liga.consoleParcels.model.TruckPlacement;
+import lombok.extern.log4j.Log4j2;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
+import ru.liga.consoleParcels.model.TruckPlacement;
 import ru.liga.consoleParcels.service.PackagingService;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.Comparator;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 /**
  * Реализация сервиса упаковки с равномерной загрузкой.
- *
+ * <p>
  * Этот сервис сортирует посылки по площади в порядке убывания
  * и затем распределяет их по грузовикам, выбирая для каждой
  * посылки грузовик с наименьшим заполненным пространством.
@@ -41,7 +41,7 @@ public class BalancedLoadingServiceImpl implements PackagingService {
      *
      * @param parcels      Список посылок, которые нужно упаковать.
      * @param numberOfCars Количество грузовиков, в которые нужно
-     *                    упаковать посылки.
+     *                     упаковать посылки.
      * @return Список грузовиков с упакованными посылками.
      */
     @Override
