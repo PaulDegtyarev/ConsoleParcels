@@ -7,15 +7,13 @@
             </PatternLayout>
         </File>
 
-        <!-- Appender для вывода логов в консоль -->
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
     </Appenders>
 
     <Loggers>
-        <!-- Корневой логгер -->
-        <Root level="info">
+        <Root level="trace">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
         </Root>
