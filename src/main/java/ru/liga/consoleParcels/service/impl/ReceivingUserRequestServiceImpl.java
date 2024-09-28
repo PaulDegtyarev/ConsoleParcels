@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.builder.PackagingCommandBuilder;
 import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.service.ReceivingUserRequestService;
@@ -19,6 +21,7 @@ import java.util.Scanner;
  * @see ReceivingUserRequestService
  */
 @Log4j2
+@Service
 public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestService {
     private Scanner scanner;
     private PackagingCommandBuilder packagingCommandBuilder;
@@ -32,6 +35,7 @@ public class ReceivingUserRequestServiceImpl implements ReceivingUserRequestServ
      *                                объекта
      *                                {@link PackagingParametersDto}.
      */
+    @Autowired
     public ReceivingUserRequestServiceImpl(Scanner scanner, PackagingCommandBuilder packagingCommandBuilder) {
         this.scanner = scanner;
         this.packagingCommandBuilder = packagingCommandBuilder;

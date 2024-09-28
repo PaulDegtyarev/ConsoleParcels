@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.FileWriteException;
 import ru.liga.consoleParcels.model.Truck;
@@ -27,6 +28,7 @@ import java.util.Map;
  * @see TruckToJsonWriterService
  */
 @Log4j2
+@Service
 public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 

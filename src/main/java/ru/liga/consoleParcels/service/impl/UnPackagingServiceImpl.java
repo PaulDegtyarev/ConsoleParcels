@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.exception.FileReadException;
 import ru.liga.consoleParcels.factory.DelimeterFactory;
@@ -24,6 +26,7 @@ import java.util.*;
  * @see UnPackagingService
  */
 @Log4j2
+@Service
 public class UnPackagingServiceImpl implements UnPackagingService {
     private ObjectMapper objectMapper = new ObjectMapper();
     private DelimeterFactory delimeterFactory;
@@ -34,6 +37,7 @@ public class UnPackagingServiceImpl implements UnPackagingService {
      * @param delimeterFactory Фабрика для создания
      *                         разделителей.
      */
+    @Autowired
     public UnPackagingServiceImpl(DelimeterFactory delimeterFactory) {
         this.delimeterFactory = delimeterFactory;
     }

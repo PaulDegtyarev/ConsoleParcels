@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.factory.PackagingServiceFactory;
 import ru.liga.consoleParcels.service.PackagingSelectionService;
 import ru.liga.consoleParcels.service.PackagingService;
@@ -20,6 +22,7 @@ import java.util.Map;
  * @see PackagingSelectionService
  */
 @Log4j2
+@Service
 public class PackagingSelectionServiceImpl implements PackagingSelectionService {
     private PackagingServiceFactory packagingServiceFactory;
     private Map<UserAlgorithmChoice, PackagingService> serviceMap = new HashMap<>();
@@ -32,6 +35,7 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
      * @param packagingServiceFactory Фабрика для создания
      *                                сервисов упаковки.
      */
+    @Autowired
     public PackagingSelectionServiceImpl(PackagingServiceFactory packagingServiceFactory) {
         this.packagingServiceFactory = packagingServiceFactory;
         initializeServiceMap();

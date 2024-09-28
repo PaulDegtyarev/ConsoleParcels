@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.PackageShapeException;
 import ru.liga.consoleParcels.model.Parcel;
@@ -20,6 +21,7 @@ import java.util.List;
  * на основе этих данных и возвращает их в виде списка.
  */
 @Log4j2
+@Service
 public class PackageReader {
     private static final String[] ALLOWED_PARCELS = {
             "1",

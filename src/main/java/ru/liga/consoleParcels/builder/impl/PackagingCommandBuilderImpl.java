@@ -1,6 +1,8 @@
 package ru.liga.consoleParcels.builder.impl;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.builder.PackagingCommandBuilder;
 import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.model.UserAlgorithmChoice;
@@ -13,18 +15,20 @@ import java.util.Scanner;
  * @see PackagingCommandBuilder
  */
 @Log4j2
+@Component
 public class PackagingCommandBuilderImpl implements PackagingCommandBuilder {
     private int numberOfCars;
     private String inputFilePath;
     private UserAlgorithmChoice algorithmChoice;
     private String filePathToWrite;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     /**
      * Конструктор билдера.
      *
      * @param scanner Сканер для считывания ввода пользователя.
      */
+    @Autowired
     public PackagingCommandBuilderImpl(Scanner scanner) {
         this.scanner = scanner;
     }

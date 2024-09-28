@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.factory.impl;
 
+import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.factory.DelimeterFactory;
 
 /**
@@ -9,6 +10,7 @@ import ru.liga.consoleParcels.factory.DelimeterFactory;
  *
  * @see DelimeterFactory
  */
+@Component
 public class DelimeterFactoryImpl implements DelimeterFactory {
     /**
      * Создает разделитель на основе идентификатора посылки.

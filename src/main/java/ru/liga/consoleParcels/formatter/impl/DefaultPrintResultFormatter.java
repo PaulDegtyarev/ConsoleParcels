@@ -1,6 +1,7 @@
 package ru.liga.consoleParcels.formatter.impl;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
 import ru.liga.consoleParcels.model.Truck;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @see PrintResultFormatter
  */
 @Log4j2
+@Service
 public class DefaultPrintResultFormatter implements PrintResultFormatter {
     /**
      * Форматирует результаты упаковки и возвращает строку для вывода на консоль.

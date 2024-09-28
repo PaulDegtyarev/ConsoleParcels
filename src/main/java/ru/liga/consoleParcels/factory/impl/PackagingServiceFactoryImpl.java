@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.factory.impl;
 
+import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.factory.PackagingServiceFactory;
 import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.impl.OptimizedPackagingServiceImpl;
@@ -15,6 +16,7 @@ import ru.liga.consoleParcels.service.impl.BalancedLoadingServiceImpl;
  *
  * @see PackagingServiceFactory
  */
+@Component
 public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
     /**
      * Создает сервис для оптимизированной упаковки.
