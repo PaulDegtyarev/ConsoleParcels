@@ -12,7 +12,8 @@ import lombok.Getter;
 public class Parcel {
     private final int height;
     private final int width;
-    private final char id;
+    private final char symbol;
+    private final String name;
     private char[][] shape;
 
     /**
@@ -24,23 +25,20 @@ public class Parcel {
      *
      * @param input Строка, представляющая форму посылки.
      */
-    public Parcel(String input) {
+    public Parcel(String input, char symbol, String name) {
         String[] lines = input.split("\n");
 
         this.height = lines.length;
 
         int maxWidth = 0;
-        char parcelId = ' ';
 
         for (String line : lines) {
-            if (!line.isEmpty() && parcelId == ' ') {
-                parcelId = line.charAt(0);
-            }
             maxWidth = Math.max(maxWidth, line.length());
         }
 
         this.width = maxWidth;
-        this.id = parcelId;
+        this.symbol = symbol;
+        this.name = name;
 
         this.shape = new char[height][width];
         for (int i = 0; i < height; i++) {
@@ -61,17 +59,5 @@ public class Parcel {
      */
     public int getArea() {
         return width * height;
-    }
-
-    /**
-     * Возвращает строковое представление посылки.
-     *
-     * @return Строковое представление посылки, содержащее ее идентификатор.
-     */
-    @Override
-    public String toString() {
-        return "Parcel{" +
-                "id=" + id +
-                '}';
     }
 }

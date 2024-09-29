@@ -23,28 +23,6 @@ import java.util.List;
 @Log4j2
 @Service
 public class PackageReader {
-    private static final String[] ALLOWED_PARCELS = {
-            "1",
-            "22",
-            "333",
-            "4444",
-            "55555",
-            "666\n666",
-            "777\n7777",
-            "8888\n8888",
-            "999\n999\n999"
-    };
-
-    private boolean isValidParcel(String input) {
-        for (String allowedParcel : ALLOWED_PARCELS) {
-            if (input.trim().equals(allowedParcel.trim())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * Считывает данные о посылках из файла.
      * <p>
@@ -62,6 +40,7 @@ public class PackageReader {
      */
     public List<Parcel> readPackages(String filename) {
         List<Parcel> parcels = new ArrayList<>();
+        int firstSymbolPosition = 0;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             StringBuilder parcelData = new StringBuilder();
@@ -71,13 +50,10 @@ public class PackageReader {
                 if (line.trim().isEmpty()) {
                     if (!parcelData.isEmpty()) {
                         String shape = parcelData.toString().trim();
+                        char symbol = shape.charAt(firstSymbolPosition);
 
-                        if (isValidParcel(shape)) {
-                            parcels.add(new Parcel(shape));
-                            log.info("Посылка с формой {} добавлена в список", shape);
-                        } else {
-                            throw new PackageShapeException(String.format("Неверная форма посылки: %s, из файла: %s", shape, filename));
-                        }
+                        parcels.add(new Parcel(shape, symbol));
+                        log.info("Посылка с формой {} добавлена в список", shape);
 
                         parcelData.setLength(0);
                     }
@@ -88,13 +64,10 @@ public class PackageReader {
 
             if (!parcelData.isEmpty()) {
                 String shape = parcelData.toString().trim();
+                char symbol = shape.charAt(firstSymbolPosition);
 
-                if (isValidParcel(shape)) {
-                    parcels.add(new Parcel(shape));
-                    log.info("Посылка с формой {} добавлена в список", shape);
-                } else {
-                    throw new PackageShapeException(String.format("Неверная форма посылки: %s, из файла: %s", shape, filename));
-                }
+                parcels.add(new Parcel(shape, symbol));
+                log.info("Посылка с формой {} добавлена в список", shape);
             }
 
         } catch (IOException ioException) {
