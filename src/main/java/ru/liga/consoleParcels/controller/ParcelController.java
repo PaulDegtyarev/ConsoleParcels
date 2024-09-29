@@ -3,11 +3,7 @@ package ru.liga.consoleParcels.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.liga.consoleParcels.dto.ParcelDto;
-import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.service.ParcelService;
-
-import java.util.List;
 
 @ShellComponent
 public class ParcelController {
@@ -19,7 +15,7 @@ public class ParcelController {
     }
 
     @ShellMethod
-    public List<ParcelDto> findAllParcels() {
+    public String findAllParcels() {
         return parcelService.findAllParcels();
     }
 }

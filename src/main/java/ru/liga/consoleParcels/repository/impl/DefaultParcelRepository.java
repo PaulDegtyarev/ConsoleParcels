@@ -12,12 +12,13 @@ import ru.liga.consoleParcels.repository.ParcelRepository;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DefaultParcelRepository implements ParcelRepository {
-    private final List<Parcel> parcels = new ArrayList<>();
+    private final Map<String, Parcel> parcels = new HashMap<>();
 
     @Value("${parcels.init.data.file}")
     private String parcelsInitDataFile;
@@ -30,7 +31,7 @@ public class DefaultParcelRepository implements ParcelRepository {
 
             for (ParcelData parcelData : initData.getParcels()) {
                 Parcel parcel = new Parcel(parcelData.getShape(), parcelData.getSymbol().charAt(0), parcelData.getName());
-                parcels.add(parcel);
+                parcels.put(parcelData.getName(), parcel);
             }
         } catch (IOException e) {
             throw new FileNotFoundException("Ошибка чтения данных из файла: " + parcelsInitDataFile + " " + e.getMessage());
@@ -39,6 +40,8 @@ public class DefaultParcelRepository implements ParcelRepository {
 
     @Override
     public List<Parcel> findAll() {
-        return parcels;
+        return parcels.values()
+                .stream()
+                .toList();
     }
 }

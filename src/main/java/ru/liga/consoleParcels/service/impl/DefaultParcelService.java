@@ -6,7 +6,7 @@ import ru.liga.consoleParcels.dto.ParcelDto;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultParcelService implements ParcelService {
@@ -18,7 +18,7 @@ public class DefaultParcelService implements ParcelService {
     }
 
     @Override
-    public List<ParcelDto> findAllParcels() {
+    public String findAllParcels() {
         return parcelRepository.findAll()
                 .stream()
                 .map(parcel -> new ParcelDto(
@@ -26,6 +26,7 @@ public class DefaultParcelService implements ParcelService {
                         parcel.getShape(),
                         parcel.getSymbol()
                 ))
-                .toList();
+                .map(ParcelDto::toString)
+                .collect(Collectors.joining("\n\n"));
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ParcelService {
 
-    List<ParcelDto> findAllParcels();
+    String findAllParcels();
 }
