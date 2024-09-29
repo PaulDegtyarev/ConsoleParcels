@@ -2,6 +2,7 @@ package ru.liga.consoleParcels.service.impl;
 
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
@@ -43,7 +44,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
      * @return Список грузовиков с упакованными посылками.
      */
     @Override
-    public List<Truck> packPackages(List<Parcel> parcels, int numberOfCars) {
+    public List<Truck> packPackages(List<ParcelMapper> parcels, int numberOfCars) {
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
@@ -53,7 +54,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
         return trucks;
     }
 
-    private List<Truck> loadTrucks(List<Parcel> parcels, int numberOfCars) {
+    private List<Truck> loadTrucks(List<ParcelMapper> parcels, int numberOfCars) {
         List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
 
         parcels.stream()

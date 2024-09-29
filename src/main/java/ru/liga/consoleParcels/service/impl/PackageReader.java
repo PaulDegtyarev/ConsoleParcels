@@ -3,6 +3,7 @@ package ru.liga.consoleParcels.service.impl;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.PackageShapeException;
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import lombok.extern.log4j.Log4j2;
 
@@ -38,8 +39,8 @@ public class PackageReader {
      * @throws PackageShapeException Если форма одной из посылок
      *                               недопустима.
      */
-    public List<Parcel> readPackages(String filename) {
-        List<Parcel> parcels = new ArrayList<>();
+    public List<ParcelMapper> readPackages(String filename) {
+        List<ParcelMapper> parcels = new ArrayList<>();
         int firstSymbolPosition = 0;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -52,7 +53,7 @@ public class PackageReader {
                         String shape = parcelData.toString().trim();
                         char symbol = shape.charAt(firstSymbolPosition);
 
-                        parcels.add(new Parcel(shape, symbol));
+                        parcels.add(new ParcelMapper(shape));
                         log.info("Посылка с формой {} добавлена в список", shape);
 
                         parcelData.setLength(0);
@@ -66,7 +67,7 @@ public class PackageReader {
                 String shape = parcelData.toString().trim();
                 char symbol = shape.charAt(firstSymbolPosition);
 
-                parcels.add(new Parcel(shape, symbol));
+                parcels.add(new ParcelMapper(shape));
                 log.info("Посылка с формой {} добавлена в список", shape);
             }
 

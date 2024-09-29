@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service;
 
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * посылок в заданное количество грузовиков.
  */
 public interface PackagingService {
+    List<Truck> packPackages(List<ParcelMapper> parcels, int numberOfCars);
 
     /**
      * Упаковывает список посылок в заданное количество грузовиков.
@@ -21,5 +23,5 @@ public interface PackagingService {
      *                     упаковать посылки.
      * @return Список грузовиков с упакованными посылками.
      */
-    List<Truck> packPackages(List<Parcel> parcels, int numberOfCars);
+
 }

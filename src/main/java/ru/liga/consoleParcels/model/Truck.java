@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.model;
 
+import ru.liga.consoleParcels.mapper.ParcelMapper;
+
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -29,7 +31,7 @@ public class Truck {
         }
     }
 
-    private boolean canFit(Parcel parcel, int x, int y) {
+    private boolean canFit(ParcelMapper parcel, int x, int y) {
         if (x + parcel.getWidth() > TRUCK_WIDTH || y + parcel.getHeight() > TRUCK_HEIGHT) {
             return false;
         }
@@ -68,7 +70,7 @@ public class Truck {
      * @param x      Координата x начала размещения посылки.
      * @param y      Координата y начала размещения посылки.
      */
-    public void place(Parcel parcel, int x, int y) {
+    public void place(ParcelMapper parcel, int x, int y) {
         char[][] shape = parcel.getShape();
 
         for (int i = 0; i < parcel.getHeight(); i++) {
@@ -91,7 +93,7 @@ public class Truck {
      * позиции, или пустой Optional, если позиция
      * не найдена.
      */
-    public Optional<Point> findPosition(Parcel parcel) {
+    public Optional<Point> findPosition(ParcelMapper parcel) {
         for (int y = TRUCK_HEIGHT - parcel.getHeight(); y >= 0; y--) {
             for (int x = 0; x <= TRUCK_WIDTH - parcel.getWidth(); x++) {
                 if (canFit(parcel, x, y)) {

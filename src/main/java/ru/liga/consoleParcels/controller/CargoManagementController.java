@@ -9,6 +9,7 @@ import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.exception.*;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.*;
@@ -69,7 +70,7 @@ public class CargoManagementController {
 
         List<Truck> trucks = new ArrayList<>();
         try {
-            List<Parcel> parcels = packageReader.readPackages(packagingParameters.getInputFilePath());
+            List<ParcelMapper> parcels = packageReader.readPackages(packagingParameters.getInputFilePath());
             log.debug("Прочитано {} посылок из файла {}", parcels.size(), packagingParameters.getInputFilePath());
 
             log.info("Начинается упаковка {} машин из файла {}", packagingParameters.getNumberOfCars(), packagingParameters.getInputFilePath());

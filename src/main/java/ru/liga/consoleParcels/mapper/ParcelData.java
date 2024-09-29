@@ -1,11 +1,11 @@
 package ru.liga.consoleParcels.mapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class ParcelData {
     @JsonProperty("name")
     private String name;
@@ -15,12 +15,4 @@ public class ParcelData {
 
     @JsonProperty("symbol")
     private String symbol;
-
-    public ParcelData(String name, String shape, String symbol) {
-        this.name = name;
-        this.shape = shape;
-        this.symbol = symbol;
-    }
-
-    public ParcelData(){}
 }

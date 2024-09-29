@@ -3,7 +3,7 @@ package ru.liga.consoleParcels.service.impl;
 import lombok.extern.log4j.Log4j2;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.model.TruckPlacement;
@@ -45,8 +45,8 @@ public class BalancedLoadingServiceImpl implements PackagingService {
      * @return Список грузовиков с упакованными посылками.
      */
     @Override
-    public List<Truck> packPackages(List<Parcel> parcels, int numberOfCars) {
-        parcels.sort(Comparator.comparingInt(Parcel::getArea).reversed());
+    public List<Truck> packPackages(List<ParcelMapper> parcels, int numberOfCars) {
+        parcels.sort(Comparator.comparingInt(ParcelMapper::getArea).reversed());
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
         List<Truck> trucks = loadTrucks(parcels, numberOfCars);
@@ -55,7 +55,7 @@ public class BalancedLoadingServiceImpl implements PackagingService {
         return trucks;
     }
 
-    private List<Truck> loadTrucks(List<Parcel> parcels, int numberOfCars) {
+    private List<Truck> loadTrucks(List<ParcelMapper> parcels, int numberOfCars) {
         List<Truck> trucks = truckFactory.createTrucks(numberOfCars);
 
         parcels.stream()

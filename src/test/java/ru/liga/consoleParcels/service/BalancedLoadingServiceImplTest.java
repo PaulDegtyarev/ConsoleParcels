@@ -2,6 +2,7 @@ package ru.liga.consoleParcels.service;
 
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.impl.TruckFactoryImpl;
+import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.impl.BalancedLoadingServiceImpl;
@@ -26,11 +27,11 @@ public class BalancedLoadingServiceImplTest {
 
     @Test
     public void packPackages_withCorrectInput_shouldReturnCorrectOutput() {
-        List<Parcel> parcels = new ArrayList<>(List.of(
-                new Parcel("1"),
-                new Parcel("1"),
-                new Parcel("1"),
-                new Parcel("333")
+        List<ParcelMapper> parcels = new ArrayList<>(List.of(
+                new ParcelMapper("1"),
+                new ParcelMapper("1"),
+                new ParcelMapper("1"),
+                new ParcelMapper("333")
         ));
 
         List<Truck> expectedResult = service.packPackages(parcels, 2);
@@ -40,13 +41,13 @@ public class BalancedLoadingServiceImplTest {
 
     @Test
     void packPackage_withDataThatDoesNotFitInOneTruck_shouldThrowPackingException() {
-        List<Parcel> parcels = new ArrayList<>(List.of(
-                new Parcel("999\n999\n999"),
-                new Parcel("999\n999\n999"),
-                new Parcel("999\n999\n999"),
-                new Parcel("999\n999\n999"),
-                new Parcel("999\n999\n999"),
-                new Parcel("999\n999\n999")
+        List<ParcelMapper> parcels = new ArrayList<>(List.of(
+                new ParcelMapper("999\n999\n999"),
+                new ParcelMapper("999\n999\n999"),
+                new ParcelMapper("999\n999\n999"),
+                new ParcelMapper("999\n999\n999"),
+                new ParcelMapper("999\n999\n999"),
+                new ParcelMapper("999\n999\n999")
         ));
 
         assertThrows(PackingException.class, () -> service.packPackages(parcels, 1));
