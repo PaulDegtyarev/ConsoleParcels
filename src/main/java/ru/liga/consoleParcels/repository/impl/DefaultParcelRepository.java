@@ -52,6 +52,6 @@ public class DefaultParcelRepository implements ParcelRepository {
 
     @Override
     public Optional<Parcel> findParcelByName(String name) {
-        return Optional.ofNullable(parcels.get(name.trim().toLowerCase()));
+        return Optional.ofNullable(parcels.get(name));
     }
 }

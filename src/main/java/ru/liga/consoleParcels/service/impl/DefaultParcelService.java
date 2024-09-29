@@ -35,7 +35,7 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public ParcelDto findParcelByName(String name) {
-        log.info("Начинается поиск посылки с названием: {}", name.trim().toLowerCase());
+        log.info("Начинается поиск посылки с названием: {}", name);
         return parcelRepository.findParcelByName(name.trim().toLowerCase())
                 .map(parcel -> new ParcelDto(
                             parcel.getName(),
