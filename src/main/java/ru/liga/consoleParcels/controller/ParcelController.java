@@ -24,4 +24,9 @@ public class ParcelController {
     public ParcelDto findParcelByName(String name) {
         return parcelService.findParcelByName(name);
     }
+
+    @ShellMethod
+    public ParcelDto addParcel(String name, String shape, char symbol) {
+        return parcelService.addParcel(name, shape, symbol);
+    }
 }

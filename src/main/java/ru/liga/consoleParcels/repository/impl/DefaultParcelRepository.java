@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @Repository
 public class DefaultParcelRepository implements ParcelRepository {
-    private static final Logger log = LogManager.getLogger(DefaultParcelRepository.class);
     private final Map<String, Parcel> parcels = new HashMap<>();
 
     @Value("${parcels.init.data.file}")
@@ -34,8 +33,7 @@ public class DefaultParcelRepository implements ParcelRepository {
             ParcelsInitData initData = objectMapper.readValue(new File(parcelsInitDataFile), ParcelsInitData.class);
 
             for (ParcelData parcelData : initData.getParcels()) {
-
-                Parcel parcel = new Parcel(parcelData.getShape(), parcelData.getSymbol().charAt(0), parcelData.getName().trim().toLowerCase());
+                Parcel parcel = new Parcel(parcelData.getName().trim().toLowerCase(), parcelData.createShape(), parcelData.getSymbol().charAt(0));
                 parcels.put(parcelData.getName().toLowerCase(), parcel);
             }
         } catch (IOException e) {
@@ -53,5 +51,15 @@ public class DefaultParcelRepository implements ParcelRepository {
     @Override
     public Optional<Parcel> findParcelByName(String name) {
         return Optional.ofNullable(parcels.get(name));
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return parcels.containsKey(name);
+    }
+
+    @Override
+    public void save(Parcel parcel) {
+        parcels.put(parcel.getName(), parcel);
     }
 }

@@ -11,4 +11,6 @@ public interface ParcelService {
 
 
     ParcelDto findParcelByName(String name);
+
+    ParcelDto addParcel(String name, String shape, char symbol);
 }
