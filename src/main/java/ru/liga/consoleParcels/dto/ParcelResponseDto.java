@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class ParcelDto {
+public class ParcelResponseDto {
     private final String name;
     private char[][] shape;
     private char symbol;

@@ -3,7 +3,8 @@ package ru.liga.consoleParcels.service.impl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.liga.consoleParcels.dto.ParcelDto;
+import ru.liga.consoleParcels.dto.ParcelRequestDto;
+import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.exception.ParcelNameConflictException;
 import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.exception.WrongSymbolInShapeException;
@@ -27,20 +28,20 @@ public class DefaultParcelService implements ParcelService {
     public String findAllParcels() {
         return parcelRepository.findAll()
                 .stream()
-                .map(parcel -> new ParcelDto(
+                .map(parcel -> new ParcelResponseDto(
                         parcel.getName(),
                         parcel.getShape(),
                         parcel.getSymbol()
                 ))
-                .map(ParcelDto::toString)
+                .map(ParcelResponseDto::toString)
                 .collect(Collectors.joining("\n\n"));
     }
 
     @Override
-    public ParcelDto findParcelByName(String name) {
+    public ParcelResponseDto findParcelByName(String name) {
         log.info("Начинается поиск посылки с названием: {}", name);
         return parcelRepository.findParcelByName(name.trim().toLowerCase())
-                .map(parcel -> new ParcelDto(
+                .map(parcel -> new ParcelResponseDto(
                             parcel.getName(),
                             parcel.getShape(),
                             parcel.getSymbol()
@@ -49,8 +50,13 @@ public class DefaultParcelService implements ParcelService {
     }
 
     @Override
-    public ParcelDto addParcel(String name, String shape, char symbol) {
-        String trimmedName = name.trim().toLowerCase();
+    public ParcelResponseDto addParcel(ParcelRequestDto parcelRequest) {
+        String name = parcelRequest.getName();
+        String shape = parcelRequest.getShape();
+        char symbol = parcelRequest.getSymbol();
+        String trimmedName = parcelRequest.getName()
+                .trim()
+                .toLowerCase();
 
         boolean areAnyCharsNotSymbol = shape.chars()
                 .mapToObj(c -> (char) c)
@@ -69,7 +75,7 @@ public class DefaultParcelService implements ParcelService {
         Parcel newParcel = new Parcel(name, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
-        return new ParcelDto(
+        return new ParcelResponseDto(
                 newParcel.getName(),
                 newParcel.getShape(),
                 newParcel.getSymbol()
@@ -97,4 +103,9 @@ public class DefaultParcelService implements ParcelService {
 
         return shapeArray;
     }
+
+//    @Override
+//    public ParcelResponseDto updateParcelByName(String nameOfSavedParcel, ParcelRequestDto parcelRequest) {
+//
+//    }
 }

@@ -3,7 +3,8 @@ package ru.liga.consoleParcels.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.liga.consoleParcels.dto.ParcelDto;
+import ru.liga.consoleParcels.dto.ParcelRequestDto;
+import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.service.ParcelService;
 
 @ShellComponent
@@ -21,12 +22,13 @@ public class ParcelController {
     }
 
     @ShellMethod
-    public ParcelDto findParcelByName(String name) {
+    public ParcelResponseDto findParcelByName(String name) {
         return parcelService.findParcelByName(name);
     }
 
     @ShellMethod
-    public ParcelDto addParcel(String name, String shape, char symbol) {
-        return parcelService.addParcel(name, shape, symbol);
+    public ParcelResponseDto addParcel(String name, String shape, char symbol) {
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        return parcelService.addParcel(parcelRequest);
     }
 }

@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ru.liga.consoleParcels.dto.ParcelDto;
+import ru.liga.consoleParcels.dto.ParcelRequestDto;
+import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.exception.ParcelNameConflictException;
 import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.exception.WrongSymbolInShapeException;
@@ -55,7 +56,7 @@ public class DefaultParcelServiceTest {
         Parcel parcel = new Parcel(name, new char[][]{{'1'}}, '1');
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(parcel));
 
-        ParcelDto result = defaultParcelService.findParcelByName(name);
+        ParcelResponseDto result = defaultParcelService.findParcelByName(name);
 
         assertThat(name).isEqualTo(result.getName());
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
@@ -75,16 +76,17 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1";
         char symbol = '1';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
 
         when(parcelRepository.existsByName(anyString())).thenReturn(false);
         doNothing().when(parcelRepository).save(any(Parcel.class));
 
-        ParcelDto result = defaultParcelService.addParcel(name, shape, symbol);
+        ParcelResponseDto result = defaultParcelService.addParcel(parcelRequest);
 
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getSymbol()).isEqualTo(symbol);
 
-        verify(parcelRepository, times(1)).existsByName(name.trim().toLowerCase());
+        verify(parcelRepository, times(1)).existsByName(parcelRequest.getName().trim().toLowerCase());
         verify(parcelRepository, times(1)).save(any(Parcel.class));
     }
 
@@ -93,13 +95,14 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1";
         char symbol = '1';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
 
         when(parcelRepository.existsByName(anyString())).thenReturn(true);
 
-        assertThatThrownBy(() -> defaultParcelService.addParcel(name, shape, symbol))
+        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequest))
                 .isInstanceOf(ParcelNameConflictException.class);
 
-        verify(parcelRepository, times(1)).existsByName(name.trim().toLowerCase());
+        verify(parcelRepository, times(1)).existsByName(parcelRequest.getName().trim().toLowerCase());
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
 
@@ -108,8 +111,9 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1\n12\n1";
         char symbol = '1';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
 
-        assertThatThrownBy(() -> defaultParcelService.addParcel(name, shape, symbol))
+        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequest))
                 .isInstanceOf(WrongSymbolInShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));
