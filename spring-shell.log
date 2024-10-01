@@ -90,3 +90,13 @@
 1727769538625:add-parcel молоко ++ +
 1727769546970:find-all-parcels
 1727769568804:exit
+1727781567873:help
+1727781593207:update-parcel-by-name Шкаф ****** *
+1727781600231:help
+1727781606110:find-parcel-by-name Шкаф
+1727781610981:help
+1727781614967:find-all-parcels
+1727781625904:help
+1727781637400:update-parcel-by-name Шкаф ?? 0
+1727781656150:update-parcel-by-name шКАф ?? ?
+1727781665009:update-parcel-by-name Щкаф ?? ?

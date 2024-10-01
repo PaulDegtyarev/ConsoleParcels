@@ -12,4 +12,6 @@ public interface ParcelService {
 
 
     ParcelResponseDto addParcel(ParcelRequestDto parcelRequest);
+
+    ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequest);
 }

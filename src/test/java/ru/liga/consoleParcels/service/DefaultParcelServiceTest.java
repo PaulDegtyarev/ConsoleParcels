@@ -118,4 +118,58 @@ public class DefaultParcelServiceTest {
 
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
+
+
+    @Test
+    void updateParcelByName_withValidInput_shouldUpdateParcel() {
+        String name = "Чипсы";
+        String shape = "999999999";
+        char symbol = '9';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+
+        Parcel existingParcel = new Parcel(name, new char[][]{{'0', '0', '0'}, {'0', '0', '0'}, {'0', '0', '0'}}, '0');
+        when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
+
+        char[][] expectedShape = new char[][]{{'9', '9', '9', '9', '9', '9', '9', '9', '9'}};
+        ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequest);
+
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getShape()).isEqualTo(expectedShape);
+        assertThat(result.getSymbol()).isEqualTo(symbol);
+
+        verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
+        verify(parcelRepository, times(1)).save(any(Parcel.class));
+    }
+
+    @Test
+    void updateParcelByName_withInvalidName_shouldThrowParcelNotFoundException() {
+        String name = "Некорректное имя";
+        String shape = "1";
+        char symbol = '1';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+
+        when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+                .isInstanceOf(ParcelNotFoundException.class)
+                .hasMessage("Посылка с названием " + name + " не найдена");
+
+        verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
+        verify(parcelRepository, never()).save(any(Parcel.class));
+    }
+
+    @Test
+    void testUpdateParcelByName_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
+        String name = "Чипсы";
+        String shape = "111\n121\n111";
+        char symbol = '1';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+                .isInstanceOf(WrongSymbolInShapeException.class)
+                .hasMessage("Некоторые символы посылки не являются указанным символом: " + symbol);
+
+        verify(parcelRepository, never()).findParcelByName(anyString());
+        verify(parcelRepository, never()).save(any(Parcel.class));
+    }
 }

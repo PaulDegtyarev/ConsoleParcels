@@ -82,6 +82,34 @@ public class DefaultParcelService implements ParcelService {
         );
     }
 
+    @Override
+    public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequest) {
+        String nameOfSavedParcel = parcelRequest.getName();
+        String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+        String shape = parcelRequest.getShape();
+        char newSymbol = parcelRequest.getSymbol();
+
+        boolean areAnyCharsNotSymbol = shape.chars()
+                .mapToObj(c -> (char) c)
+                .anyMatch(ch -> ch != newSymbol);
+
+        if (areAnyCharsNotSymbol) {
+            throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
+        }
+
+        char[][] newShapeCharArray = parseShape(shape);
+
+        Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
+        parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
+        parcelRepository.save(parcelToUpdate);
+
+        return new ParcelResponseDto(
+                parcelToUpdate.getName(),
+                parcelToUpdate.getShape(),
+                parcelToUpdate.getSymbol()
+        );
+    }
+
     private char[][] parseShape(String shape) {
         String[] lines = shape.split("\\n");
         int height = lines.length;
@@ -103,9 +131,4 @@ public class DefaultParcelService implements ParcelService {
 
         return shapeArray;
     }
-
-//    @Override
-//    public ParcelResponseDto updateParcelByName(String nameOfSavedParcel, ParcelRequestDto parcelRequest) {
-//
-//    }
 }

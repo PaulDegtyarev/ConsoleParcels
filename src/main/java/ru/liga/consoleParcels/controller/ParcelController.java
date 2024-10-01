@@ -31,4 +31,10 @@ public class ParcelController {
         ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
         return parcelService.addParcel(parcelRequest);
     }
+
+    @ShellMethod
+    public ParcelResponseDto updateParcelByName(String nameOfSavedParcel, String newShape, char newSymbol) {
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
+        return parcelService.updateParcelByName(parcelRequest);
+    }
 }

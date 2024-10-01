@@ -18,5 +18,10 @@ import java.util.Arrays;
 public class Parcel {
     private final String name;
     private char[][] shape;
-    private final char symbol;
+    private char symbol;
+
+    public void updateShapeWithNewSymbol(char[][] newShape, char newSymbol) {
+        this.shape = newShape;
+        this.symbol = newSymbol;
+    }
 }
