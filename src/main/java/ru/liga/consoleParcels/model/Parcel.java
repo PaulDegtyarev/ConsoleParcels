@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-
 /**
  * Представляет посылку с определенными характеристиками.
  * <p>
@@ -23,5 +21,9 @@ public class Parcel {
     public void updateShapeWithNewSymbol(char[][] newShape, char newSymbol) {
         this.shape = newShape;
         this.symbol = newSymbol;
+    }
+
+    public void updateShape(char[][] newShape) {
+        this.shape = newShape;
     }
 }

@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
-import ru.liga.consoleParcels.exception.ParcelNameConflictException;
-import ru.liga.consoleParcels.exception.ParcelNotFoundException;
-import ru.liga.consoleParcels.exception.WrongSymbolInShapeException;
+import ru.liga.consoleParcels.exception.*;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
@@ -107,6 +105,56 @@ public class DefaultParcelService implements ParcelService {
                 parcelToUpdate.getName(),
                 parcelToUpdate.getShape(),
                 parcelToUpdate.getSymbol()
+        );
+    }
+
+    @Override
+    public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
+        if (newSymbol == ' ') {
+            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
+        }
+
+        String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+
+        Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
+        char[][] currentShape = parcelWithUpdateSymbol.getShape();
+
+        char[][] newShape = new char[currentShape.length][];
+        for (int i = 0; i < currentShape.length; i++) {
+            newShape[i] = new char[currentShape[i].length];
+            for (int j = 0; j < currentShape[i].length; j++) {
+                newShape[i][j] = newSymbol;
+            }
+        }
+
+        parcelWithUpdateSymbol.updateShapeWithNewSymbol(newShape, newSymbol);
+        parcelRepository.save(parcelWithUpdateSymbol);
+
+        return new ParcelResponseDto(
+                parcelWithUpdateSymbol.getName(),
+                parcelWithUpdateSymbol.getShape(),
+                parcelWithUpdateSymbol.getSymbol()
+        );
+    }
+
+    @Override
+    public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
+        if (newShape.isBlank()) {
+            throw new InvalidShapeException("Новая форма не может быть пробелами");
+        }
+
+        String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+        Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
+
+        char[][] parsedShape = parseShape(newShape);
+
+        parcelWithUpdateShape.updateShape(parsedShape);
+        parcelRepository.save(parcelWithUpdateShape);
+
+        return new ParcelResponseDto(
+                parcelWithUpdateShape.getName(),
+                parcelWithUpdateShape.getShape(),
+                parcelWithUpdateShape.getSymbol()
         );
     }
 

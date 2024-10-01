@@ -33,8 +33,18 @@ public class ParcelController {
     }
 
     @ShellMethod
-    public ParcelResponseDto updateParcelByName(String nameOfSavedParcel, String newShape, char newSymbol) {
+    public ParcelResponseDto updateParcelByParcelName(String nameOfSavedParcel, String newShape, char newSymbol) {
         ParcelRequestDto parcelRequest = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
         return parcelService.updateParcelByName(parcelRequest);
+    }
+
+    @ShellMethod
+    public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
+        return parcelService.updateSymbolByParcelName(nameOfSavedParcel, newSymbol);
+    }
+
+    @ShellMethod
+    public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String shape) {
+        return parcelService.updateShapeByParcelName(nameOfSavedParcel, shape);
     }
 }

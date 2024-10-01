@@ -1,8 +1,7 @@
 package ru.liga.consoleParcels.repository.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Log4j2
 @Repository
 public class DefaultParcelRepository implements ParcelRepository {
     private final Map<String, Parcel> parcels = new HashMap<>();
@@ -60,6 +60,8 @@ public class DefaultParcelRepository implements ParcelRepository {
 
     @Override
     public void save(Parcel parcel) {
+        log.info("Добавляется посылка с названием = {}", parcel.getName());
         parcels.put(parcel.getName(), parcel);
+        log.info("Добавлена посылка с id = {}", parcels.size() + 1);
     }
 }
