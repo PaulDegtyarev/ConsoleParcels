@@ -18,4 +18,6 @@ public interface ParcelService {
     ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol);
 
     ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape);
+
+    void deleteParcelByParcelName(String nameOfParcelForDelete);
 }

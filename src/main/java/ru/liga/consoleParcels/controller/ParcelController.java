@@ -47,4 +47,9 @@ public class ParcelController {
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String shape) {
         return parcelService.updateShapeByParcelName(nameOfSavedParcel, shape);
     }
+
+    @ShellMethod
+    public void deleteParcelByParcelName(String nameOfParcelForDelete) {
+        parcelService.deleteParcelByParcelName(nameOfParcelForDelete);
+    }
 }

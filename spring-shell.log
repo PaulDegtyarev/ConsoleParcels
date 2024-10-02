@@ -131,3 +131,21 @@
 1727827957426:help
 1727827972895:add-parcel Ноут "1\\n1" 1
 1727828251439:add-parcel Ноут "1 1" 1
+1727829041664:help
+1727829065622:add-parcel Ноутбук "** **" *
+1727829070913:help
+1727829074593:find-all-parcels
+1727829082489:help
+1727829099571:update-symbol-by-parcel-name ноутбук (
+1727829166158:add-parcel Ноутбук "** **" *
+1727829173170:help
+1727829197277:find-all-parcels
+1727829202765:help
+1727829222799:update-shape-by-parcel-name ноуБУК (((( ((((( ((
+1727829231741:update-shape-by-parcel-name ноутБУК (((( ((((( ((
+1727829244244:update-shape-by-parcel-name ноутБУК "(((( ((((( (("
+1727829279654:help
+1727829285290:find-all-parcels
+1727829293692:help
+1727829308445:delete-parcel-by-parcel-name ноУтБуК
+1727829314386:find-all-parcels

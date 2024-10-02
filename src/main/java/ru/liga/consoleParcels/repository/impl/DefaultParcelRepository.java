@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
+import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.mapper.ParcelData;
 import ru.liga.consoleParcels.mapper.ParcelsInitData;
 import ru.liga.consoleParcels.model.Parcel;
@@ -63,5 +64,19 @@ public class DefaultParcelRepository implements ParcelRepository {
         log.info("Добавляется посылка с названием = {}", parcel.getName());
         parcels.put(parcel.getName(), parcel);
         log.info("Добавлена посылка с id = {}", parcels.size() + 1);
+    }
+    
+    @Override
+    public void deleteParcelByParcelName(String nameOfParcelForDelete) {
+        Optional<Parcel> removedParcel = parcels.entrySet().stream()
+                .filter(entry -> entry.getKey().equals(nameOfParcelForDelete))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .map(parcel -> {
+                    parcels.remove(nameOfParcelForDelete);
+                    return parcel;
+                });
+
+        removedParcel.orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfParcelForDelete + " не найдена"));
     }
 }

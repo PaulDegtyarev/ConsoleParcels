@@ -14,4 +14,6 @@ public interface ParcelRepository {
     boolean existsByName(String name);
 
     void save(Parcel parcel);
+
+    void deleteParcelByParcelName(String nameOfParcelForDelete);
 }

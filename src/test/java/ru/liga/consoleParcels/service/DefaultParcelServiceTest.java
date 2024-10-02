@@ -284,4 +284,28 @@ public class DefaultParcelServiceTest {
         verify(parcelRepository, never()).findParcelByName(anyString());
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
+
+    @Test
+    void deleteParcelByParcelName_withExistingParcel_shouldDeleteParcel() {
+        String name = "существующая посылка";
+        doNothing().when(parcelRepository).deleteParcelByParcelName(name.trim().toLowerCase());
+
+        defaultParcelService.deleteParcelByParcelName(name);
+
+        verify(parcelRepository, times(1)).deleteParcelByParcelName(name.trim().toLowerCase());
+    }
+
+    @Test
+    void deleteParcelByParcelName_withNonExistentParcel_shouldThrowParcelNotFoundException() {
+        String name = "Некорректное имя";
+        String trimmedName = name.trim().toLowerCase();
+
+        doThrow(new ParcelNotFoundException("Посылка с названием " + name + " не найдена"))
+                .when(parcelRepository).deleteParcelByParcelName(trimmedName);
+
+        assertThatThrownBy(() -> defaultParcelService.deleteParcelByParcelName(name))
+                .isInstanceOf(ParcelNotFoundException.class);
+
+        verify(parcelRepository, times(1)).deleteParcelByParcelName(trimmedName);
+    }
 }

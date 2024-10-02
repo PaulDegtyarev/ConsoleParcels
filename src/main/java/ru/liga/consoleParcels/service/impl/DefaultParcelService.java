@@ -72,7 +72,7 @@ public class DefaultParcelService implements ParcelService {
         }
 
         char[][] shapeCharArray = parseShape(shape);
-        Parcel newParcel = new Parcel(name, shapeCharArray, symbol);
+        Parcel newParcel = new Parcel(trimmedName, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
         return new ParcelResponseDto(
@@ -186,5 +186,12 @@ public class DefaultParcelService implements ParcelService {
         }
 
         return shapeArray;
+    }
+
+    @Override
+    public void deleteParcelByParcelName(String nameOfParcelForDelete) {
+        String trimmedNameOfSavedParcel = nameOfParcelForDelete.trim().toLowerCase();
+
+        parcelRepository.deleteParcelByParcelName(trimmedNameOfSavedParcel);
     }
 }
