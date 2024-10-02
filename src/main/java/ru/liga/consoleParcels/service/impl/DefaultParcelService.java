@@ -5,11 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
-import ru.liga.consoleParcels.exception.*;
+import ru.liga.consoleParcels.exception.ParcelNameConflictException;
+import ru.liga.consoleParcels.exception.ParcelNotFoundException;
+import ru.liga.consoleParcels.exception.WrongSymbolInShapeException;
 import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
+import ru.liga.consoleParcels.service.ParcelValidator;
+import ru.liga.consoleParcels.service.ShapeParser;
 
 import java.util.stream.Collectors;
 
@@ -18,11 +22,15 @@ import java.util.stream.Collectors;
 public class DefaultParcelService implements ParcelService {
     private ParcelRepository parcelRepository;
     private ParcelServiceResponseFactory parcelServiceResponseFactory;
+    private ParcelValidator parcelValidator;
+    private ShapeParser shapeParser;
 
     @Autowired
-    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory) {
+    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelValidator parcelValidator, ShapeParser shapeParser) {
         this.parcelRepository = parcelRepository;
         this.parcelServiceResponseFactory = parcelServiceResponseFactory;
+        this.parcelValidator = parcelValidator;
+        this.shapeParser = shapeParser;
     }
 
     @Override
@@ -47,16 +55,12 @@ public class DefaultParcelService implements ParcelService {
         String name = parcelRequest.getName();
 
         String shape = parcelRequest.getShape();
-        if (shape.isBlank()) {
-            throw new InvalidShapeException("Новая форма не может быть пробелами");
-        }
+        parcelValidator.validateParcelShape(shape);
 
         char symbol = parcelRequest.getSymbol();
-        if (symbol == ' ') {
-            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
-        }
+        parcelValidator.validateParcelSymbol(symbol);
 
-        if (parcelRequest.isEachCharacterSpecified()) {
+        if (parcelRequest.isThereSymbolThatIsNotSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + symbol);
         }
 
@@ -66,7 +70,7 @@ public class DefaultParcelService implements ParcelService {
             throw new ParcelNameConflictException("Посылка с названием " + name + " уже существует");
         }
 
-        char[][] shapeCharArray = parseShape(shape);
+        char[][] shapeCharArray = shapeParser.parseShape(shape);
         Parcel newParcel = new Parcel(trimmedName, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
@@ -78,16 +82,12 @@ public class DefaultParcelService implements ParcelService {
         String nameOfSavedParcel = parcelRequest.getName();
 
         String shape = parcelRequest.getShape();
-        if (shape.isBlank()) {
-            throw new InvalidShapeException("Новая форма не может быть пробелами");
-        }
+        parcelValidator.validateParcelShape(shape);
 
         char newSymbol = parcelRequest.getSymbol();
-        if (newSymbol == ' ') {
-            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
-        }
+        parcelValidator.validateParcelSymbol(newSymbol);
 
-        if (parcelRequest.isEachCharacterSpecified()) {
+        if (parcelRequest.isThereSymbolThatIsNotSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
         }
 
@@ -95,7 +95,7 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        char[][] newShapeCharArray = parseShape(shape);
+        char[][] newShapeCharArray = shapeParser.parseShape(shape);
         parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
@@ -104,9 +104,7 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
-        if (newSymbol == ' ') {
-            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
-        }
+        parcelValidator.validateParcelSymbol(newSymbol);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
         Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
@@ -133,41 +131,17 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
-        if (newShape.isBlank()) {
-            throw new InvalidShapeException("Новая форма не может быть пробелами");
-        }
+        parcelValidator.validateParcelShape(newShape);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
         Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        char[][] parsedShape = parseShape(newShape);
+        char[][] parsedShape = shapeParser.parseShape(newShape);
         parcelWithUpdateShape.updateShape(parsedShape);
         parcelRepository.save(parcelWithUpdateShape);
 
         return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateShape);
-    }
-
-    private char[][] parseShape(String shape) {
-        String[] lines = shape.split(" ");
-        int height = lines.length;
-        int maxWidth = 0;
-
-        for (String line : lines) {
-            maxWidth = Math.max(maxWidth, line.length());
-        }
-
-        char[][] shapeArray = new char[height][maxWidth];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < lines[i].length(); j++) {
-                shapeArray[i][j] = lines[i].charAt(j);
-            }
-            for (int j = lines[i].length(); j < maxWidth; j++) {
-                shapeArray[i][j] = ' ';
-            }
-        }
-
-        return shapeArray;
     }
 
     @Override

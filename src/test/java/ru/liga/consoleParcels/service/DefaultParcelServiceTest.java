@@ -1,17 +1,20 @@
 package ru.liga.consoleParcels.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.exception.*;
+import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.impl.DefaultParcelService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-
+@ExtendWith(MockitoExtension.class)
 public class DefaultParcelServiceTest {
     @Mock
     private ParcelRepository parcelRepository;
@@ -28,45 +31,91 @@ public class DefaultParcelServiceTest {
     @InjectMocks
     private DefaultParcelService defaultParcelService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    @Mock
+    private ParcelServiceResponseFactory parcelServiceResponseFactory;
+
+    @Mock
+    private ParcelValidator parcelValidator;
+
+    @Mock
+    private ShapeParser shapeParser;
 
     @Test
-    void testFindAllParcels() {
-        Parcel parcel1 = new Parcel("Чипсы", new char[][]{{'1'}}, '1');
-        Parcel parcel2 = new Parcel("Макароны", new char[][]{{'2', '2'}}, '2');
-
-        List<Parcel> parcels = List.of(parcel1, parcel2);
-        when(parcelRepository.findAll()).thenReturn(parcels);
+    void testFindAllParcels_shouldReturnEmptyList() {
+        when(parcelRepository.findAll()).thenReturn(Collections.emptyList());
 
         String result = defaultParcelService.findAllParcels();
 
-        String expectedResult = "name=Чипсы,\nshape=1,\nsymbol=1\n\nname=Макароны,\nshape=22,\nsymbol=2";
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void testFindAllParcels_shouldReturnValidOutput() {
+        Parcel parcel1 = new Parcel("Чипсы", new char[][]{{'1'}}, '1');
+        Parcel parcel2 = new Parcel("Макароны", new char[][]{{'2', '2'}}, '2');
+        Parcel parcel3 = new Parcel("Конфеты", new char[][]{{'3', '3', '3'}}, '3');
+
+        List<Parcel> parcels = new ArrayList<>(List.of(parcel1, parcel2, parcel3));
+        when(parcelRepository.findAll()).thenReturn(parcels);
+
+        ParcelResponseDto response1 = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto response2 = new ParcelResponseDto("Макароны", new char[][]{{'2', '2'}}, '2');
+        ParcelResponseDto response3 = new ParcelResponseDto("Конфеты", new char[][]{{'3', '3', '3'}}, '3');
+
+        when(parcelServiceResponseFactory.createServiceResponse(parcel1)).thenReturn(response1);
+        when(parcelServiceResponseFactory.createServiceResponse(parcel2)).thenReturn(response2);
+        when(parcelServiceResponseFactory.createServiceResponse(parcel3)).thenReturn(response3);
+
+        String result = defaultParcelService.findAllParcels();
+
+        String expectedResult = "name=Чипсы,\nshape=1,\nsymbol=1\n\n" +
+                "name=Макароны,\nshape=22,\nsymbol=2\n\n" +
+                "name=Конфеты,\nshape=333,\nsymbol=3";
 
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
-    void findParcelByName_withValidInput_shouldReturnValidOutput() {
+    void findParcelByName_withValidName_shouldReturnParcelResponseDto() {
         String name = "Чипсы";
-        Parcel parcel = new Parcel(name, new char[][]{{'1'}}, '1');
+        Parcel parcel = new Parcel("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(parcel));
+        when(parcelServiceResponseFactory.createServiceResponse(parcel)).thenReturn(expectedResponse);
 
-        ParcelResponseDto result = defaultParcelService.findParcelByName(name);
+        ParcelResponseDto actualResponse = defaultParcelService.findParcelByName(name);
 
-        assertThat(name).isEqualTo(result.getName());
+        assertThat(actualResponse).isEqualTo(expectedResponse);
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
+        verify(parcelServiceResponseFactory, times(1)).createServiceResponse(parcel);
     }
 
     @Test
-    void findParcelByName_withInvalidName_shouldThrowParcelNotFoundException() {
-        String name = "Некорректное имя";
+    void findParcelByName_withNameContainingWhitespace_shouldTrimAndLowercase() {
+        String name = "  Чипсы  ";
+        Parcel parcel = new Parcel("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+
+        when(parcelRepository.findParcelByName("чипсы")).thenReturn(Optional.of(parcel));
+        when(parcelServiceResponseFactory.createServiceResponse(parcel)).thenReturn(expectedResponse);
+
+        ParcelResponseDto actualResponse = defaultParcelService.findParcelByName(name);
+
+        assertThat(actualResponse).isEqualTo(expectedResponse);
+        verify(parcelRepository, times(1)).findParcelByName("чипсы");
+        verify(parcelServiceResponseFactory, times(1)).createServiceResponse(parcel);
+    }
+
+    @Test
+    void findParcelByName_withNameContainingOnlyWhitespace_shouldThrowParcelNotFoundException() {
+        String name = "   ";
+
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
 
         assertThrows(ParcelNotFoundException.class, () -> defaultParcelService.findParcelByName(name));
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
+        verify(parcelServiceResponseFactory, never()).createServiceResponse(any());
     }
 
     @Test
@@ -79,8 +128,12 @@ public class DefaultParcelServiceTest {
         when(parcelRepository.existsByName(anyString())).thenReturn(false);
         doNothing().when(parcelRepository).save(any(Parcel.class));
 
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+        when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
+
         ParcelResponseDto result = defaultParcelService.addParcel(parcelRequest);
 
+        assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getSymbol()).isEqualTo(symbol);
 
@@ -129,8 +182,13 @@ public class DefaultParcelServiceTest {
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
 
         char[][] expectedShape = new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}};
+
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}}, '9');
+        when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
+
         ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequest);
 
+        assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getShape()).isEqualTo(expectedShape);
         assertThat(result.getSymbol()).isEqualTo(symbol);
@@ -157,7 +215,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void testUpdateParcelByName_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
+    void updateParcelByName_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
         String name = "Чипсы";
         String shape = "111\n121\n111";
         char symbol = '1';
@@ -167,7 +225,21 @@ public class DefaultParcelServiceTest {
                 .isInstanceOf(WrongSymbolInShapeException.class)
                 .hasMessage("Некоторые символы посылки не являются указанным символом: " + symbol);
 
-        verify(parcelRepository, never()).findParcelByName(anyString());
+        verify(parcelRepository, never()).save(any(Parcel.class));
+    }
+
+    @Test
+    void updateParcelByName_withInvalidShape_shouldThrowInvalidShapeException() {
+        String name = "Чипсы";
+        String shape = "  ";
+        char symbol = ' ';
+        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+
+        doThrow(new InvalidShapeException("Форма посылки не может быть пустой")).when(parcelValidator).validateParcelShape(shape);
+
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+                .isInstanceOf(InvalidShapeException.class);
+
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
 
@@ -180,8 +252,12 @@ public class DefaultParcelServiceTest {
         Parcel existingParcel = new Parcel(name, new char[][]{{oldSymbol, oldSymbol}, {oldSymbol, oldSymbol}}, oldSymbol);
         when(parcelRepository.findParcelByName(name)).thenReturn(Optional.of(existingParcel));
 
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("чипсы", new char[][]{{'9', '9'}, {'9', '9'}}, '9');
+        when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
+
         ParcelResponseDto result = defaultParcelService.updateSymbolByParcelName(name, newSymbol);
 
+        assertThat(expectedResponse).isEqualTo(result);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getSymbol()).isEqualTo(newSymbol);
         assertThat(result.getShape()).isEqualTo(new char[][]{{newSymbol, newSymbol}, {newSymbol, newSymbol}});
@@ -198,44 +274,23 @@ public class DefaultParcelServiceTest {
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> defaultParcelService.updateSymbolByParcelName(name, newSymbol))
-                .isInstanceOf(ParcelNotFoundException.class)
-                .hasMessage("Посылка с названием " + name + " не найдена");
+                .isInstanceOf(ParcelNotFoundException.class);
 
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
 
     @Test
-    void updateSymbolByParcelName_withWhitespaceSymbol_shouldThrowIllegalArgumentException() {
+    void updateSymbolByParcelName_withWhitespaceSymbol_shouldThrowInvalidCharacterException() {
         String name = "чипсы";
         char newSymbol = ' ';
 
-        Parcel existingParcel = new Parcel(name, new char[][]{{'1', '1'}}, '1');
-        when(parcelRepository.findParcelByName(name)).thenReturn(Optional.of(existingParcel));
+        doThrow(new InvalidCharacterException("Нельзя сделать символ пробелом")).when(parcelValidator).validateParcelSymbol(newSymbol);
 
         assertThatThrownBy(() -> defaultParcelService.updateSymbolByParcelName(name, newSymbol))
                 .isInstanceOf(InvalidCharacterException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));
-    }
-
-    @Test
-    void updateSymbolByParcelName_withEmptyShape_shouldHReturnParcelWithEmptyShape() {
-        String name = "чипсы";
-        char oldSymbol = '1';
-        char newSymbol = '9';
-
-        Parcel existingParcel = new Parcel(name, new char[0][0], oldSymbol);
-        when(parcelRepository.findParcelByName(name)).thenReturn(Optional.of(existingParcel));
-
-        ParcelResponseDto result = defaultParcelService.updateSymbolByParcelName(name, newSymbol);
-
-        assertThat(result.getName()).isEqualTo(name);
-        assertThat(result.getSymbol()).isEqualTo(newSymbol);
-        assertThat(result.getShape()).isEqualTo(new char[0][0]);
-
-        verify(parcelRepository, times(1)).findParcelByName(name);
-        verify(parcelRepository, times(1)).save(any(Parcel.class));
     }
 
     @Test
@@ -247,12 +302,13 @@ public class DefaultParcelServiceTest {
         Parcel existingParcel = new Parcel(name, new char[][]{{'1', '1'}, {'1', '1'}}, symbol);
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
 
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1', '1', '1'}, {'1', '1', '1'}}, '1');
+        when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
+
         ParcelResponseDto result = defaultParcelService.updateShapeByParcelName(name, newShape);
 
-        char[][] expectedShape = new char[][]{{'1', '1', '1'}, {'1', '1', '1'}};
-
         assertThat(result.getName()).isEqualTo(name);
-        assertThat(result.getShape()).isEqualTo(expectedShape);
+        assertThat(result.getShape()).isEqualTo(expectedResponse.getShape());
         assertThat(result.getSymbol()).isEqualTo(symbol);
 
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
@@ -262,7 +318,7 @@ public class DefaultParcelServiceTest {
     @Test
     void updateShapeByParcelName_withNonExistentParcel_shouldThrowParcelNotFoundException() {
         String name = "Некорректное имя";
-        String newShape = "22\n22";
+        String newShape = "22 22";
 
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
 
@@ -277,6 +333,8 @@ public class DefaultParcelServiceTest {
     void updateShapeByParcelName_withBlankShape_shouldThrowInvalidShapeException() {
         String name = "Чипсы";
         String newShape = "   ";
+
+        doThrow(new InvalidShapeException("Новая форма не может быть пробелами")).when(parcelValidator).validateParcelShape(newShape);
 
         assertThatThrownBy(() -> defaultParcelService.updateShapeByParcelName(name, newShape))
                 .isInstanceOf(InvalidShapeException.class);

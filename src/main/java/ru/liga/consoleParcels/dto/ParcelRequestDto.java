@@ -14,7 +14,7 @@ public class ParcelRequestDto {
     private String shape;
     private char symbol;
 
-    public boolean isEachCharacterSpecified() {
+    public boolean isThereSymbolThatIsNotSpecified() {
         for (char c : shape.toCharArray()) {
             log.info("Проверка символа {}", c);
             if (c != symbol && c != ' ') {
@@ -24,5 +24,3 @@ public class ParcelRequestDto {
         return false;
     }
 }
-
-//add-parcel Ноут "1 1" 1
