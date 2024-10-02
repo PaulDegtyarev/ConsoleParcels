@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.exception.*;
+import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
 import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
@@ -16,21 +17,19 @@ import java.util.stream.Collectors;
 @Log4j2
 public class DefaultParcelService implements ParcelService {
     private ParcelRepository parcelRepository;
+    private ParcelServiceResponseFactory parcelServiceResponseFactory;
 
     @Autowired
-    public DefaultParcelService(ParcelRepository parcelRepository) {
+    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory) {
         this.parcelRepository = parcelRepository;
+        this.parcelServiceResponseFactory = parcelServiceResponseFactory;
     }
 
     @Override
     public String findAllParcels() {
         return parcelRepository.findAll()
                 .stream()
-                .map(parcel -> new ParcelResponseDto(
-                        parcel.getName(),
-                        parcel.getShape(),
-                        parcel.getSymbol()
-                ))
+                .map(parcelServiceResponseFactory::createServiceResponse)
                 .map(ParcelResponseDto::toString)
                 .collect(Collectors.joining("\n\n"));
     }
@@ -39,11 +38,7 @@ public class DefaultParcelService implements ParcelService {
     public ParcelResponseDto findParcelByName(String name) {
         log.info("Начинается поиск посылки с названием: {}", name);
         return parcelRepository.findParcelByName(name.trim().toLowerCase())
-                .map(parcel -> new ParcelResponseDto(
-                        parcel.getName(),
-                        parcel.getShape(),
-                        parcel.getSymbol()
-                ))
+                .map(parcelServiceResponseFactory::createServiceResponse)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием: " + name + " не найдена"));
     }
 
@@ -75,11 +70,7 @@ public class DefaultParcelService implements ParcelService {
         Parcel newParcel = new Parcel(trimmedName, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
-        return new ParcelResponseDto(
-                newParcel.getName(),
-                newParcel.getShape(),
-                newParcel.getSymbol()
-        );
+        return parcelServiceResponseFactory.createServiceResponse(newParcel);
     }
 
     @Override
@@ -92,6 +83,9 @@ public class DefaultParcelService implements ParcelService {
         }
 
         char newSymbol = parcelRequest.getSymbol();
+        if (newSymbol == ' ') {
+            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
+        }
 
         if (parcelRequest.isEachCharacterSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
@@ -105,11 +99,7 @@ public class DefaultParcelService implements ParcelService {
         parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
-        return new ParcelResponseDto(
-                parcelToUpdate.getName(),
-                parcelToUpdate.getShape(),
-                parcelToUpdate.getSymbol()
-        );
+        return parcelServiceResponseFactory.createServiceResponse(parcelToUpdate);
     }
 
     @Override
@@ -126,11 +116,7 @@ public class DefaultParcelService implements ParcelService {
         parcelWithUpdateSymbol.updateShapeWithNewSymbol(newShape, newSymbol);
         parcelRepository.save(parcelWithUpdateSymbol);
 
-        return new ParcelResponseDto(
-                parcelWithUpdateSymbol.getName(),
-                parcelWithUpdateSymbol.getShape(),
-                parcelWithUpdateSymbol.getSymbol()
-        );
+        return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateSymbol);
     }
 
     private char[][] updateSavedShapeWithNewSymbol(char[][] shapeOfSavedPassword, char newSymbol) {
@@ -159,11 +145,7 @@ public class DefaultParcelService implements ParcelService {
         parcelWithUpdateShape.updateShape(parsedShape);
         parcelRepository.save(parcelWithUpdateShape);
 
-        return new ParcelResponseDto(
-                parcelWithUpdateShape.getName(),
-                parcelWithUpdateShape.getShape(),
-                parcelWithUpdateShape.getSymbol()
-        );
+        return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateShape);
     }
 
     private char[][] parseShape(String shape) {
