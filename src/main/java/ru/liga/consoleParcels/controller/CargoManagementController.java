@@ -4,16 +4,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.stereotype.Controller;
 import ru.liga.consoleParcels.dto.PackagingParametersDto;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.exception.*;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
 import ru.liga.consoleParcels.mapper.ParcelMapper;
-import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.*;
-import ru.liga.consoleParcels.service.impl.PackageReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,29 +27,28 @@ import java.util.List;
 public class CargoManagementController {
     private ReceivingUserRequestService receivingUserRequestService;
     private PackagingSelectionService packagingSelectionService;
-    private PackageReader packageReader;
     private TruckToJsonWriterService truckToJsonWriterService;
     private UnPackagingService unPackagingService;
     private PrintResultFormatter printResultFormatter;
+    private PackageReader packageReader;
 
     /**
      * Конструктор контроллера.
      *
      * @param receivingUserRequestService Сервис для получения запросов от пользователя.
      * @param packagingSelectionService   Сервис для выбора сервиса упаковки.
-     * @param packageReader               Сервис для чтения данных о посылках из файла.
      * @param truckToJsonWriterService    Сервис для записи данных о грузовиках в JSON.
      * @param unPackagingService          Сервис для распаковки грузовиков.
      * @param printResultFormatter        Сервис для форматирования результатов упаковки/распаковки.
      */
     @Autowired
-    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, PackageReader packageReader, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService, PrintResultFormatter printResultFormatter) {
+    public CargoManagementController(ReceivingUserRequestService receivingUserRequestService, PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, UnPackagingService unPackagingService, PrintResultFormatter printResultFormatter, PackageReader packageReader) {
         this.receivingUserRequestService = receivingUserRequestService;
         this.packagingSelectionService = packagingSelectionService;
-        this.packageReader = packageReader;
         this.truckToJsonWriterService = truckToJsonWriterService;
         this.unPackagingService = unPackagingService;
         this.printResultFormatter = printResultFormatter;
+        this.packageReader = packageReader;
     }
 
     @ShellMethod

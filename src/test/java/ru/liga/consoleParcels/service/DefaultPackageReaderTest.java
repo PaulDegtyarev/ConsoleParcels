@@ -3,24 +3,23 @@ package ru.liga.consoleParcels.service;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.PackageShapeException;
 import ru.liga.consoleParcels.mapper.ParcelMapper;
-import ru.liga.consoleParcels.model.Parcel;
 import org.junit.jupiter.api.Test;
-import ru.liga.consoleParcels.service.impl.PackageReader;
+import ru.liga.consoleParcels.service.impl.DefaultPackageReader;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class PackageReaderTest {
-    private PackageReader packageReader = new PackageReader();
+public class DefaultPackageReaderTest {
+    private DefaultPackageReader defaultPackageReader = new DefaultPackageReader();
 
     @Test
     void readPackages_withNonExistenceFile_shouldThrowFileNotFoundException() {
         String filePath = "/home/non-existent-file.txt";
 
         assertThatThrownBy(
-                () -> packageReader.readPackages(filePath)).isInstanceOf(FileNotFoundException.class);
+                () -> defaultPackageReader.readPackages(filePath)).isInstanceOf(FileNotFoundException.class);
     }
 
     @Test
@@ -28,7 +27,7 @@ public class PackageReaderTest {
         String filePath = "src/test/resources/input/wrong-input-data.txt";
 
         assertThatThrownBy(
-                () -> packageReader.readPackages(filePath)
+                () -> defaultPackageReader.readPackages(filePath)
         ).isInstanceOf(PackageShapeException.class);
     }
 
@@ -36,7 +35,7 @@ public class PackageReaderTest {
     void readPackages_withCorrectInput_shouldReturnCorrectOutput() {
         String filePath = "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
 
-        List<ParcelMapper> parcels = packageReader.readPackages(filePath);
+        List<ParcelMapper> parcels = defaultPackageReader.readPackages(filePath);
 
         assertThat(6).isEqualTo(parcels.size());
 

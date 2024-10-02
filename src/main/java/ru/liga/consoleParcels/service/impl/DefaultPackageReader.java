@@ -6,6 +6,7 @@ import ru.liga.consoleParcels.exception.PackageShapeException;
 import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import lombok.extern.log4j.Log4j2;
+import ru.liga.consoleParcels.service.PackageReader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Log4j2
 @Service
-public class PackageReader {
+public class DefaultPackageReader implements PackageReader {
     /**
      * Считывает данные о посылках из файла.
      * <p>
@@ -39,6 +40,7 @@ public class PackageReader {
      * @throws PackageShapeException Если форма одной из посылок
      *                               недопустима.
      */
+    @Override
     public List<ParcelMapper> readPackages(String filename) {
         List<ParcelMapper> parcels = new ArrayList<>();
         int firstSymbolPosition = 0;
