@@ -2,15 +2,13 @@ package ru.liga.consoleParcels.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class ParcelResponseDto {
     private final String name;
-    private char[][] shape;
-    private char symbol;
+    private final char[][] shape;
+    private final char symbol;
 
     @Override
     public String toString() {

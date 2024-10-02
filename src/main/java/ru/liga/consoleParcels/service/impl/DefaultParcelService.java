@@ -40,9 +40,9 @@ public class DefaultParcelService implements ParcelService {
         log.info("Начинается поиск посылки с названием: {}", name);
         return parcelRepository.findParcelByName(name.trim().toLowerCase())
                 .map(parcel -> new ParcelResponseDto(
-                            parcel.getName(),
-                            parcel.getShape(),
-                            parcel.getSymbol()
+                        parcel.getName(),
+                        parcel.getShape(),
+                        parcel.getSymbol()
                 ))
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием: " + name + " не найдена"));
     }
@@ -50,26 +50,28 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public ParcelResponseDto addParcel(ParcelRequestDto parcelRequest) {
         String name = parcelRequest.getName();
+
         String shape = parcelRequest.getShape();
+        if (shape.isBlank()) {
+            throw new InvalidShapeException("Новая форма не может быть пробелами");
+        }
+
         char symbol = parcelRequest.getSymbol();
-        String trimmedName = parcelRequest.getName()
-                .trim()
-                .toLowerCase();
+        if (symbol == ' ') {
+            throw new InvalidCharacterException("Нельзя сделать символ пробелом");
+        }
 
-        boolean areAnyCharsNotSymbol = shape.chars()
-                .mapToObj(c -> (char) c)
-                .anyMatch(ch -> ch != symbol);
-
-        if (areAnyCharsNotSymbol) {
+        if (parcelRequest.isEachCharacterSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + symbol);
         }
 
+        String trimmedName = name.trim()
+                .toLowerCase();
         if (parcelRepository.existsByName(trimmedName)) {
             throw new ParcelNameConflictException("Посылка с названием " + name + " уже существует");
         }
 
         char[][] shapeCharArray = parseShape(shape);
-
         Parcel newParcel = new Parcel(name, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
@@ -83,21 +85,23 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequest) {
         String nameOfSavedParcel = parcelRequest.getName();
-        String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+
         String shape = parcelRequest.getShape();
+        if (shape.isBlank()) {
+            throw new InvalidShapeException("Новая форма не может быть пробелами");
+        }
+
         char newSymbol = parcelRequest.getSymbol();
 
-        boolean areAnyCharsNotSymbol = shape.chars()
-                .mapToObj(c -> (char) c)
-                .anyMatch(ch -> ch != newSymbol);
-
-        if (areAnyCharsNotSymbol) {
+        if (parcelRequest.isEachCharacterSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
         }
 
-        char[][] newShapeCharArray = parseShape(shape);
+        String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+        Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
+                .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
+        char[][] newShapeCharArray = parseShape(shape);
         parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
@@ -115,18 +119,10 @@ public class DefaultParcelService implements ParcelService {
         }
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
+        Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
+                .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
-        char[][] currentShape = parcelWithUpdateSymbol.getShape();
-
-        char[][] newShape = new char[currentShape.length][];
-        for (int i = 0; i < currentShape.length; i++) {
-            newShape[i] = new char[currentShape[i].length];
-            for (int j = 0; j < currentShape[i].length; j++) {
-                newShape[i][j] = newSymbol;
-            }
-        }
-
+        char[][] newShape = updateSavedShapeWithNewSymbol(parcelWithUpdateSymbol.getShape(), newSymbol);
         parcelWithUpdateSymbol.updateShapeWithNewSymbol(newShape, newSymbol);
         parcelRepository.save(parcelWithUpdateSymbol);
 
@@ -137,6 +133,18 @@ public class DefaultParcelService implements ParcelService {
         );
     }
 
+    private char[][] updateSavedShapeWithNewSymbol(char[][] shapeOfSavedPassword, char newSymbol) {
+        char[][] newShape = new char[shapeOfSavedPassword.length][];
+        for (int i = 0; i < shapeOfSavedPassword.length; i++) {
+            newShape[i] = new char[shapeOfSavedPassword[i].length];
+            for (int j = 0; j < shapeOfSavedPassword[i].length; j++) {
+                newShape[i][j] = newSymbol;
+            }
+        }
+
+        return newShape;
+    }
+
     @Override
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
         if (newShape.isBlank()) {
@@ -144,10 +152,10 @@ public class DefaultParcelService implements ParcelService {
         }
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
-        Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel).orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
+        Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
+                .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
         char[][] parsedShape = parseShape(newShape);
-
         parcelWithUpdateShape.updateShape(parsedShape);
         parcelRepository.save(parcelWithUpdateShape);
 
@@ -159,7 +167,7 @@ public class DefaultParcelService implements ParcelService {
     }
 
     private char[][] parseShape(String shape) {
-        String[] lines = shape.split("\\n");
+        String[] lines = shape.split(" ");
         int height = lines.length;
         int maxWidth = 0;
 

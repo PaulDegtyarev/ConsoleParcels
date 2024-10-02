@@ -121,14 +121,14 @@ public class DefaultParcelServiceTest {
     @Test
     void updateParcelByName_withValidInput_shouldUpdateParcel() {
         String name = "Чипсы";
-        String shape = "999999999";
+        String shape = "999 999 999";
         char symbol = '9';
         ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
 
         Parcel existingParcel = new Parcel(name, new char[][]{{'0', '0', '0'}, {'0', '0', '0'}, {'0', '0', '0'}}, '0');
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
 
-        char[][] expectedShape = new char[][]{{'9', '9', '9', '9', '9', '9', '9', '9', '9'}};
+        char[][] expectedShape = new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}};
         ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequest);
 
         assertThat(result.getName()).isEqualTo(name);
@@ -242,7 +242,7 @@ public class DefaultParcelServiceTest {
     void updateShapeByParcelName_withValidInput_shouldUpdateShape() {
         String name = "Чипсы";
         char symbol = '1';
-        String newShape = "111\n111";
+        String newShape = "111 111";
 
         Parcel existingParcel = new Parcel(name, new char[][]{{'1', '1'}, {'1', '1'}}, symbol);
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
