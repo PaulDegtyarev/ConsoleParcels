@@ -15,6 +15,7 @@ import java.util.Optional;
  * посылок в его пространстве.
  */
 public class Truck {
+    @Getter
     private final int truckWidth;
     private final int truckHeight;
     /**

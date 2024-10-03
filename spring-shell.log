@@ -159,3 +159,4 @@
 1727914805615:pack "6x6" "Nелевизор" MAX_SPACE "data/trucks.json"
 1727914810790:pack "6x6" "Телевизор" MAX_SPACE "data/trucks.json"
 1727914937239:pack "6x6, 9x9, 1x1" "телевизор, Чипсы с сыром, Вазилин, Шкаф, Телевизор" MAX_SPACE "data/trucks.json"
+1727915393624:pack "9x9" "ТеЛЕВизор, Торт Панчо" MAX_SPACE data/trucks.json

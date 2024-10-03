@@ -32,17 +32,19 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < trucks.size(); i++) {
             log.debug("Печать информации для грузовика {}", i + 1);
+            Truck actualTruck = trucks.get(i);
 
             result.append("Грузовик ").append(i + 1).append(":\n");
 
-            for (char[] row : trucks.get(i).getSpace()) {
+            for (char[] row : actualTruck.getSpace()) {
                 result.append("+");
                 result.append(new String(row));
                 result.append("+\n");
             }
 
-            result.append("++++++++\n");
-            result.append("\n");
+            result.append("+");
+            result.append("+".repeat(Math.max(0, actualTruck.getTruckWidth())));
+            result.append("+\n");
         }
 
         return result;
