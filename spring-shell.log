@@ -149,3 +149,13 @@
 1727829293692:help
 1727829308445:delete-parcel-by-parcel-name ноУтБуК
 1727829314386:find-all-parcels
+1727913969911:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1727913988188:stacktrace
+1727914137535:pack "6x6" "телевизор, шкаф" MAX_SPACE "data/trucks.json"
+1727914185682:stacktrace
+1727914443827:pack "6x6" "телевизор" MAX_SPACE "data/trucks.json"
+1727914473047:stacktrace
+1727914775635:pack "6x6" "телевизор" MAX_SPACE "data/trucks.json"
+1727914805615:pack "6x6" "Nелевизор" MAX_SPACE "data/trucks.json"
+1727914810790:pack "6x6" "Телевизор" MAX_SPACE "data/trucks.json"
+1727914937239:pack "6x6, 9x9, 1x1" "телевизор, Чипсы с сыром, Вазилин, Шкаф, Телевизор" MAX_SPACE "data/trucks.json"

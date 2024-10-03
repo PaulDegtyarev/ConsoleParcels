@@ -12,7 +12,7 @@ import ru.liga.consoleParcels.service.impl.BalancedLoadingServiceImpl;
  * Эта фабрика создает конкретные реализации сервисов упаковки,
  * таких как {@link OptimizedPackagingServiceImpl} и
  * {@link BalancedLoadingServiceImpl}, используя фабрику для
- * создания грузовиков {@link TruckFactoryImpl}.
+ * создания грузовиков {@link DefaultTruckFactory}.
  *
  * @see PackagingServiceFactory
  */
@@ -22,14 +22,14 @@ public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
      * Создает сервис для оптимизированной упаковки.
      * <p>
      * Сервис создается с использованием фабрики для создания
-     * грузовиков {@link TruckFactoryImpl}.
+     * грузовиков {@link DefaultTruckFactory}.
      *
      * @return Сервис оптимизированной упаковки.
      */
     @Override
     public PackagingService createOptimizedPackagingService() {
         return new OptimizedPackagingServiceImpl(
-                new TruckFactoryImpl()
+                new DefaultTruckFactory()
         );
     }
 
@@ -37,14 +37,14 @@ public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
      * Создает сервис для упаковки с равномерной загрузкой.
      * <p>
      * Сервис создается с использованием фабрики для создания
-     * грузовиков {@link TruckFactoryImpl}.
+     * грузовиков {@link DefaultTruckFactory}.
      *
      * @return Сервис упаковки с равномерной загрузкой.
      */
     @Override
     public PackagingService createSinglePackagingService() {
         return new BalancedLoadingServiceImpl(
-                new TruckFactoryImpl()
+                new DefaultTruckFactory()
         );
     }
 }

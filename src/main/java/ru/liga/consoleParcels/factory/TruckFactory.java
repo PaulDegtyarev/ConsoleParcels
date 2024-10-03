@@ -11,11 +11,6 @@ import java.util.List;
  * заданной длины.
  */
 public interface TruckFactory {
-    /**
-     * Создает список грузовиков заданной длины.
-     *
-     * @param numberOfCars Количество грузовиков, которые нужно создать.
-     * @return Список созданных грузовиков.
-     */
-    List<Truck> createTrucks(int numberOfCars);
+
+    List<Truck> createTrucks(String truckSizes);
 }

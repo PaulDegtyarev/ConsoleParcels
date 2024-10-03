@@ -1,9 +1,9 @@
 package ru.liga.consoleParcels.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.liga.consoleParcels.dto.ParcelForPackaging;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.PackageShapeException;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Parcel;
 import lombok.extern.log4j.Log4j2;
 import ru.liga.consoleParcels.service.PackageReader;
@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,23 +42,28 @@ public class DefaultPackageReader implements PackageReader {
      *                               недопустима.
      */
     @Override
-    public List<ParcelMapper> readPackages(String filename) {
-        List<ParcelMapper> parcels = new ArrayList<>();
-        int firstSymbolPosition = 0;
+    public List<ParcelForPackaging> readPackages(String filename) {
+        List<ParcelForPackaging> parcelsForPackaging = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             StringBuilder parcelData = new StringBuilder();
             String line;
 
+            String[] split = parcelData.toString().trim().split("\n");
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     if (!parcelData.isEmpty()) {
-                        String shape = parcelData.toString().trim();
-                        char symbol = shape.charAt(firstSymbolPosition);
+                        int height = split.length;
+                        int width = split[0].length();
 
-                        parcels.add(new ParcelMapper(shape));
-                        log.info("Посылка с формой {} добавлена в список", shape);
-
+                        char[][] shape = new char[height][width];
+                        for (int i = 0; i < height; i++) {
+                            for (int j = 0; j < width; j++) {
+                                shape[i][j] = split[i].charAt(j);
+                            }
+                        }
+                        parcelsForPackaging.add(new ParcelForPackaging(height, width, shape));
+                        log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
                         parcelData.setLength(0);
                     }
                 } else {
@@ -66,17 +72,23 @@ public class DefaultPackageReader implements PackageReader {
             }
 
             if (!parcelData.isEmpty()) {
-                String shape = parcelData.toString().trim();
-                char symbol = shape.charAt(firstSymbolPosition);
+                int height = split.length;
+                int width = split[0].length();
 
-                parcels.add(new ParcelMapper(shape));
-                log.info("Посылка с формой {} добавлена в список", shape);
+                char[][] shape = new char[height][width];
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                        shape[i][j] = split[i].charAt(j);
+                    }
+                }
+                parcelsForPackaging.add(new ParcelForPackaging(height, width, shape));
+                log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
             }
 
         } catch (IOException ioException) {
             throw new FileNotFoundException(String.format("Файл %s не найден", filename));
         }
 
-        return parcels;
+        return parcelsForPackaging;
     }
 }

@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.model;
 
+import lombok.Getter;
+import ru.liga.consoleParcels.dto.ParcelForPackaging;
 import ru.liga.consoleParcels.mapper.ParcelMapper;
 
 import java.util.Arrays;
@@ -13,8 +15,14 @@ import java.util.Optional;
  * посылок в его пространстве.
  */
 public class Truck {
-    private static final int TRUCK_WIDTH = 6;
-    private static final int TRUCK_HEIGHT = 6;
+    private final int truckWidth;
+    private final int truckHeight;
+    /**
+     * -- GETTER --
+     *  Возвращает двумерный массив, представляющий пространство грузовика.
+     *
+     */
+    @Getter
     private final char[][] space;
 
     /**
@@ -23,16 +31,18 @@ public class Truck {
      * Пространство грузовика заполняется пробелами (' '),
      * которые обозначают пустые ячейки.
      */
-    public Truck() {
-        space = new char[TRUCK_HEIGHT][TRUCK_WIDTH];
+    public Truck(int truckWidth, int truckHeight) {
+        this.truckWidth = truckWidth;
+        this.truckHeight = truckHeight;
+        space = new char[truckHeight][truckWidth];
 
         for (char[] row : space) {
             Arrays.fill(row, ' ');
         }
     }
 
-    private boolean canFit(ParcelMapper parcel, int x, int y) {
-        if (x + parcel.getWidth() > TRUCK_WIDTH || y + parcel.getHeight() > TRUCK_HEIGHT) {
+    private boolean canFit(ParcelForPackaging parcel, int x, int y) {
+        if (x + parcel.getWidth() > truckWidth || y + parcel.getHeight() > truckHeight) {
             return false;
         }
         for (int i = 0; i < parcel.getHeight(); i++) {
@@ -43,7 +53,7 @@ public class Truck {
             }
         }
 
-        if (y + parcel.getHeight() < TRUCK_HEIGHT) {
+        if (y + parcel.getHeight() < truckHeight) {
 
             boolean hasSupport = false;
 
@@ -70,7 +80,7 @@ public class Truck {
      * @param x      Координата x начала размещения посылки.
      * @param y      Координата y начала размещения посылки.
      */
-    public void place(ParcelMapper parcel, int x, int y) {
+    public void place(ParcelForPackaging parcel, int x, int y) {
         char[][] shape = parcel.getShape();
 
         for (int i = 0; i < parcel.getHeight(); i++) {
@@ -93,9 +103,9 @@ public class Truck {
      * позиции, или пустой Optional, если позиция
      * не найдена.
      */
-    public Optional<Point> findPosition(ParcelMapper parcel) {
-        for (int y = TRUCK_HEIGHT - parcel.getHeight(); y >= 0; y--) {
-            for (int x = 0; x <= TRUCK_WIDTH - parcel.getWidth(); x++) {
+    public Optional<Point> findPosition(ParcelForPackaging parcel) {
+        for (int y = truckHeight - parcel.getHeight(); y >= 0; y--) {
+            for (int x = 0; x <= truckWidth - parcel.getWidth(); x++) {
                 if (canFit(parcel, x, y)) {
                     return Optional.of(new Point(x, y));
                 }
@@ -120,14 +130,5 @@ public class Truck {
             }
         }
         return usedSpace;
-    }
-
-    /**
-     * Возвращает двумерный массив, представляющий пространство грузовика.
-     *
-     * @return Двумерный массив символов, представляющий пространство грузовика.
-     */
-    public char[][] getSpace() {
-        return space;
     }
 }
