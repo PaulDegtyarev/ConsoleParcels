@@ -70,6 +70,11 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             builder.append("Грузовик ").append(truckId).append(":");
             builder.append("\n");
 
+            int truckWidth = packageLayout.stream()
+                    .mapToInt(List::size)
+                    .max()
+                    .orElse(0);
+
             for (List<String> row : packageLayout) {
                 builder.append("+");
                 for (String packageId : row) {
@@ -78,7 +83,10 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
                 builder.append("+\n");
             }
 
-            builder.append("++++++++\n");
+            builder.append("+");
+            builder.append("+".repeat(Math.max(0, truckWidth)));
+            builder.append("+\n");
+
             builder.append("Количество посылок:\n");
             for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
                 String packageId = entry.getKey();

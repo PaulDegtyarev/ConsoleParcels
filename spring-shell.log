@@ -160,3 +160,12 @@
 1727914810790:pack "6x6" "Телевизор" MAX_SPACE "data/trucks.json"
 1727914937239:pack "6x6, 9x9, 1x1" "телевизор, Чипсы с сыром, Вазилин, Шкаф, Телевизор" MAX_SPACE "data/trucks.json"
 1727915393624:pack "9x9" "ТеЛЕВизор, Торт Панчо" MAX_SPACE data/trucks.json
+1727915705857:help
+1727915711420:unpack data/trucks.json
+1727915929838:data/trucks.json
+1727915934263:unpack data/trucks.json
+1727915961566:helphelp
+1727915964330:help
+1727916280257:add-parcel Тестовая "*** ***" *
+1727916586978:add-parcel Штанга "*    * ***** *    *" *
+1727916884351:exit

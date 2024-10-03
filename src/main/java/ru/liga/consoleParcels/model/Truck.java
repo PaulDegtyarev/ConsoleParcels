@@ -2,7 +2,6 @@ package ru.liga.consoleParcels.model;
 
 import lombok.Getter;
 import ru.liga.consoleParcels.dto.ParcelForPackaging;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -20,8 +19,7 @@ public class Truck {
     private final int truckHeight;
     /**
      * -- GETTER --
-     *  Возвращает двумерный массив, представляющий пространство грузовика.
-     *
+     * Возвращает двумерный массив, представляющий пространство грузовика.
      */
     @Getter
     private final char[][] space;

@@ -28,11 +28,12 @@ import java.util.List;
 @ShellComponent
 public class CargoManagementController {
     private PackagingManager packagingManager;
-    private UnPackagingService unPackagingService;
+    private UnPackagingManager unPackagingManager;
 
     @Autowired
-    public CargoManagementController(PackagingManager packagingManager) {
+    public CargoManagementController(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
         this.packagingManager = packagingManager;
+        this.unPackagingManager = unPackagingManager;
     }
 
     @ShellMethod
@@ -49,26 +50,10 @@ public class CargoManagementController {
         return packagingManager.packParcels(packRequest);
     }
 
-//    @ShellMethod
-//    public void unpack() {
-//        log.info("Пользователь выбрал распаковку");
-//        log.info("Начало процесса распаковки");
-//
-//        String filePathToUnpack = receivingUserRequestService.requestForFilePathToUnpackTruck();
-//        log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
-//
-//        List<UnPackedTruckDto> unpackedTrucks = new ArrayList<>();
-//        try {
-//            unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
-//            log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
-//        } catch (FileReadException fileReadException) {
-//            log.error("Ошибка при чтении файла {}: {}", filePathToUnpack, fileReadException.getMessage());
-//        }
-//
-//        log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
-//        StringBuilder unPackagingResult = printResultFormatter.transferUnpackingResultsToConsole(unpackedTrucks);
-//
-//        System.out.println(unPackagingResult);
-//        log.info("Завершение печати результатов распаковки");
-//    }
+    @ShellMethod
+    public String unpack(String filePathToUnpack) {
+        log.info("Пользователь выбрал распаковку");
+
+        return unPackagingManager.unpackParcels(filePathToUnpack);
+    }
 }
