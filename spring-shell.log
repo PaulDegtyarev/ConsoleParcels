@@ -12,3 +12,5 @@
 1728050139487:find-all-parcels
 1728050182805:pack "10x10" "Шкаф, Телевизор, тестовая" "MAX_SPACE" "data/trucks.json"
 1728050466495:unpack "data/trucks.json"
+1728050890026:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1728050907343:pack "10x10" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"

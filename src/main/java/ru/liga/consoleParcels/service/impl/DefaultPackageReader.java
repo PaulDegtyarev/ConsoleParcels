@@ -49,10 +49,10 @@ public class DefaultPackageReader implements PackageReader {
             StringBuilder parcelData = new StringBuilder();
             String line;
 
-            String[] split = parcelData.toString().trim().split("\n");
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     if (!parcelData.isEmpty()) {
+                        String[] split = parcelData.toString().trim().split("\n");
                         int height = split.length;
                         int width = split[0].length();
 
@@ -72,6 +72,7 @@ public class DefaultPackageReader implements PackageReader {
             }
 
             if (!parcelData.isEmpty()) {
+                String[] split = parcelData.toString().trim().split("\n");
                 int height = split.length;
                 int width = split[0].length();
 
