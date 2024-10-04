@@ -35,3 +35,4 @@
 1728078115607:pack "10x10" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
 1728078161722:pack "10x10, 5x5" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
 1728082875697:pack "6x6, 6x6" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
+1728083033810:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
