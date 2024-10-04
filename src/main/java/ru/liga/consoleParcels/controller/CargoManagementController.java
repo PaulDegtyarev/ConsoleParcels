@@ -43,9 +43,9 @@ public class CargoManagementController {
     }
 
     @ShellMethod
-    public String unpack(String filePathToUnpack) {
+    public String unpack(String truckFilePath, String parcelCountFilePath) {
         log.info("Пользователь выбрал распаковку");
 
-        return unPackagingManager.unpackParcels(filePathToUnpack);
+        return unPackagingManager.unpackParcels(truckFilePath, parcelCountFilePath);
     }
 }

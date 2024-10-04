@@ -37,3 +37,14 @@
 1728082875697:pack "6x6, 6x6" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
 1728083033810:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
 1728083247049:pack "6x6, 6x6" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
+1728083682095:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728083775932:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1728083797667:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728083985216:uunpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728083992408:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728084006872:help
+1728084022877:add-parcel "Тестовая" "*****" *
+1728084047269:pack "6x6" "тестовая" MAX_SPACE "data/trucks.json"
+1728084058314:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728084069960:stacktrace
+1728084294679:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"

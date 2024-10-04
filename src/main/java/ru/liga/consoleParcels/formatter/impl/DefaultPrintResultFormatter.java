@@ -62,19 +62,15 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
 
         for (UnPackedTruckDto unPackedTruck : unPackedTrucks) {
             int truckId = unPackedTruck.getTruckId();
-            Map<String, Integer> finalCounts = unPackedTruck.getPackageCounts();
+            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCounts();
             List<List<String>> packageLayout = unPackedTruck.getPackageLayout();
 
             log.debug("Генерация строки для грузовика ID: {}", truckId);
 
-            builder.append("Грузовик ").append(truckId).append(":");
-            builder.append("\n");
+            builder.append("Грузовик ").append(truckId).append(":\n");
 
-            int truckWidth = packageLayout.stream()
-                    .mapToInt(List::size)
-                    .max()
-                    .orElse(0);
-
+            // Отрисовка layout'а грузовика
+            int truckWidth = packageLayout.stream().mapToInt(List::size).max().orElse(0);
             for (List<String> row : packageLayout) {
                 builder.append("+");
                 for (String packageId : row) {
@@ -82,19 +78,14 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
                 }
                 builder.append("+\n");
             }
+            builder.append("+").append("+".repeat(Math.max(0, truckWidth))).append("+\n");
 
-            builder.append("+");
-            builder.append("+".repeat(Math.max(0, truckWidth)));
-            builder.append("+\n");
-
+            // Вывод количества посылок
             builder.append("Количество посылок:\n");
-            for (Map.Entry<String, Integer> entry : finalCounts.entrySet()) {
-                String packageId = entry.getKey();
+            for (Map.Entry<String, Integer> entry : parcelCounts.entrySet()) {
+                String form = entry.getKey();
                 int count = entry.getValue();
-
-                if (count > 0) {
-                    builder.append(packageId).append(" - ").append(count).append(" шт.\n");
-                }
+                builder.append("Форма ").append(form).append(" - ").append(count).append(" шт.\n");
             }
 
             builder.append("\n");

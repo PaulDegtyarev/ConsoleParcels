@@ -1,14 +1,12 @@
 package ru.liga.consoleParcels.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.liga.consoleParcels.dto.UnPackedTruckDto;
-import ru.liga.consoleParcels.exception.FileReadException;
-import ru.liga.consoleParcels.factory.DelimeterFactory;
-import ru.liga.consoleParcels.service.UnPackagingService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import ru.liga.consoleParcels.dto.UnPackedTruckDto;
+import ru.liga.consoleParcels.exception.FileReadException;
+import ru.liga.consoleParcels.service.UnPackagingService;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,55 +27,23 @@ import java.util.*;
 @Service
 public class DefaultUnPackagingService implements UnPackagingService {
     private ObjectMapper objectMapper = new ObjectMapper();
-    private DelimeterFactory delimeterFactory;
 
-    /**
-     * Конструктор сервиса распаковки грузовиков.
-     *
-     * @param delimeterFactory Фабрика для создания
-     *                         разделителей.
-     */
-    @Autowired
-    public DefaultUnPackagingService(DelimeterFactory delimeterFactory) {
-        this.delimeterFactory = delimeterFactory;
-    }
-
-    /**
-     * Распаковывает данные о грузовиках из JSON файла.
-     *
-     * @param filePath Путь к файлу JSON, содержащему данные
-     *                 о грузовиках.
-     * @return Список объектов {@link UnPackedTruckDto},
-     * представляющих информацию о каждом
-     * распакованном грузовике.
-     * @throws FileReadException Если произошла ошибка при
-     *                           чтении файла.
-     */
     @Override
-    public List<UnPackedTruckDto> unpackTruck(String filePath) {
-        log.info("Начало процесса распаковки грузовиков из файла: {}", filePath);
+    public List<UnPackedTruckDto> unpackTruck(String truckFilePath, String parcelCountFilePath) {
+        log.info("Начало процесса распаковки грузовиков из файлов: {} и {}", truckFilePath, parcelCountFilePath);
 
-        JsonNode rootNode = readJsonFile(filePath);
-        JsonNode trucksNode = rootNode.get("trucks");
+        JsonNode trucksNode = readJsonFile(truckFilePath).get("trucks");
+        JsonNode parcelCountsNode = readJsonFile(parcelCountFilePath);
 
         List<UnPackedTruckDto> unPackedTrucks = new ArrayList<>();
         for (JsonNode truckNode : trucksNode) {
             int truckId = truckNode.get("truckId").asInt();
             JsonNode packagesNode = truckNode.get("packages");
 
-            List<List<String>> packageLayout = new ArrayList<>();
-            for (JsonNode packageRow : packagesNode) {
-                List<String> row = new ArrayList<>();
-                for (JsonNode packageElement : packageRow) {
-                    row.add(packageElement.isTextual() ? packageElement.asText() : " ");
-                }
-                packageLayout.add(row);
-            }
+            List<List<String>> packageLayout = createPackageLayout(packagesNode);
+            Map<String, Integer> parcelCounts = calculateParcelCounts(packageLayout);
 
-            Map<String, Integer> packageCounters = countPackages(packagesNode);
-            Map<String, Integer> finalCounts = calculatePackageCounts(packageCounters);
-
-            unPackedTrucks.add(new UnPackedTruckDto(truckId, finalCounts, packageLayout));
+            unPackedTrucks.add(new UnPackedTruckDto(truckId, parcelCounts, packageLayout));
             log.debug("Обработан грузовик с ID: {}", truckId);
         }
 
@@ -89,63 +55,46 @@ public class DefaultUnPackagingService implements UnPackagingService {
         try {
             return objectMapper.readTree(new File(filePath));
         } catch (IOException e) {
-            throw new FileReadException("Ошибка при чтении JSON файла: {}\", filePath");
+            throw new FileReadException("Ошибка при чтении JSON файла: " + filePath);
         }
     }
 
-    private Map<String, Integer> countPackages(JsonNode packagesNode) {
-        Map<String, Integer> packageCounters = new HashMap<>();
+    private List<List<String>> createPackageLayout(JsonNode packagesNode) {
+        List<List<String>> packageLayout = new ArrayList<>();
+        for (JsonNode packageRow : packagesNode) {
+            List<String> row = new ArrayList<>();
+            for (JsonNode packageElement : packageRow) {
+                row.add(packageElement.isTextual() ? packageElement.asText() : " ");
+            }
+            packageLayout.add(row);
+        }
+        return packageLayout;
+    }
 
-        for (JsonNode packageGroup : packagesNode) {
-            for (JsonNode packageElement : packageGroup) {
-                String packageId = packageElement.asText();
-                packageCounters.put(packageId, packageCounters.getOrDefault(packageId, 0) + 1);
-                log.debug("Посылка {} положена", packageId);
+    private Map<String, Integer> calculateParcelCounts(List<List<String>> packageLayout) {
+        Map<String, Set<Character>> uniqueSymbols = new HashMap<>();
+        Map<String, Integer> symbolCounts = new HashMap<>();
+
+        for (List<String> row : packageLayout) {
+            for (String cell : row) {
+                if (!cell.trim().isEmpty()) {
+                    symbolCounts.put(cell, symbolCounts.getOrDefault(cell, 0) + 1);
+                    uniqueSymbols.computeIfAbsent(cell, k -> new HashSet<>()).add(cell.charAt(0));
+                }
             }
         }
-        log.trace("Подсчитаны посылки для одного грузовика");
-        return packageCounters;
-    }
 
-    private Map<String, Integer> calculatePackageCounts(Map<String, Integer> packageCounters) {
-        Map<String, Integer> finalCounts = new HashMap<>();
-
-        for (Map.Entry<String, Integer> entry : packageCounters.entrySet()) {
-            String packageId = entry.getKey();
+        Map<String, Integer> parcelCounts = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : symbolCounts.entrySet()) {
+            String form = entry.getKey();
             int count = entry.getValue();
-
-            switch (packageId) {
-                case "1":
-                    finalCounts.put(packageId, count);
-                    break;
-                case "2":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "3":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "4":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "5":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "6":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "7":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "8":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
-                case "9":
-                    finalCounts.put(packageId, count / delimeterFactory.createDelimeter(packageId));
-                    break;
+            int delimeter = uniqueSymbols.get(form).size();
+            int actualCount = count / delimeter;
+            if (actualCount > 0) {
+                parcelCounts.put(form, actualCount);
             }
         }
 
-        log.trace("Рассчитаны финальные количества пакетов");
-        return finalCounts;
+        return parcelCounts;
     }
 }

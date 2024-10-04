@@ -25,16 +25,16 @@ public class DefaultUnPackagingManager implements UnPackagingManager {
     }
 
     @Override
-    public String unpackParcels(String filePathToUnpack) {
+    public String unpackParcels(String truckFilePath, String parcelCountFilePath) {
         log.info("Начало процесса распаковки");
-        log.debug("Путь к файлу с данными для распаковки: {}", filePathToUnpack);
+
 
         List<UnPackedTruckDto> unpackedTrucks = new ArrayList<>();
         try {
-            unpackedTrucks = unPackagingService.unpackTruck(filePathToUnpack);
+            unpackedTrucks = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
             log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
         } catch (FileReadException fileReadException) {
-            log.error("Ошибка при чтении файла {}: {}", filePathToUnpack, fileReadException.getMessage());
+            log.error("Ошибка при чтении файлов: {}", fileReadException.getMessage());
         }
 
         log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());

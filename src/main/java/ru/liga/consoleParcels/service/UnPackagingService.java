@@ -14,16 +14,6 @@ import java.util.List;
  * информацию о каждом грузовике.
  */
 public interface UnPackagingService {
-    /**
-     * Распаковывает данные о грузовиках из JSON файла.
-     *
-     * @param filePath Путь к файлу JSON, содержащему данные
-     *                 о грузовиках.
-     * @return Список объектов {@link UnPackedTruckDto},
-     * представляющих информацию о каждом
-     * распакованном грузовике.
-     * @throws FileReadException Если произошла ошибка при
-     *                           чтении файла.
-     */
-    List<UnPackedTruckDto> unpackTruck(String filePath);
+
+    List<UnPackedTruckDto> unpackTruck(String truckFilePath, String parcelCountFilePath);
 }
