@@ -2,7 +2,9 @@ package ru.liga.consoleParcels.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.liga.consoleParcels.dto.ParcelCountDto;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
+import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
 import ru.liga.consoleParcels.model.Point;
@@ -12,10 +14,8 @@ import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.ParcelCountingService;
 import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Реализация сервиса упаковки с равномерной загрузкой.
@@ -52,12 +52,38 @@ public class BalancedLoadingService implements PackagingService {
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
 
-        Map<String, Integer> parcelCountByShape = parcelCountingService.countParcelByShape(parcels);
+        List<TruckParcelCountDto> truckParcelCounts = countParcelsInTrucks(trucks);
 
-        parcelQuantityRecordingService.writeParcelCountToJsonFile(parcelCountByShape);
+        parcelQuantityRecordingService.writeParcelCountToJsonFile(truckParcelCounts);
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
+    }
+
+    private List<TruckParcelCountDto> countParcelsInTrucks(List<Truck> trucks) {
+        List<TruckParcelCountDto> truckParcelCounts = new ArrayList<>();
+
+        for (int i = 0; i < trucks.size(); i++) {
+            Truck truck = trucks.get(i);
+            Map<String, Integer> parcelCountByShape = new HashMap<>();
+
+            for (char[] row : truck.getSpace()) {
+                for (char cell : row) {
+                    if (cell != ' ') {
+                        String shape = String.valueOf(cell);
+                        parcelCountByShape.put(shape, parcelCountByShape.getOrDefault(shape, 0) + 1);
+                    }
+                }
+            }
+
+            List<ParcelCountDto> parcelCounts = parcelCountByShape.entrySet().stream()
+                    .map(entry -> new ParcelCountDto(entry.getKey(), entry.getValue()))
+                    .collect(Collectors.toList());
+
+            truckParcelCounts.add(new TruckParcelCountDto(i + 1, parcelCounts));
+        }
+
+        return truckParcelCounts;
     }
 
     private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {

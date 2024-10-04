@@ -11,6 +11,7 @@ import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.ParcelCountingService;
 import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,17 +44,18 @@ public class OptimizedPackagingService implements PackagingService {
 
     @Override
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
-        parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
-        log.trace("Посылки отсортированы по площади в порядке убывания");
-
-        List<Truck> trucks = loadTrucks(parcels, trucksSize);
-
-        Map<String, Integer> parcelCountByShape = parcelCountingService.countParcelByShape(parcels);
-
-        parcelQuantityRecordingService.writeParcelCountToJsonFile(parcelCountByShape);
-
-        log.info("Упаковка завершена успешно. Все посылки размещены.");
-        return trucks;
+//        parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
+//        log.trace("Посылки отсортированы по площади в порядке убывания");
+//
+//        List<Truck> trucks = loadTrucks(parcels, trucksSize);
+//
+//        Map<String, Integer> parcelCountByShape = parcelCountingService.countParcelByShape(parcels);
+//
+//        parcelQuantityRecordingService.writeParcelCountToJsonFile(parcelCountByShape);
+//
+//        log.info("Упаковка завершена успешно. Все посылки размещены.");
+//        return trucks;
+        return new ArrayList<>();
     }
 
     private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
