@@ -31,7 +31,9 @@ public class DefaultPackagingServiceFactory implements PackagingServiceFactory {
     @Override
     public PackagingService createOptimizedPackagingService() {
         return new OptimizedPackagingService(
-                new DefaultTruckFactory()
+                new DefaultTruckFactory(),
+                new DefaultParcelCountingService(),
+                new ServiceForRecordingNumberOfParcelsToJsonFile()
         );
     }
 

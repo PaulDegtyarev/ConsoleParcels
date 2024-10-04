@@ -1,13 +1,10 @@
 package ru.liga.consoleParcels.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.liga.consoleParcels.dto.ParcelCountDto;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.model.Parcel;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.model.TruckPlacement;
@@ -15,9 +12,10 @@ import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.ParcelCountingService;
 import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Реализация сервиса упаковки с равномерной загрузкой.
@@ -64,6 +62,7 @@ public class BalancedLoadingService implements PackagingService {
 
     private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
+
         parcels.forEach(parcel -> {
             Optional<TruckPlacement> bestPlacement = trucks.stream()
                     .map(truck -> {
