@@ -1,6 +1,8 @@
 package ru.liga.consoleParcels.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import ru.liga.consoleParcels.dto.ParcelCountDto;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
@@ -38,14 +40,14 @@ public class BalancedLoadingService implements PackagingService {
 
     @Override
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
-        parcels.sort(Comparator.comparingInt(ParcelForPackagingDto::getArea).reversed());
+        parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
         Map<String, Integer> parcelCountByShape = new HashMap<>();
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize, parcelCountByShape);
 
-        writeParcelCountToFile(parcelCountByShape);
+        writeParcelCountToJsonFile(parcelCountByShape);
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
@@ -82,19 +84,26 @@ public class BalancedLoadingService implements PackagingService {
 
     private String getShapeKey(char[][] shape) {
         StringBuilder keyBuilder = new StringBuilder();
-        for (char[] row : shape) {
-            keyBuilder.append(new String(row)).append("\n");
+        for (int i = 0; i < shape.length; i++) {
+            keyBuilder.append(new String(shape[i]));
+            if (i < shape.length - 1) {
+                keyBuilder.append("\n");
+            }
         }
         return keyBuilder.toString();
     }
 
-    private void writeParcelCountToFile(Map<String, Integer> parcelCountByShape) {
-        try (FileWriter writer = new FileWriter("data/trucks-with-number-of-parcels.txt")) {
-            for (Map.Entry<String, Integer> entry : parcelCountByShape.entrySet()) {
-                writer.write("Форма:\n" + entry.getKey() + "Количество:\n" + entry.getValue() + "\n\n");
-            }
+    private void writeParcelCountToJsonFile(Map<String, Integer> parcelCountByShape) {
+        List<ParcelCountDto> parcelCounts = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : parcelCountByShape.entrySet()) {
+            parcelCounts.add(new ParcelCountDto(entry.getKey(), entry.getValue()));
+        }
+
+        try (FileWriter writer = new FileWriter("data/trucks-with-number-of-parcels.json")) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(writer, parcelCounts);
         } catch (IOException e) {
-            log.error("Ошибка при записи в файл: ", e);
+            log.error("Ошибка при записи в JSON файл: ", e);
         }
     }
 }

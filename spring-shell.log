@@ -21,3 +21,8 @@
 1728052797983:pack "8x8" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
 1728052829730:pack "10x10" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
 1728052887277:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1728053370798:pack "6x6" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
+1728053610681:pack "7x7" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1728053786775:for (int i = 0; i < shape.length; i++) {
+1728053819700:pack "6x6" "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt" MAX_SPACE "data/trucks.json"
+1728053888416:pack "9x9" "src/test/resources/input/valid-input-data-for-balanced-loading-service.txt" EVEN_LOADING "data/trucks.json"
