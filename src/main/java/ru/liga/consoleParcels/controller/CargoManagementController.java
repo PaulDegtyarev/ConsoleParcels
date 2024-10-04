@@ -4,18 +4,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.liga.consoleParcels.dto.PackRequest;
-import ru.liga.consoleParcels.dto.PackagingParametersDto;
-import ru.liga.consoleParcels.dto.UnPackedTruckDto;
-import ru.liga.consoleParcels.exception.*;
-import ru.liga.consoleParcels.formatter.PrintResultFormatter;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
-import ru.liga.consoleParcels.model.Truck;
+import ru.liga.consoleParcels.dto.PackRequestDto;
 import ru.liga.consoleParcels.model.UserAlgorithmChoice;
-import ru.liga.consoleParcels.service.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.liga.consoleParcels.service.PackagingManager;
+import ru.liga.consoleParcels.service.UnPackagingManager;
 
 /**
  * Контроллер, отвечающий за управление логикой упаковки и распаковки грузов.
@@ -40,14 +32,14 @@ public class CargoManagementController {
     public String pack(String trucks, String inputFilePath, UserAlgorithmChoice algorithmChoice, String filePathToWrite) {
         log.info("Пользователь выбрал упаковку");
 
-        PackRequest packRequest = new PackRequest(
+        PackRequestDto packRequestDto = new PackRequestDto(
                 trucks,
                 inputFilePath,
                 algorithmChoice,
                 filePathToWrite
         );
 
-        return packagingManager.packParcels(packRequest);
+        return packagingManager.packParcels(packRequestDto);
     }
 
     @ShellMethod

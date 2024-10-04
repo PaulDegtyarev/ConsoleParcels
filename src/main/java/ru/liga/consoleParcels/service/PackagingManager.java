@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.service;
 
-import ru.liga.consoleParcels.dto.PackRequest;
+import ru.liga.consoleParcels.dto.PackRequestDto;
 
 public interface PackagingManager {
-    String packParcels(PackRequest packRequest);
+    String packParcels(PackRequestDto packRequestDto);
 }

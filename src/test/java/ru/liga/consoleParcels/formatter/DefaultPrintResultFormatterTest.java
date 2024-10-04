@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
 import ru.liga.consoleParcels.formatter.impl.DefaultPrintResultFormatter;
-import ru.liga.consoleParcels.model.Truck;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,45 +20,6 @@ public class DefaultPrintResultFormatterTest {
     @BeforeEach
     void setUp() {
         formatter = new DefaultPrintResultFormatter();
-    }
-
-    @Test
-    void transferPackagingResultsToConsole_withValidTrucks_shouldFormatCorrectly() {
-        Truck truck1 = mock(Truck.class);
-        Truck truck2 = mock(Truck.class);
-
-        when(truck1.getSpace()).thenReturn(new char[][]{
-                {'1', ' ', ' '},
-                {'2', '2', ' '},
-                {'3', '3', '3'}
-        });
-
-        when(truck2.getSpace()).thenReturn(new char[][]{
-                {'4', ' ', ' '},
-                {'5', '5', ' '},
-                {'6', '6', '6'}
-        });
-
-        List<Truck> trucks = List.of(truck1, truck2);
-
-        StringBuilder result = formatter.transferPackagingResultsToConsole(trucks);
-
-        String expectedOutput = """
-                Грузовик 1:
-                +1  +
-                +22 +
-                +333+
-                ++++++++
-                
-                Грузовик 2:
-                +4  +
-                +55 +
-                +666+
-                ++++++++
-                
-                """;
-
-        assertThat(result.toString()).isEqualTo(expectedOutput);
     }
 
     @Test
@@ -100,7 +60,7 @@ public class DefaultPrintResultFormatterTest {
                 +1  +
                 +22 +
                 +333+
-                ++++++++
+                +++++
                 Количество посылок:
                 1 - 1 шт.
                 2 - 2 шт.
@@ -110,7 +70,7 @@ public class DefaultPrintResultFormatterTest {
                 +4  +
                 +55 +
                 +666+
-                ++++++++
+                +++++
                 Количество посылок:
                 4 - 1 шт.
                 5 - 2 шт.

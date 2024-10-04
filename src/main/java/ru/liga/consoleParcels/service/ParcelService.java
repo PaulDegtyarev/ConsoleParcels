@@ -11,9 +11,9 @@ public interface ParcelService {
     ParcelResponseDto findParcelByName(String name);
 
 
-    ParcelResponseDto addParcel(ParcelRequestDto parcelRequest);
+    ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto);
 
-    ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequest);
+    ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequestDto);
 
     ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol);
 

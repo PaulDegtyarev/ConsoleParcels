@@ -11,7 +11,7 @@ import ru.liga.consoleParcels.factory.DelimeterFactory;
  * @see DelimeterFactory
  */
 @Component
-public class DelimeterFactoryImpl implements DelimeterFactory {
+public class DefaultDelimeterFactory implements DelimeterFactory {
     /**
      * Создает разделитель на основе идентификатора посылки.
      *

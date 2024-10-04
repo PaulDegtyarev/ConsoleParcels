@@ -1,16 +1,5 @@
 package ru.liga.consoleParcels.service;
 
-import ru.liga.consoleParcels.exception.PackingException;
-import ru.liga.consoleParcels.factory.impl.DefaultTruckFactory;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
-import ru.liga.consoleParcels.model.Truck;
-import ru.liga.consoleParcels.service.impl.OptimizedPackagingServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

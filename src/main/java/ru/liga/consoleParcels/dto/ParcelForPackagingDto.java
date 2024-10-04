@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ParcelForPackaging {
+public class ParcelForPackagingDto {
     private final int height;
     private final int width;
     private char[][] shape;

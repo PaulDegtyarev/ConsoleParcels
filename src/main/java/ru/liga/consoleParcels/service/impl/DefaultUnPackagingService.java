@@ -27,7 +27,7 @@ import java.util.*;
  */
 @Log4j2
 @Service
-public class UnPackagingServiceImpl implements UnPackagingService {
+public class DefaultUnPackagingService implements UnPackagingService {
     private ObjectMapper objectMapper = new ObjectMapper();
     private DelimeterFactory delimeterFactory;
 
@@ -38,7 +38,7 @@ public class UnPackagingServiceImpl implements UnPackagingService {
      *                         разделителей.
      */
     @Autowired
-    public UnPackagingServiceImpl(DelimeterFactory delimeterFactory) {
+    public DefaultUnPackagingService(DelimeterFactory delimeterFactory) {
         this.delimeterFactory = delimeterFactory;
     }
 

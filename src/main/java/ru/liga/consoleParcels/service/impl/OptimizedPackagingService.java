@@ -1,9 +1,8 @@
 package ru.liga.consoleParcels.service.impl;
 
-import ru.liga.consoleParcels.dto.ParcelForPackaging;
+import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.PackagingService;
@@ -21,7 +20,7 @@ import java.util.List;
  * @see PackagingService
  */
 @Log4j2
-public class OptimizedPackagingServiceImpl implements PackagingService {
+public class OptimizedPackagingService implements PackagingService {
     private TruckFactory truckFactory;
 
     /**
@@ -29,12 +28,12 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
      *
      * @param truckFactory Фабрика для создания грузовиков.
      */
-    public OptimizedPackagingServiceImpl(TruckFactory truckFactory) {
+    public OptimizedPackagingService(TruckFactory truckFactory) {
         this.truckFactory = truckFactory;
     }
 
     @Override
-    public List<Truck> packPackages(List<ParcelForPackaging> parcels, String trucksSize) {
+    public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
@@ -44,7 +43,7 @@ public class OptimizedPackagingServiceImpl implements PackagingService {
         return trucks;
     }
 
-    private List<Truck> loadTrucks(List<ParcelForPackaging> parcels, String trucksSize) {
+    private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
 
         parcels.stream()

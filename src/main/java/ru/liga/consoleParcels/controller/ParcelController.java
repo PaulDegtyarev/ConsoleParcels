@@ -28,14 +28,14 @@ public class ParcelController {
 
     @ShellMethod
     public ParcelResponseDto addParcel(String name, String shape, char symbol) {
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
-        return parcelService.addParcel(parcelRequest);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
+        return parcelService.addParcel(parcelRequestDto);
     }
 
     @ShellMethod
     public ParcelResponseDto updateParcelByParcelName(String nameOfSavedParcel, String newShape, char newSymbol) {
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
-        return parcelService.updateParcelByName(parcelRequest);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
+        return parcelService.updateParcelByName(parcelRequestDto);
     }
 
     @ShellMethod

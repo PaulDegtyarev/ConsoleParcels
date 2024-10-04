@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.liga.consoleParcels.dto.ParcelForPackaging;
+import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.PackageShapeException;
 import ru.liga.consoleParcels.model.Parcel;
@@ -42,8 +42,8 @@ public class DefaultPackageReader implements PackageReader {
      *                               недопустима.
      */
     @Override
-    public List<ParcelForPackaging> readPackages(String filename) {
-        List<ParcelForPackaging> parcelsForPackaging = new ArrayList<>();
+    public List<ParcelForPackagingDto> readPackages(String filename) {
+        List<ParcelForPackagingDto> parcelsForPackaging = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             StringBuilder parcelData = new StringBuilder();
@@ -62,7 +62,7 @@ public class DefaultPackageReader implements PackageReader {
                                 shape[i][j] = split[i].charAt(j);
                             }
                         }
-                        parcelsForPackaging.add(new ParcelForPackaging(height, width, shape));
+                        parcelsForPackaging.add(new ParcelForPackagingDto(height, width, shape));
                         log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
                         parcelData.setLength(0);
                     }
@@ -81,7 +81,7 @@ public class DefaultPackageReader implements PackageReader {
                         shape[i][j] = split[i].charAt(j);
                     }
                 }
-                parcelsForPackaging.add(new ParcelForPackaging(height, width, shape));
+                parcelsForPackaging.add(new ParcelForPackagingDto(height, width, shape));
                 log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
             }
 

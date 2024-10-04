@@ -123,7 +123,7 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1";
         char symbol = '1';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
         when(parcelRepository.existsByName(anyString())).thenReturn(false);
         doNothing().when(parcelRepository).save(any(Parcel.class));
@@ -131,13 +131,13 @@ public class DefaultParcelServiceTest {
         ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
-        ParcelResponseDto result = defaultParcelService.addParcel(parcelRequest);
+        ParcelResponseDto result = defaultParcelService.addParcel(parcelRequestDto);
 
         assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getSymbol()).isEqualTo(symbol);
 
-        verify(parcelRepository, times(1)).existsByName(parcelRequest.getName().trim().toLowerCase());
+        verify(parcelRepository, times(1)).existsByName(parcelRequestDto.getName().trim().toLowerCase());
         verify(parcelRepository, times(1)).save(any(Parcel.class));
     }
 
@@ -146,14 +146,14 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1";
         char symbol = '1';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
         when(parcelRepository.existsByName(anyString())).thenReturn(true);
 
-        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequest))
+        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequestDto))
                 .isInstanceOf(ParcelNameConflictException.class);
 
-        verify(parcelRepository, times(1)).existsByName(parcelRequest.getName().trim().toLowerCase());
+        verify(parcelRepository, times(1)).existsByName(parcelRequestDto.getName().trim().toLowerCase());
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
 
@@ -162,9 +162,9 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "1\n12\n1";
         char symbol = '1';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
-        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequest))
+        assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequestDto))
                 .isInstanceOf(WrongSymbolInShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));
@@ -176,7 +176,7 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "999 999 999";
         char symbol = '9';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
         Parcel existingParcel = new Parcel(name, new char[][]{{'0', '0', '0'}, {'0', '0', '0'}, {'0', '0', '0'}}, '0');
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
@@ -186,7 +186,7 @@ public class DefaultParcelServiceTest {
         ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}}, '9');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
-        ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequest);
+        ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequestDto);
 
         assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
@@ -202,11 +202,11 @@ public class DefaultParcelServiceTest {
         String name = "Некорректное имя";
         String shape = "1";
         char symbol = '1';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
                 .isInstanceOf(ParcelNotFoundException.class)
                 .hasMessage("Посылка с названием " + name + " не найдена");
 
@@ -219,9 +219,9 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "111\n121\n111";
         char symbol = '1';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
                 .isInstanceOf(WrongSymbolInShapeException.class)
                 .hasMessage("Некоторые символы посылки не являются указанным символом: " + symbol);
 
@@ -233,11 +233,11 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String shape = "  ";
         char symbol = ' ';
-        ParcelRequestDto parcelRequest = new ParcelRequestDto(name, shape, symbol);
+        ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
         doThrow(new InvalidShapeException("Форма посылки не может быть пустой")).when(parcelValidator).validateParcelShape(shape);
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequest))
+        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
                 .isInstanceOf(InvalidShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));

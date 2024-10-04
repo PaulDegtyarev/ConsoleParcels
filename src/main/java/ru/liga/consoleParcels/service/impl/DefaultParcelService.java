@@ -51,16 +51,16 @@ public class DefaultParcelService implements ParcelService {
     }
 
     @Override
-    public ParcelResponseDto addParcel(ParcelRequestDto parcelRequest) {
-        String name = parcelRequest.getName();
+    public ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto) {
+        String name = parcelRequestDto.getName();
 
-        String shape = parcelRequest.getShape();
+        String shape = parcelRequestDto.getShape();
         parcelValidator.validateParcelShape(shape);
 
-        char symbol = parcelRequest.getSymbol();
+        char symbol = parcelRequestDto.getSymbol();
         parcelValidator.validateParcelSymbol(symbol);
 
-        if (parcelRequest.isThereSymbolThatIsNotSpecified()) {
+        if (parcelRequestDto.isThereSymbolThatIsNotSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + symbol);
         }
 
@@ -78,16 +78,16 @@ public class DefaultParcelService implements ParcelService {
     }
 
     @Override
-    public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequest) {
-        String nameOfSavedParcel = parcelRequest.getName();
+    public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequestDto) {
+        String nameOfSavedParcel = parcelRequestDto.getName();
 
-        String shape = parcelRequest.getShape();
+        String shape = parcelRequestDto.getShape();
         parcelValidator.validateParcelShape(shape);
 
-        char newSymbol = parcelRequest.getSymbol();
+        char newSymbol = parcelRequestDto.getSymbol();
         parcelValidator.validateParcelSymbol(newSymbol);
 
-        if (parcelRequest.isThereSymbolThatIsNotSpecified()) {
+        if (parcelRequestDto.isThereSymbolThatIsNotSpecified()) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
         }
 

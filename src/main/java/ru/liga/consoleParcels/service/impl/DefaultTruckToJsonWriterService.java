@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Log4j2
 @Service
-public class TruckToJsonWriterServiceImpl implements TruckToJsonWriterService {
+public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**

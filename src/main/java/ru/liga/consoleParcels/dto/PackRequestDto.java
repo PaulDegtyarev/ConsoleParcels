@@ -8,7 +8,7 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PackRequest {
+public class PackRequestDto {
     private String trucks;
     private String inputData;
     private UserAlgorithmChoice algorithmChoice;

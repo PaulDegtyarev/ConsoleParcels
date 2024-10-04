@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Log4j2
 @Service
-public class PackagingSelectionServiceImpl implements PackagingSelectionService {
+public class DefaultPackagingSelectionService implements PackagingSelectionService {
     private PackagingServiceFactory packagingServiceFactory;
     private Map<UserAlgorithmChoice, PackagingService> serviceMap = new HashMap<>();
 
@@ -36,7 +36,7 @@ public class PackagingSelectionServiceImpl implements PackagingSelectionService 
      *                                сервисов упаковки.
      */
     @Autowired
-    public PackagingSelectionServiceImpl(PackagingServiceFactory packagingServiceFactory) {
+    public DefaultPackagingSelectionService(PackagingServiceFactory packagingServiceFactory) {
         this.packagingServiceFactory = packagingServiceFactory;
         initializeServiceMap();
     }

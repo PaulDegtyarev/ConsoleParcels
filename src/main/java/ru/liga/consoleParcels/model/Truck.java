@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.model;
 
 import lombok.Getter;
-import ru.liga.consoleParcels.dto.ParcelForPackaging;
+import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -40,7 +40,7 @@ public class Truck {
         }
     }
 
-    private boolean canFit(ParcelForPackaging parcel, int x, int y) {
+    private boolean canFit(ParcelForPackagingDto parcel, int x, int y) {
         if (x + parcel.getWidth() > truckWidth || y + parcel.getHeight() > truckHeight) {
             return false;
         }
@@ -79,7 +79,7 @@ public class Truck {
      * @param x      Координата x начала размещения посылки.
      * @param y      Координата y начала размещения посылки.
      */
-    public void place(ParcelForPackaging parcel, int x, int y) {
+    public void place(ParcelForPackagingDto parcel, int x, int y) {
         char[][] shape = parcel.getShape();
 
         for (int i = 0; i < parcel.getHeight(); i++) {
@@ -102,7 +102,7 @@ public class Truck {
      * позиции, или пустой Optional, если позиция
      * не найдена.
      */
-    public Optional<Point> findPosition(ParcelForPackaging parcel) {
+    public Optional<Point> findPosition(ParcelForPackagingDto parcel) {
         for (int y = truckHeight - parcel.getHeight(); y >= 0; y--) {
             for (int x = 0; x <= truckWidth - parcel.getWidth(); x++) {
                 if (canFit(parcel, x, y)) {

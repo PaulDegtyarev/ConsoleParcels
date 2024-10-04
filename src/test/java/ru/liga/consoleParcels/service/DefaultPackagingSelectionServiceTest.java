@@ -1,23 +1,23 @@
 package ru.liga.consoleParcels.service;
 
 import ru.liga.consoleParcels.factory.PackagingServiceFactory;
-import ru.liga.consoleParcels.factory.impl.PackagingServiceFactoryImpl;
-import ru.liga.consoleParcels.service.impl.OptimizedPackagingServiceImpl;
-import ru.liga.consoleParcels.service.impl.PackagingSelectionServiceImpl;
+import ru.liga.consoleParcels.factory.impl.DefaultPackagingServiceFactory;
+import ru.liga.consoleParcels.service.impl.OptimizedPackagingService;
+import ru.liga.consoleParcels.service.impl.DefaultPackagingSelectionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class PackagingSelectionServiceImplTest {
+public class DefaultPackagingSelectionServiceTest {
     private PackagingServiceFactory packagingServiceFactory;
     private PackagingSelectionService packagingSelectionService;
 
     @BeforeEach
     void setUp() {
-        packagingServiceFactory = new PackagingServiceFactoryImpl();
-        packagingSelectionService = new PackagingSelectionServiceImpl(packagingServiceFactory);
+        packagingServiceFactory = new DefaultPackagingServiceFactory();
+        packagingSelectionService = new DefaultPackagingSelectionService(packagingServiceFactory);
     }
 
     @Test
@@ -25,6 +25,6 @@ public class PackagingSelectionServiceImplTest {
         UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.MAX_SPACE;
         PackagingService actualResponse = packagingSelectionService.selectPackagingService(algorithmChoice);
 
-        assertThat(actualResponse).isInstanceOf(OptimizedPackagingServiceImpl.class);
+        assertThat(actualResponse).isInstanceOf(OptimizedPackagingService.class);
     }
 }

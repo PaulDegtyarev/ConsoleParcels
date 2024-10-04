@@ -1,10 +1,9 @@
 package ru.liga.consoleParcels.service.impl;
 
 import lombok.extern.log4j.Log4j2;
-import ru.liga.consoleParcels.dto.ParcelForPackaging;
+import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
 import ru.liga.consoleParcels.model.Point;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.model.TruckPlacement;
@@ -24,7 +23,7 @@ import java.util.Optional;
  * @see PackagingService
  */
 @Log4j2
-public class BalancedLoadingServiceImpl implements PackagingService {
+public class BalancedLoadingService implements PackagingService {
     private TruckFactory truckFactory;
 
     /**
@@ -32,14 +31,14 @@ public class BalancedLoadingServiceImpl implements PackagingService {
      *
      * @param truckFactory Фабрика для создания грузовиков.
      */
-    public BalancedLoadingServiceImpl(TruckFactory truckFactory) {
+    public BalancedLoadingService(TruckFactory truckFactory) {
         this.truckFactory = truckFactory;
     }
 
 
     @Override
-    public List<Truck> packPackages(List<ParcelForPackaging> parcels, String trucksSize) {
-        parcels.sort(Comparator.comparingInt(ParcelForPackaging::getArea).reversed());
+    public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
+        parcels.sort(Comparator.comparingInt(ParcelForPackagingDto::getArea).reversed());
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
@@ -48,7 +47,7 @@ public class BalancedLoadingServiceImpl implements PackagingService {
         return trucks;
     }
 
-    private List<Truck> loadTrucks(List<ParcelForPackaging> parcels, String trucksSize) {
+    private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
 
         parcels.forEach(parcel -> {

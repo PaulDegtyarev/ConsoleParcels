@@ -3,21 +3,21 @@ package ru.liga.consoleParcels.factory.impl;
 import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.factory.PackagingServiceFactory;
 import ru.liga.consoleParcels.service.PackagingService;
-import ru.liga.consoleParcels.service.impl.OptimizedPackagingServiceImpl;
-import ru.liga.consoleParcels.service.impl.BalancedLoadingServiceImpl;
+import ru.liga.consoleParcels.service.impl.OptimizedPackagingService;
+import ru.liga.consoleParcels.service.impl.BalancedLoadingService;
 
 /**
  * Реализация фабрики для создания сервисов упаковки.
  * <p>
  * Эта фабрика создает конкретные реализации сервисов упаковки,
- * таких как {@link OptimizedPackagingServiceImpl} и
- * {@link BalancedLoadingServiceImpl}, используя фабрику для
+ * таких как {@link OptimizedPackagingService} и
+ * {@link BalancedLoadingService}, используя фабрику для
  * создания грузовиков {@link DefaultTruckFactory}.
  *
  * @see PackagingServiceFactory
  */
 @Component
-public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
+public class DefaultPackagingServiceFactory implements PackagingServiceFactory {
     /**
      * Создает сервис для оптимизированной упаковки.
      * <p>
@@ -28,7 +28,7 @@ public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
      */
     @Override
     public PackagingService createOptimizedPackagingService() {
-        return new OptimizedPackagingServiceImpl(
+        return new OptimizedPackagingService(
                 new DefaultTruckFactory()
         );
     }
@@ -43,7 +43,7 @@ public class PackagingServiceFactoryImpl implements PackagingServiceFactory {
      */
     @Override
     public PackagingService createSinglePackagingService() {
-        return new BalancedLoadingServiceImpl(
+        return new BalancedLoadingService(
                 new DefaultTruckFactory()
         );
     }
