@@ -2,6 +2,7 @@ package ru.liga.consoleParcels.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Log4j2
+@Service
 public class ServiceForRecordingNumberOfParcelsToJsonFile implements ParcelQuantityRecordingService {
     private final String JSON_FILENAME_TO_WRITE_QUANTITY = "data/trucks-with-number-of-parcels.json";
 

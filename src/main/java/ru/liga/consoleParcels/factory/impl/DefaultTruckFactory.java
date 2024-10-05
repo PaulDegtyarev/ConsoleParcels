@@ -1,6 +1,7 @@
 package ru.liga.consoleParcels.factory.impl;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.factory.TruckFactory;
 import ru.liga.consoleParcels.model.Truck;
 
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
+@Component
 public class DefaultTruckFactory implements TruckFactory {
-
     @Override
     public List<Truck> createTrucks(String truckSizes) {
         List<Truck> trucks = new ArrayList<>();

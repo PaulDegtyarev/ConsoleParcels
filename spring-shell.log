@@ -48,3 +48,5 @@
 1728084058314:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
 1728084069960:stacktrace
 1728084294679:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
+1728091900054:pack "6x6" "Чипсы с сыром, Вазилин, веревка, телевизор" MAX_SPACE "data/trucks.json"
+1728091920396:unpack "data/trucks.json" "data/trucks-with-number-of-parcels.json"
