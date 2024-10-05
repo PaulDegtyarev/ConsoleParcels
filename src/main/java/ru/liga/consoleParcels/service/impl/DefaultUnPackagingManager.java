@@ -4,12 +4,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.UnPackedTruckDto;
-import ru.liga.consoleParcels.exception.FileReadException;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 import ru.liga.consoleParcels.service.UnPackagingService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,14 +26,8 @@ public class DefaultUnPackagingManager implements UnPackagingManager {
     public String unpackParcels(String truckFilePath, String parcelCountFilePath) {
         log.info("Начало процесса распаковки");
 
-
-        List<UnPackedTruckDto> unpackedTrucks = new ArrayList<>();
-        try {
-            unpackedTrucks = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
-            log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
-        } catch (FileReadException fileReadException) {
-            log.error("Ошибка при чтении файлов: {}", fileReadException.getMessage());
-        }
+        List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
+        log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
 
         log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
         StringBuilder unPackagingResult = printResultFormatter.transferUnpackingResultsToConsole(unpackedTrucks);

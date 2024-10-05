@@ -17,31 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Реализация сервиса для записи данных о грузовиках в JSON
- * файл.
- * <p>
- * Этот сервис использует {@link ObjectMapper} для
- * сериализации данных о грузовиках в JSON формат и
- * записывает их в файл по заданному пути.
- *
- * @see TruckToJsonWriterService
- */
+
 @Log4j2
 @Service
 public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * Записывает данные о грузовиках в JSON файл.
-     *
-     * @param trucks   Список грузовиков, данные о которых
-     *                 нужно записать.
-     * @param filePath Путь к файлу, в который нужно записать
-     *                 данные.
-     * @throws FileWriteException Если произошла ошибка при
-     *                            записи в файл.
-     */
     @Override
     public void writeTruckToJson(List<Truck> trucks, String filePath) {
         log.info("Начало процесса записи грузовиков в JSON файл: {}", filePath);
@@ -61,7 +42,6 @@ public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService
             data.put("trucks", truckList);
 
             objectMapper.writeValue(Files.newOutputStream(path), data);
-
             log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), filePath);
 
         } catch (IOException e) {
@@ -71,6 +51,8 @@ public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService
     }
 
     private void addTrucksToData(List<Truck> trucks, List<Map<String, Object>> truckList) {
+        log.debug("Начало добавления грузовиков в данные JSON");
+
         int nextTruckId = truckList.size() + 1;
         for (Truck truck : trucks) {
             Map<String, Object> truckMap = new HashMap<>();
@@ -79,11 +61,13 @@ public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService
             truckList.add(truckMap);
             log.trace("Добавлен грузовик с ID: {}", truckMap.get("truckId"));
         }
+        log.debug("Завершено добавление грузовиков в данные JSON");
     }
 
     private List<List<Character>> convertTruckSpaceToPackageList(Truck truck) {
-        List<List<Character>> packages = new ArrayList<>();
+        log.trace("Начало конвертации данных пространства грузовика в список пакетов.");
 
+        List<List<Character>> packages = new ArrayList<>();
         char[][] space = truck.getSpace();
         for (char[] row : space) {
             List<Character> rowList = new ArrayList<>();

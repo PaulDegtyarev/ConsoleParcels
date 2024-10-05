@@ -39,7 +39,7 @@ public class DefaultPackagingManager implements PackagingManager {
         log.info("Начало процесса упаковки");
 
         PackagingService packagingService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
-        log.debug("Выбран сервис для упаковки: {}", packagingService);
+        log.debug("Выбран сервис для упаковки: {}", packagingService.getClass().getSimpleName());
 
         List<ParcelForPackagingDto> parcelsForPackaging;
         try {
@@ -59,7 +59,7 @@ public class DefaultPackagingManager implements PackagingManager {
                         );
                     })
                     .collect(Collectors.toList());
-
+            log.info("Получено {} посылок из репозитория", parcelsForPackaging.size());
         } catch (ParcelNotFoundException parcelNotFoundException) {
             parcelsForPackaging = packageReader.readPackages(packRequestDto.getInputData());
             log.debug("Прочитано {} посылок из файла {}", parcelsForPackaging.size(), packRequestDto.getInputData());
@@ -75,7 +75,6 @@ public class DefaultPackagingManager implements PackagingManager {
         log.info("Запись результатов упаковки в JSON завершена");
 
         log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
-
         return printResultFormatter.transferPackagingResultsToConsole(trucks).toString();
     }
 }

@@ -35,6 +35,7 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public String findAllParcels() {
+        log.info("Получение списка всех посылок");
         return parcelRepository.findAll()
                 .stream()
                 .map(parcelServiceResponseFactory::createServiceResponse)
@@ -52,6 +53,7 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto) {
+        log.info("Начинается добавление посылки с данными: {}", parcelRequestDto);
         String name = parcelRequestDto.getName();
 
         String shape = parcelRequestDto.getShape();
@@ -74,11 +76,13 @@ public class DefaultParcelService implements ParcelService {
         Parcel newParcel = new Parcel(trimmedName, shapeCharArray, symbol);
         parcelRepository.save(newParcel);
 
+        log.info("Посылка успешно добавлена: {}", newParcel);
         return parcelServiceResponseFactory.createServiceResponse(newParcel);
     }
 
     @Override
     public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequestDto) {
+        log.info("Начинается обновление посылки с данными: {}", parcelRequestDto);
         String nameOfSavedParcel = parcelRequestDto.getName();
 
         String shape = parcelRequestDto.getShape();
@@ -99,11 +103,13 @@ public class DefaultParcelService implements ParcelService {
         parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
+        log.info("Посылка успешно обновлена: {}", parcelToUpdate);
         return parcelServiceResponseFactory.createServiceResponse(parcelToUpdate);
     }
 
     @Override
     public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
+        log.info("Начинается обновление символа посылки с названием: {}, новый символ: {}", nameOfSavedParcel, newSymbol);
         parcelValidator.validateParcelSymbol(newSymbol);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
@@ -114,6 +120,7 @@ public class DefaultParcelService implements ParcelService {
         parcelWithUpdateSymbol.updateShapeWithNewSymbol(newShape, newSymbol);
         parcelRepository.save(parcelWithUpdateSymbol);
 
+        log.info("Символ посылки успешно обновлен: {}", parcelWithUpdateSymbol);
         return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateSymbol);
     }
 
@@ -131,6 +138,7 @@ public class DefaultParcelService implements ParcelService {
 
     @Override
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
+        log.info("Начинается обновление формы посылки с названием: {}, новая форма: {}", nameOfSavedParcel, newShape);
         parcelValidator.validateParcelShape(newShape);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
@@ -141,13 +149,16 @@ public class DefaultParcelService implements ParcelService {
         parcelWithUpdateShape.updateShape(parsedShape);
         parcelRepository.save(parcelWithUpdateShape);
 
+        log.info("Форма посылки успешно обновлена: {}", parcelWithUpdateShape);
         return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateShape);
     }
 
     @Override
     public void deleteParcelByParcelName(String nameOfParcelForDelete) {
+        log.info("Начинается удаление посылки с названием: {}", nameOfParcelForDelete);
         String trimmedNameOfSavedParcel = nameOfParcelForDelete.trim().toLowerCase();
 
         parcelRepository.deleteParcelByParcelName(trimmedNameOfSavedParcel);
+        log.info("Посылка с названием: {} успешно удалена", nameOfParcelForDelete);
     }
 }

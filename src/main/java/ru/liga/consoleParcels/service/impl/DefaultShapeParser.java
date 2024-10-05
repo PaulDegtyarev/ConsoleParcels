@@ -1,12 +1,15 @@
 package ru.liga.consoleParcels.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.service.ShapeParser;
 
 @Service
+@Log4j2
 public class DefaultShapeParser implements ShapeParser {
     @Override
     public char[][] parseShape(String shape) {
+        log.debug("Начинается парсинг формы: {}", shape);
         String[] lines = shape.split(" ");
         int height = lines.length;
         int maxWidth = 0;
@@ -25,6 +28,7 @@ public class DefaultShapeParser implements ShapeParser {
             }
         }
 
+        log.debug("Результат парсинга формы:\n{}", (Object[]) shapeArray);
         return shapeArray;
     }
 }

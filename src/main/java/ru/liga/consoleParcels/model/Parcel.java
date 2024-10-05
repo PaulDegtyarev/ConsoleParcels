@@ -26,4 +26,11 @@ public class Parcel {
     public void updateShape(char[][] newShape) {
         this.shape = newShape;
     }
+
+    @Override
+    public String toString() {
+        return "Parcel{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

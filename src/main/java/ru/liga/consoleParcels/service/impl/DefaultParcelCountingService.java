@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelCountDto;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
@@ -13,15 +14,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class DefaultParcelCountingService implements ParcelCountingService {
     @Override
     public List<TruckParcelCountDto> countParcelsInTrucks(List<Truck> trucks) {
+        log.info("Начало подсчета количества посылок в грузовиках. Количество грузовиков: {}", trucks.size());
+
         List<TruckParcelCountDto> truckParcelCounts = new ArrayList<>();
 
         for (int i = 0; i < trucks.size(); i++) {
             Truck truck = trucks.get(i);
-            Map<String, Integer> parcelCountByShape = new HashMap<>();
+            log.debug("Обработка грузовика №{}...", i + 1);
 
+            Map<String, Integer> parcelCountByShape = new HashMap<>();
             for (char[] row : truck.getSpace()) {
                 for (char cell : row) {
                     if (cell != ' ') {
@@ -36,8 +41,10 @@ public class DefaultParcelCountingService implements ParcelCountingService {
                     .collect(Collectors.toList());
 
             truckParcelCounts.add(new TruckParcelCountDto(i + 1, parcelCounts));
+            log.debug("Подсчет посылок в грузовике №{} завершен. Найдено {} типов посылок.", i + 1, parcelCounts.size());
         }
 
+        log.info("Подсчет количества посылок во всех грузовиках завершен. Найдено {} записей.", truckParcelCounts.size());
         return truckParcelCounts;
     }
 }

@@ -23,4 +23,13 @@ public class ParcelRequestDto {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "ParcelRequestDto{" +
+                "name='" + name + '\'' +
+                ", shape='" + shape + '\'' +
+                ", symbol=" + symbol +
+                '}';
+    }
 }

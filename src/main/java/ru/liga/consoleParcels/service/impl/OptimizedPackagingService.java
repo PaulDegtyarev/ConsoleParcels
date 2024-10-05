@@ -2,7 +2,7 @@ package ru.liga.consoleParcels.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.liga.consoleParcels.dto.ParcelCountDto;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.exception.PackingException;
@@ -13,32 +13,15 @@ import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.ParcelCountingService;
 import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-/**
- * Реализация сервиса оптимизированной упаковки.
- * <p>
- * Этот сервис сортирует посылки по площади в порядке убывания
- * и затем пытается разместить каждую посылку в первом
- * найденном свободном пространстве в грузовиках.
- *
- * @see PackagingService
- */
 @Log4j2
+@Service
 public class OptimizedPackagingService implements PackagingService {
     private TruckFactory truckFactory;
     private ParcelCountingService parcelCountingService;
     private ParcelQuantityRecordingService parcelQuantityRecordingService;
 
-    /**
-     * Конструктор сервиса оптимизированной упаковки.
-     *
-     * @param truckFactory Фабрика для создания грузовиков.
-     */
     @Autowired
     public OptimizedPackagingService(TruckFactory truckFactory, ParcelCountingService parcelCountingService, ParcelQuantityRecordingService parcelQuantityRecordingService) {
         this.truckFactory = truckFactory;
@@ -48,14 +31,18 @@ public class OptimizedPackagingService implements PackagingService {
 
     @Override
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
+        log.info("Начало процесса упаковки. Количество посылок: {}, размер грузовиков: {}", parcels.size(), trucksSize);
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
         log.trace("Посылки отсортированы по площади в порядке убывания");
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
+        log.debug("Создано {} грузовиков для упаковки.", trucks.size());
 
         List<TruckParcelCountDto> truckParcelCounts = parcelCountingService.countParcelsInTrucks(trucks);
+        log.debug("Подсчитано количество посылок в каждом грузовике.");
 
         parcelQuantityRecordingService.writeParcelCountToJsonFile(truckParcelCounts);
+        log.info("Информация о количестве посылок в каждом грузовике успешно записана в JSON файл.");
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
@@ -63,6 +50,7 @@ public class OptimizedPackagingService implements PackagingService {
 
     private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
+        log.debug("Созданы грузовики: {}", trucks);
 
         parcels.stream()
                 .peek(parcel -> log.trace("Обработка посылки с формой: {}", parcel.getShape()))
