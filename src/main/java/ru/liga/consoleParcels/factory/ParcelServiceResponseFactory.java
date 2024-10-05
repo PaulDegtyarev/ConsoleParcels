@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.factory;
 
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 
 /**
  * Интерфейс фабрики ответов сервиса посылки.

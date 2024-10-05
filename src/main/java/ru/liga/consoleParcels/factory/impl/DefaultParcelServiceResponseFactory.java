@@ -3,7 +3,7 @@ package ru.liga.consoleParcels.factory.impl;
 import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 
 /**
  * Фабрика ответов сервиса по умолчанию.

@@ -1,6 +1,6 @@
 package ru.liga.consoleParcels.repository;
 
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 
 import java.util.List;
 import java.util.Optional;

@@ -8,7 +8,7 @@ import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.mapper.ParcelData;
 import ru.liga.consoleParcels.mapper.ParcelsInitData;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 
 import javax.annotation.PostConstruct;

@@ -1,8 +1,13 @@
-package ru.liga.consoleParcels.model;
+package ru.liga.consoleParcels.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Класс для представления посылки.
@@ -10,9 +15,17 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Entity
+@Table(name = "parcels", schema = "parcels")
 public class Parcel {
+    @Id
+    @Column(name = "name")
     private final String name;
+
+    @Column(name = "shape")
     private char[][] shape;
+
+    @Column(name = "symbol")
     private char symbol;
 
     /**

@@ -9,7 +9,7 @@ import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.exception.*;
 import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.impl.DefaultParcelService;
 

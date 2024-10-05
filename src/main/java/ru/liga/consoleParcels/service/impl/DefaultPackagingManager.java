@@ -7,7 +7,7 @@ import ru.liga.consoleParcels.dto.PackRequestDto;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.*;

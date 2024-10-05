@@ -9,7 +9,7 @@ import ru.liga.consoleParcels.exception.ParcelNameConflictException;
 import ru.liga.consoleParcels.exception.ParcelNotFoundException;
 import ru.liga.consoleParcels.exception.WrongSymbolInShapeException;
 import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
-import ru.liga.consoleParcels.model.Parcel;
+import ru.liga.consoleParcels.entity.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
 import ru.liga.consoleParcels.service.ParcelValidator;
