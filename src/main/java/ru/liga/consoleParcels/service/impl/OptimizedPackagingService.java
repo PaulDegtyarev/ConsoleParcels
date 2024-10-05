@@ -15,6 +15,9 @@ import ru.liga.consoleParcels.service.ParcelQuantityRecordingService;
 
 import java.util.List;
 
+/**
+ * Сервис для оптимизированной упаковки посылок в грузовики.
+ */
 @Log4j2
 @Service
 public class OptimizedPackagingService implements PackagingService {
@@ -22,6 +25,13 @@ public class OptimizedPackagingService implements PackagingService {
     private ParcelCountingService parcelCountingService;
     private ParcelQuantityRecordingService parcelQuantityRecordingService;
 
+    /**
+     * Конструктор сервиса с зависимостями.
+     *
+     * @param truckFactory                   Фабрика грузовиков.
+     * @param parcelCountingService          Сервис подсчета посылок.
+     * @param parcelQuantityRecordingService Сервис записи количества посылок.
+     */
     @Autowired
     public OptimizedPackagingService(TruckFactory truckFactory, ParcelCountingService parcelCountingService, ParcelQuantityRecordingService parcelQuantityRecordingService) {
         this.truckFactory = truckFactory;
@@ -29,6 +39,13 @@ public class OptimizedPackagingService implements PackagingService {
         this.parcelQuantityRecordingService = parcelQuantityRecordingService;
     }
 
+    /**
+     * Упаковывает посылки в грузовики.
+     *
+     * @param parcels    Список посылок для упаковки.
+     * @param trucksSize Размер грузовиков.
+     * @return Список грузовиков с упакованными посылками.
+     */
     @Override
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
         log.info("Начало процесса упаковки. Количество посылок: {}, размер грузовиков: {}", parcels.size(), trucksSize);

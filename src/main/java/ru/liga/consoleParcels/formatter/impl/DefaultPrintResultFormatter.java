@@ -9,9 +9,18 @@ import ru.liga.consoleParcels.model.Truck;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Форматирует результаты упаковки и распаковки в строку для вывода в консоль.
+ */
 @Log4j2
 @Service
 public class DefaultPrintResultFormatter implements PrintResultFormatter {
+    /**
+     * Форматирует результаты упаковки в строку.
+     *
+     * @param trucks Список грузовиков.
+     * @return Строка с результатами упаковки.
+     */
     @Override
     public StringBuilder transferPackagingResultsToConsole(List<Truck> trucks) {
         StringBuilder result = new StringBuilder();
@@ -36,6 +45,12 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
         return result;
     }
 
+    /**
+     * Форматирует результаты распаковки в строку.
+     *
+     * @param unPackedTrucks Список распакованных грузовиков.
+     * @return Строка с результатами распаковки.
+     */
     @Override
     public StringBuilder transferUnpackingResultsToConsole(List<UnPackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();

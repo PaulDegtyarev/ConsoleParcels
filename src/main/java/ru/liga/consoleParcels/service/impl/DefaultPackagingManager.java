@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация менеджера упаковки посылок.
+ */
 @Service
 @Log4j2
 public class DefaultPackagingManager implements PackagingManager {
@@ -25,6 +28,15 @@ public class DefaultPackagingManager implements PackagingManager {
     private PackageReader packageReader;
     private ParcelRepository parcelRepository;
 
+    /**
+     * Конструктор с зависимостями.
+     *
+     * @param packagingSelectionService Сервис выбора алгоритма упаковки.
+     * @param truckToJsonWriterService  Сервис записи данных о грузовиках в JSON.
+     * @param printResultFormatter      Форматировщик результатов упаковки.
+     * @param packageReader             Чтение посылок из файла.
+     * @param parcelRepository          Репозиторий посылок.
+     */
     @Autowired
     public DefaultPackagingManager(PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, PrintResultFormatter printResultFormatter, PackageReader packageReader, ParcelRepository parcelRepository) {
         this.packagingSelectionService = packagingSelectionService;
@@ -34,6 +46,12 @@ public class DefaultPackagingManager implements PackagingManager {
         this.parcelRepository = parcelRepository;
     }
 
+    /**
+     * Упаковывает посылки согласно запросу.
+     *
+     * @param packRequestDto Запрос на упаковку.
+     * @return Строка с результатами упаковки.
+     */
     @Override
     public String packParcels(PackRequestDto packRequestDto) {
         log.info("Начало процесса упаковки");

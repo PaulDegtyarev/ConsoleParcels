@@ -13,9 +13,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса для подсчета количества посылок в грузовиках.
+ */
 @Service
 @Log4j2
 public class DefaultParcelCountingService implements ParcelCountingService {
+
+    /**
+     * Подсчитывает количество посылок в каждом грузовике.
+     *
+     * @param trucks Список грузовиков.
+     * @return Список DTO, содержащих информацию о количестве посылок в каждом грузовике.
+     */
     @Override
     public List<TruckParcelCountDto> countParcelsInTrucks(List<Truck> trucks) {
         log.info("Начало подсчета количества посылок в грузовиках. Количество грузовиков: {}", trucks.size());

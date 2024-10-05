@@ -12,12 +12,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * Реализация сервиса для распаковки грузовиков.
+ */
 @Log4j2
 @Service
 public class DefaultUnPackagingService implements UnPackagingService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Распаковывает грузовики из файлов и формирует данные о распаковке.
+     *
+     * @param truckFilePath       Путь к файлу с данными грузовиков.
+     * @param parcelCountFilePath Путь к файлу с данными о количестве посылок.
+     * @return Список DTO с данными о распаковке грузовиков.
+     */
     @Override
     public List<UnPackedTruckDto> unpackTruck(String truckFilePath, String parcelCountFilePath) {
         log.info("Начало процесса распаковки грузовиков из файлов: {} и {}", truckFilePath, parcelCountFilePath);
@@ -47,7 +56,6 @@ public class DefaultUnPackagingService implements UnPackagingService {
     private JsonNode readJsonFile(String filePath) {
         log.debug("Чтение JSON файла: {}", filePath);
         try {
-
             return objectMapper.readTree(new File(filePath));
         } catch (IOException e) {
             throw new FileReadException("Ошибка при чтении JSON файла: " + filePath);

@@ -13,11 +13,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * Реализация сервиса для чтения посылок из файла.
+ */
 @Log4j2
 @Service
 public class DefaultPackageReader implements PackageReader {
-
+    /**
+     * Читает посылки из файла.
+     *
+     * @param filename Имя файла с данными посылок.
+     * @return Список посылок для упаковки.
+     */
     @Override
     public List<ParcelForPackagingDto> readPackages(String filename) {
         log.info("Начало чтения посылок из файла: {}", filename);

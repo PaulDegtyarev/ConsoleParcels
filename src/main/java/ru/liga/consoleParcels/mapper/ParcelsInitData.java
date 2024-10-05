@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
+/**
+ * Класс для хранения данных о посылках.
+ */
 @Getter
 @NoArgsConstructor
 public class ParcelsInitData {

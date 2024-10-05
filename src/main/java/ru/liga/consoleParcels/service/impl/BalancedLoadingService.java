@@ -2,6 +2,7 @@ package ru.liga.consoleParcels.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.exception.PackingException;
@@ -18,13 +19,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+/**
+ * Сервис для упаковки посылок со сбалансированной загрузкой грузовиков.
+ */
 @Log4j2
+@Service
 public class BalancedLoadingService implements PackagingService {
     private TruckFactory truckFactory;
     private ParcelCountingService parcelCountingService;
     private ParcelQuantityRecordingService parcelQuantityRecordingService;
 
+    /**
+     * Конструктор сервиса с зависимостями.
+     *
+     * @param truckFactory                   Фабрика грузовиков.
+     * @param parcelCountingService          Сервис подсчета посылок.
+     * @param parcelQuantityRecordingService Сервис записи количества посылок.
+     */
     @Autowired
     public BalancedLoadingService(TruckFactory truckFactory, ParcelCountingService parcelCountingService, ParcelQuantityRecordingService parcelQuantityRecordingService) {
         this.truckFactory = truckFactory;
@@ -33,6 +44,13 @@ public class BalancedLoadingService implements PackagingService {
         log.info("BalancedLoadingService инициализирован");
     }
 
+    /**
+     * Упаковывает посылки в грузовики.
+     *
+     * @param parcels    Список посылок для упаковки.
+     * @param trucksSize Размер грузовиков.
+     * @return Список грузовиков с упакованными посылками.
+     */
     @Override
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
         log.info("Начало упаковки посылок. Количество посылок: {}, размер грузовиков: {}", parcels.size(), trucksSize);

@@ -1,12 +1,12 @@
 package ru.liga.consoleParcels.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
 import ru.liga.consoleParcels.exception.FileWriteException;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.TruckToJsonWriterService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,12 +17,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Реализация сервиса для записи данных о грузовиках в JSON файл.
+ */
 @Log4j2
 @Service
 public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Записывает данные о грузовиках в JSON файл.
+     *
+     * @param trucks   Список грузовиков.
+     * @param filePath Путь к файлу для записи.
+     * @throws FileNotFoundException Если файл не существует.
+     * @throws FileWriteException    Если произошла ошибка при записи файла.
+     */
     @Override
     public void writeTruckToJson(List<Truck> trucks, String filePath) {
         log.info("Начало процесса записи грузовиков в JSON файл: {}", filePath);

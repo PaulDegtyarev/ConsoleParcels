@@ -5,6 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 
+/**
+ * Класс DTO для запроса на упаковку посылок.
+ *
+ * <p>
+ * Этот класс представляет данные, необходимые для запроса на упаковку посылок.
+ * Он включает информацию о грузовиках, входных данных, выборе алгоритма и пути
+ * к файлу для записи результата.
+ * </p>
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

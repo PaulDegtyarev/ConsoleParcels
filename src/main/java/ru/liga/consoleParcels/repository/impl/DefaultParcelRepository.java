@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Реализация репозитория для работы с посылками.
+ */
 @Log4j2
 @Repository
 public class DefaultParcelRepository implements ParcelRepository {
@@ -42,6 +45,11 @@ public class DefaultParcelRepository implements ParcelRepository {
         }
     }
 
+    /**
+     * Возвращает список всех посылок.
+     *
+     * @return Список всех посылок.
+     */
     @Override
     public List<Parcel> findAll() {
         return parcels.values()
@@ -49,23 +57,46 @@ public class DefaultParcelRepository implements ParcelRepository {
                 .toList();
     }
 
+    /**
+     * Находит посылку по имени.
+     *
+     * @param name Имя посылки.
+     * @return Опциональная посылка, если она найдена, иначе пустой опционал.
+     */
     @Override
     public Optional<Parcel> findParcelByName(String name) {
         return Optional.ofNullable(parcels.get(name));
     }
 
+    /**
+     * Проверяет наличие посылки по имени.
+     *
+     * @param name Имя посылки.
+     * @return {@code true}, если посылка существует, иначе {@code false}.
+     */
     @Override
     public boolean existsByName(String name) {
         return parcels.containsKey(name);
     }
 
+    /**
+     * Сохраняет новую посылку.
+     *
+     * @param parcel Посылка для сохранения.
+     */
     @Override
     public void save(Parcel parcel) {
         log.info("Добавляется посылка с названием = {}", parcel.getName());
         parcels.put(parcel.getName(), parcel);
         log.info("Добавлена посылка с id = {}", parcels.size() + 1);
     }
-    
+
+    /**
+     * Удаляет посылку по имени.
+     *
+     * @param nameOfParcelForDelete Имя посылки для удаления.
+     * @throws ParcelNotFoundException Если посылка не найдена.
+     */
     @Override
     public void deleteParcelByParcelName(String nameOfParcelForDelete) {
         Optional<Parcel> removedParcel = parcels.entrySet().stream()

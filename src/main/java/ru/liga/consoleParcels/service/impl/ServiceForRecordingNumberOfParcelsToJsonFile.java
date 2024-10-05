@@ -10,11 +10,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Реализация сервиса для записи количества посылок в JSON файл.
+ */
 @Log4j2
 @Service
 public class ServiceForRecordingNumberOfParcelsToJsonFile implements ParcelQuantityRecordingService {
     private final String JSON_FILENAME_TO_WRITE_QUANTITY = "data/trucks-with-number-of-parcels.json";
 
+    /**
+     * Записывает количество посылок в JSON файл.
+     *
+     * @param truckParcelCounts Список DTO с данными о количестве посылок в каждом грузовике.
+     */
     @Override
     public void writeParcelCountToJsonFile(List<TruckParcelCountDto> truckParcelCounts) {
         try (FileWriter writer = new FileWriter(JSON_FILENAME_TO_WRITE_QUANTITY)) {

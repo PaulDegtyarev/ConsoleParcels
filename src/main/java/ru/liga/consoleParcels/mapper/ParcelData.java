@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для представления данных о посылке.
+ */
 @Getter
 @NoArgsConstructor
 public class ParcelData {
@@ -16,6 +19,11 @@ public class ParcelData {
     @JsonProperty("symbol")
     private String symbol;
 
+    /**
+     * Создает матрицу символов на основе формы посылки.
+     *
+     * @return Матрица символов, представляющая форму посылки.
+     */
     public char[][] createShape() {
         String[] lines = shape.split("\n");
         int height = lines.length;

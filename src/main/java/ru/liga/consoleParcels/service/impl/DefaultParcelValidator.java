@@ -6,9 +6,19 @@ import ru.liga.consoleParcels.exception.InvalidCharacterException;
 import ru.liga.consoleParcels.exception.InvalidShapeException;
 import ru.liga.consoleParcels.service.ParcelValidator;
 
+/**
+ * Реализация валидатора для посылок.
+ */
 @Service
 @Log4j2
 public class DefaultParcelValidator implements ParcelValidator {
+
+    /**
+     * Проверяет валидность формы посылки.
+     *
+     * @param shape Форма посылки в виде строки.
+     * @throws InvalidShapeException Если форма посылки невалидна.
+     */
     @Override
     public void validateParcelShape(String shape) {
         log.debug("Проверка валидности формы посылки: {}", shape);
@@ -18,6 +28,12 @@ public class DefaultParcelValidator implements ParcelValidator {
         log.debug("Форма посылки валидна");
     }
 
+    /**
+     * Проверяет валидность символа посылки.
+     *
+     * @param symbol Символ посылки.
+     * @throws InvalidCharacterException Если символ посылки невалиден.
+     */
     @Override
     public void validateParcelSymbol(char symbol) {
         log.debug("Проверка валидности символа посылки: {}", symbol);

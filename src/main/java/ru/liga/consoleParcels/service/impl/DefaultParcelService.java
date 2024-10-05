@@ -17,6 +17,9 @@ import ru.liga.consoleParcels.service.ShapeParser;
 
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса для управления посылками.
+ */
 @Service
 @Log4j2
 public class DefaultParcelService implements ParcelService {
@@ -25,6 +28,14 @@ public class DefaultParcelService implements ParcelService {
     private ParcelValidator parcelValidator;
     private ShapeParser shapeParser;
 
+    /**
+     * Конструктор с зависимостями.
+     *
+     * @param parcelRepository             Репозиторий посылок.
+     * @param parcelServiceResponseFactory Фабрика ответов сервиса посылок.
+     * @param parcelValidator              Валидатор посылок.
+     * @param shapeParser                  Парсер формы посылок.
+     */
     @Autowired
     public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelValidator parcelValidator, ShapeParser shapeParser) {
         this.parcelRepository = parcelRepository;
@@ -33,6 +44,11 @@ public class DefaultParcelService implements ParcelService {
         this.shapeParser = shapeParser;
     }
 
+    /**
+     * Возвращает список всех посылок.
+     *
+     * @return Строка с информацией о всех посылках.
+     */
     @Override
     public String findAllParcels() {
         log.info("Получение списка всех посылок");
@@ -43,6 +59,13 @@ public class DefaultParcelService implements ParcelService {
                 .collect(Collectors.joining("\n\n"));
     }
 
+    /**
+     * Находит посылку по имени.
+     *
+     * @param name Имя посылки.
+     * @return DTO с информацией о посылке.
+     * @throws ParcelNotFoundException Если посылка не найдена.
+     */
     @Override
     public ParcelResponseDto findParcelByName(String name) {
         log.info("Начинается поиск посылки с названием: {}", name);
@@ -51,6 +74,14 @@ public class DefaultParcelService implements ParcelService {
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием: " + name + " не найдена"));
     }
 
+    /**
+     * Добавляет новую посылку.
+     *
+     * @param parcelRequestDto Данные для создания новой посылки.
+     * @return DTO с информацией о созданной посылке.
+     * @throws ParcelNameConflictException Если посылка с таким именем уже существует.
+     * @throws WrongSymbolInShapeException Если форма посылки содержит недопустимые символы.
+     */
     @Override
     public ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto) {
         log.info("Начинается добавление посылки с данными: {}", parcelRequestDto);
@@ -80,6 +111,14 @@ public class DefaultParcelService implements ParcelService {
         return parcelServiceResponseFactory.createServiceResponse(newParcel);
     }
 
+    /**
+     * Обновляет посылку по имени.
+     *
+     * @param parcelRequestDto Данные для обновления посылки.
+     * @return DTO с информацией о обновленной посылке.
+     * @throws ParcelNotFoundException     Если посылка не найдена.
+     * @throws WrongSymbolInShapeException Если форма посылки содержит недопустимые символы.
+     */
     @Override
     public ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequestDto) {
         log.info("Начинается обновление посылки с данными: {}", parcelRequestDto);
@@ -107,6 +146,14 @@ public class DefaultParcelService implements ParcelService {
         return parcelServiceResponseFactory.createServiceResponse(parcelToUpdate);
     }
 
+    /**
+     * Обновляет символ посылки по имени.
+     *
+     * @param nameOfSavedParcel Имя посылки.
+     * @param newSymbol         Новый символ для посылки.
+     * @return DTO с информацией о обновленной посылке.
+     * @throws ParcelNotFoundException Если посылка не найдена.
+     */
     @Override
     public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
         log.info("Начинается обновление символа посылки с названием: {}, новый символ: {}", nameOfSavedParcel, newSymbol);
@@ -136,6 +183,14 @@ public class DefaultParcelService implements ParcelService {
         return newShape;
     }
 
+    /**
+     * Обновляет форму посылки по имени.
+     *
+     * @param nameOfSavedParcel Имя посылки.
+     * @param newShape          Новая форма для посылки.
+     * @return DTO с информацией о обновленной посылке.
+     * @throws ParcelNotFoundException Если посылка не найдена.
+     */
     @Override
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
         log.info("Начинается обновление формы посылки с названием: {}, новая форма: {}", nameOfSavedParcel, newShape);
@@ -153,6 +208,11 @@ public class DefaultParcelService implements ParcelService {
         return parcelServiceResponseFactory.createServiceResponse(parcelWithUpdateShape);
     }
 
+    /**
+     * Удаляет посылку по имени.
+     *
+     * @param nameOfParcelForDelete Имя посылки для удаления.
+     */
     @Override
     public void deleteParcelByParcelName(String nameOfParcelForDelete) {
         log.info("Начинается удаление посылки с названием: {}", nameOfParcelForDelete);

@@ -6,7 +6,9 @@ import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import java.util.Arrays;
 import java.util.Optional;
 
-
+/**
+ * Класс для представления грузовика с возможностью упаковки посылок.
+ */
 public class Truck {
     @Getter
     private final int truckWidth;
@@ -14,7 +16,12 @@ public class Truck {
     @Getter
     private final char[][] space;
 
-
+    /**
+     * Конструктор грузовика.
+     *
+     * @param truckWidth  Ширина грузовика.
+     * @param truckHeight Высота грузовика.
+     */
     public Truck(int truckWidth, int truckHeight) {
         this.truckWidth = truckWidth;
         this.truckHeight = truckHeight;
@@ -54,6 +61,13 @@ public class Truck {
         return true;
     }
 
+    /**
+     * Размещает посылку в указанной позиции.
+     *
+     * @param parcel Посылка для размещения.
+     * @param x      Координата X начальной позиции.
+     * @param y      Координата Y начальной позиции.
+     */
     public void place(ParcelForPackagingDto parcel, int x, int y) {
         char[][] shape = parcel.getShape();
 
@@ -66,6 +80,12 @@ public class Truck {
         }
     }
 
+    /**
+     * Находит позицию для размещения посылки.
+     *
+     * @param parcel Посылка для размещения.
+     * @return Опциональная позиция (Point), если посылка может быть размещена, иначе пустой опционал.
+     */
     public Optional<Point> findPosition(ParcelForPackagingDto parcel) {
         for (int y = truckHeight - parcel.getHeight(); y >= 0; y--) {
             for (int x = 0; x <= truckWidth - parcel.getWidth(); x++) {
@@ -78,6 +98,11 @@ public class Truck {
         return Optional.empty();
     }
 
+    /**
+     * Возвращает количество занятых ячеек пространства грузовика.
+     *
+     * @return Количество занятых ячеек.
+     */
     public int getUsedSpace() {
         int usedSpace = 0;
         for (char[] row : space) {
