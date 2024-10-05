@@ -7,9 +7,7 @@ public interface ParcelService {
 
     String findAllParcels();
 
-
     ParcelResponseDto findParcelByName(String name);
-
 
     ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto);
 

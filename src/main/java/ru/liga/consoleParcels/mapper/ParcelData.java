@@ -21,7 +21,6 @@ public class ParcelData {
         int height = lines.length;
         int maxWidth = 0;
 
-        // Определяем максимальную ширину строки
         for (String line : lines) {
             maxWidth = Math.max(maxWidth, line.length());
         }
@@ -33,7 +32,6 @@ public class ParcelData {
             for (int j = 0; j < line.length(); j++) {
                 shapeMatrix[i][j] = line.charAt(j);
             }
-            // Заполняем оставшиеся ячейки пробелами
             for (int j = line.length(); j < maxWidth; j++) {
                 shapeMatrix[i][j] = ' ';
             }

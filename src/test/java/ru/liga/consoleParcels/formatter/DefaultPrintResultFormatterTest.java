@@ -56,27 +56,27 @@ public class DefaultPrintResultFormatterTest {
         StringBuilder result = formatter.transferUnpackingResultsToConsole(unpackedTrucks);
 
         String expectedOutput = """
-        Грузовик 1:
-        +1  +
-        +22 +
-        +333+
-        +++++
-        Количество посылок:
-        Форма 1 - 1 шт.
-        Форма 2 - 2 шт.
-        Форма 3 - 3 шт.
-        
-        Грузовик 2:
-        +4  +
-        +55 +
-        +666+
-        +++++
-        Количество посылок:
-        Форма 4 - 1 шт.
-        Форма 5 - 2 шт.
-        Форма 6 - 3 шт.
-        
-        """;
+                Грузовик 1:
+                +1  +
+                +22 +
+                +333+
+                +++++
+                Количество посылок:
+                Форма 1 - 1 шт.
+                Форма 2 - 2 шт.
+                Форма 3 - 3 шт.
+                
+                Грузовик 2:
+                +4  +
+                +55 +
+                +666+
+                +++++
+                Количество посылок:
+                Форма 4 - 1 шт.
+                Форма 5 - 2 шт.
+                Форма 6 - 3 шт.
+                
+                """;
 
         assertThat(result.toString()).isEqualTo(expectedOutput);
     }

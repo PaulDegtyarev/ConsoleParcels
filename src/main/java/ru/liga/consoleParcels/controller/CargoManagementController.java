@@ -9,13 +9,6 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 import ru.liga.consoleParcels.service.PackagingManager;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 
-/**
- * Контроллер, отвечающий за управление логикой упаковки и распаковки грузов.
- * <p>
- * Контроллер обрабатывает выбор пользователя между упаковкой и распаковкой,
- * запрашивает необходимые параметры, вызывает соответствующие сервисы
- * и выводит результаты на консоль.
- */
 @Log4j2
 @ShellComponent
 public class CargoManagementController {

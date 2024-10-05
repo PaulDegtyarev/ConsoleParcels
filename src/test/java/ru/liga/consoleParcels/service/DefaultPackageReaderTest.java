@@ -1,10 +1,8 @@
 package ru.liga.consoleParcels.service;
 
+import org.junit.jupiter.api.Test;
 import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.exception.FileNotFoundException;
-import ru.liga.consoleParcels.exception.PackageShapeException;
-import ru.liga.consoleParcels.mapper.ParcelMapper;
-import org.junit.jupiter.api.Test;
 import ru.liga.consoleParcels.service.impl.DefaultPackageReader;
 
 import java.util.List;
