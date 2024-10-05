@@ -4,12 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Представляет посылку с определенными характеристиками.
- * <p>
- * Посылка имеет высоту, ширину, идентификатор и форму,
- * которая представлена двумерным массивом символов.
- */
+
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor

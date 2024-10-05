@@ -16,6 +16,9 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class OptimizedPackagingServiceTest {
@@ -38,29 +41,30 @@ public class OptimizedPackagingServiceTest {
     }
 
     @Test
-    void packPackages_withDataThatDoesNotFitInOneTruck_shouldThrowPackingException() {
-        List<ParcelForPackagingDto> parcels = new ArrayList<>(List.of(
-                new ParcelForPackagingDto(3, 3, new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}}),
-                new ParcelForPackagingDto(3, 3, new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}})
-        ));
+    void packPackages_withCorrectInput_shouldReturnCorrectOutput() {
+        ParcelForPackagingDto parcel1 = new ParcelForPackagingDto(1, 1, new char[][]{{'1'}});
+        ParcelForPackagingDto parcel2 = new ParcelForPackagingDto(1, 1, new char[][]{{'2'}});
+        List<ParcelForPackagingDto> parcels = new ArrayList<>(List.of(parcel1, parcel2));
 
-        assertThrows(PackingException.class, () -> service.packPackages(parcels, "1x1"));
+        Truck truck = new Truck(4, 4);
+        when(truckFactory.createTrucks("4x4")).thenReturn(List.of(truck));
+
+        List<Truck> result = service.packPackages(parcels, "4x4");
+
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+        verify(parcelCountingService).countParcelsInTrucks(result);
+        verify(parcelQuantityRecordingService).writeParcelCountToJsonFile(anyList());
     }
 
     @Test
-    void packPackages_withMultipleTrucks_shouldDistributeParcelsCorrectly() {
-        // Arrange
-        List<ParcelForPackagingDto> parcels = List.of(
-                new ParcelForPackagingDto(2, 2, new char[][]{{'A', 'A'}, {'A', 'A'}}),
-                new ParcelForPackagingDto(2, 2, new char[][]{{'B', 'B'}, {'B', 'B'}})
-        );
+    void packPackage_withDataThatDoesNotFitInOneTruck_shouldThrowPackingException() {
+        ParcelForPackagingDto parcel = new ParcelForPackagingDto(3, 3, new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}});
+        List<ParcelForPackagingDto> parcels = new ArrayList<>(List.of(parcel, parcel, parcel, parcel, parcel, parcel));
 
-        // Act
-        List<Truck> result = service.packPackages(parcels, "2x2, 2x2");
+        Truck truck = new Truck(2, 2);
+        when(truckFactory.createTrucks("2x2")).thenReturn(List.of(truck));
 
-        // Assert
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(2);
+        assertThrows(PackingException.class, () -> service.packPackages(parcels, "2x2"));
     }
-
 }

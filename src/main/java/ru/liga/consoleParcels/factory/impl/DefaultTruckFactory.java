@@ -7,14 +7,6 @@ import ru.liga.consoleParcels.model.Truck;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Реализация фабрики для создания грузовиков.
- * <p>
- * Эта фабрика создает список грузовиков заданной длины,
- * инициализируя каждый грузовик как пустой объект {@link Truck}.
- *
- * @see TruckFactory
- */
 @Log4j2
 public class DefaultTruckFactory implements TruckFactory {
 

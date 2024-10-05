@@ -9,24 +9,9 @@ import ru.liga.consoleParcels.model.Truck;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Реализация форматтера для вывода результатов упаковки и распаковки на консоль.
- * <p>
- * Этот класс реализует методы для форматирования результатов
- * упаковки и распаковки в виде строки, которая затем может быть
- * выведена на консоль.
- *
- * @see PrintResultFormatter
- */
 @Log4j2
 @Service
 public class DefaultPrintResultFormatter implements PrintResultFormatter {
-    /**
-     * Форматирует результаты упаковки и возвращает строку для вывода на консоль.
-     *
-     * @param trucks Список грузовиков с результатами упаковки.
-     * @return Строка с отформатированными результатами упаковки.
-     */
     @Override
     public StringBuilder transferPackagingResultsToConsole(List<Truck> trucks) {
         StringBuilder result = new StringBuilder();
@@ -47,15 +32,10 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             result.append("+\n");
         }
 
+        log.info("Форматирование результатов упаковки завершено для {} грузовиков", trucks.size());
         return result;
     }
 
-    /**
-     * Форматирует результаты распаковки и возвращает строку для вывода на консоль.
-     *
-     * @param unPackedTrucks Список грузовиков с результатами распаковки.
-     * @return Строка с отформатированными результатами распаковки.
-     */
     @Override
     public StringBuilder transferUnpackingResultsToConsole(List<UnPackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();
@@ -69,7 +49,6 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
 
             builder.append("Грузовик ").append(truckId).append(":\n");
 
-            // Отрисовка layout'а грузовика
             int truckWidth = packageLayout.stream().mapToInt(List::size).max().orElse(0);
             for (List<String> row : packageLayout) {
                 builder.append("+");
@@ -80,7 +59,6 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             }
             builder.append("+").append("+".repeat(Math.max(0, truckWidth))).append("+\n");
 
-            // Вывод количества посылок
             builder.append("Количество посылок:\n");
             for (Map.Entry<String, Integer> entry : parcelCounts.entrySet()) {
                 String form = entry.getKey();
@@ -89,8 +67,10 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             }
 
             builder.append("\n");
+            log.info("Форматирование завершено для грузовика ID: {}", truckId);
         }
 
+        log.info("Форматирование результатов распаковки завершено для {} грузовиков", unPackedTrucks.size());
         return builder;
     }
 }
