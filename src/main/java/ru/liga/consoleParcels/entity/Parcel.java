@@ -2,28 +2,25 @@ package ru.liga.consoleParcels.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Класс для представления посылки.
  */
 @Getter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "parcels", schema = "parcels")
 public class Parcel {
     @Id
     @Column(name = "name")
-    private final String name;
+    private String name;
 
     @Column(name = "shape")
-    private char[][] shape;
+    private String shape;
 
     @Column(name = "symbol")
     private char symbol;
@@ -34,7 +31,7 @@ public class Parcel {
      * @param newShape  Новая матрица символов для формы посылки.
      * @param newSymbol Новый символ для представления посылки.
      */
-    public void updateShapeWithNewSymbol(char[][] newShape, char newSymbol) {
+    public void updateShapeWithNewSymbol(String newShape, char newSymbol) {
         this.shape = newShape;
         this.symbol = newSymbol;
     }
@@ -44,7 +41,7 @@ public class Parcel {
      *
      * @param newShape Новая матрица символов для формы посылки.
      */
-    public void updateShape(char[][] newShape) {
+    public void updateShape(String newShape) {
         this.shape = newShape;
     }
 
@@ -58,5 +55,34 @@ public class Parcel {
         return "Parcel{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    /**
+     * Преобразует строку в матрицу символов.
+     *
+     * @param str Строка для преобразования.
+     * @return Матрица символов.
+     */
+    public char[][] convertStringToCharArray(String str) {
+        String[] rows = str.split("\n");
+        char[][] charArray = new char[rows.length][];
+        for (int i = 0; i < rows.length; i++) {
+            charArray[i] = rows[i].toCharArray();
+        }
+        return charArray;
+    }
+
+    /**
+     * Преобразует матрицу символов в строку.
+     *
+     * @param charArray Матрица символов.
+     * @return Строковое представление матрицы символов.
+     */
+    public String convertCharArrayToString(char[][] charArray) {
+        StringBuilder sb = new StringBuilder();
+        for (char[] row : charArray) {
+            sb.append(new String(row)).append("\n");
+        }
+        return sb.toString();
     }
 }

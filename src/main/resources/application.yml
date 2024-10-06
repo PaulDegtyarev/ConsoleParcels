@@ -10,7 +10,7 @@ logging:
     level: TRACE
 
 database:
-  url: jdbc:postgresql://localhost:5432/parcels_db
+  url: jdbc:postgresql://localhost:5432/parcels
   username: admin
   password: 123
   driverClassName: org.postgresql.Driver
@@ -25,10 +25,11 @@ spring:
     username: ${database.username}
     password: ${database.password}
     driverClassName: ${database.driverClassName}
+  flyway:
+    enabled: true
+    debug: true
 
 flyway:
+  baselineOnMigrate: true
   locations: classpath:db/migration
-  url: ${database.url}
-  user: ${database.username}
-  password: ${database.password}
-  schemas: parcels
+  schemas: public

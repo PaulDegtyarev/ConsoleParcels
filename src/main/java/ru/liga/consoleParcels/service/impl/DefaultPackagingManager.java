@@ -71,9 +71,9 @@ public class DefaultPackagingManager implements PackagingManager {
                         Parcel parcel = parcelRepository.findParcelByName(parcelName.trim().toLowerCase())
                                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
                         return new ParcelForPackagingDto(
-                                parcel.getShape().length,
-                                parcel.getShape()[0].length,
-                                parcel.getShape()
+                                parcel.convertStringToCharArray(parcel.getShape()).length,
+                                parcel.convertStringToCharArray(parcel.getShape())[0].length,
+                                parcel.convertStringToCharArray(parcel.getShape())
                         );
                     })
                     .collect(Collectors.toList());

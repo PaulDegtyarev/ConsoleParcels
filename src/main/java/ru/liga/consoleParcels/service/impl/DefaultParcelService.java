@@ -103,8 +103,8 @@ public class DefaultParcelService implements ParcelService {
             throw new ParcelNameConflictException("Посылка с названием " + name + " уже существует");
         }
 
-        char[][] shapeCharArray = shapeParser.parseShape(shape);
-        Parcel newParcel = new Parcel(trimmedName, shapeCharArray, symbol);
+//        char[][] shapeCharArray = shapeParser.parseShape(shape);
+        Parcel newParcel = new Parcel(trimmedName, shape, symbol);
         parcelRepository.save(newParcel);
 
         log.info("Посылка успешно добавлена: {}", newParcel);
@@ -138,8 +138,8 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        char[][] newShapeCharArray = shapeParser.parseShape(shape);
-        parcelToUpdate.updateShapeWithNewSymbol(newShapeCharArray, newSymbol);
+//        char[][] newShapeCharArray = shapeParser.parseShape(shape);
+        parcelToUpdate.updateShapeWithNewSymbol(shape, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
         log.info("Посылка успешно обновлена: {}", parcelToUpdate);
@@ -163,8 +163,9 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        char[][] newShape = updateSavedShapeWithNewSymbol(parcelWithUpdateSymbol.getShape(), newSymbol);
-        parcelWithUpdateSymbol.updateShapeWithNewSymbol(newShape, newSymbol);
+        // Тут поправить в стрингу
+//        char[][] newShape = updateSavedShapeWithNewSymbol(parcelWithUpdateSymbol.getShape(), newSymbol);
+        parcelWithUpdateSymbol.updateShapeWithNewSymbol(parcelWithUpdateSymbol.getShape(), newSymbol);
         parcelRepository.save(parcelWithUpdateSymbol);
 
         log.info("Символ посылки успешно обновлен: {}", parcelWithUpdateSymbol);
@@ -200,8 +201,8 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        char[][] parsedShape = shapeParser.parseShape(newShape);
-        parcelWithUpdateShape.updateShape(parsedShape);
+//        char[][] parsedShape = shapeParser.parseShape(newShape);
+        parcelWithUpdateShape.updateShape(newShape);
         parcelRepository.save(parcelWithUpdateShape);
 
         log.info("Форма посылки успешно обновлена: {}", parcelWithUpdateShape);
@@ -218,7 +219,7 @@ public class DefaultParcelService implements ParcelService {
         log.info("Начинается удаление посылки с названием: {}", nameOfParcelForDelete);
         String trimmedNameOfSavedParcel = nameOfParcelForDelete.trim().toLowerCase();
 
-        parcelRepository.deleteParcelByParcelName(trimmedNameOfSavedParcel);
+        parcelRepository.deleteById(trimmedNameOfSavedParcel);
         log.info("Посылка с названием: {} успешно удалена", nameOfParcelForDelete);
     }
 }

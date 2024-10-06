@@ -25,7 +25,7 @@ public class DefaultParcelServiceResponseFactory implements ParcelServiceRespons
     public ParcelResponseDto createServiceResponse(Parcel parcel) {
         return new ParcelResponseDto(
                 parcel.getName(),
-                parcel.getShape(),
+                parcel.convertStringToCharArray(parcel.getShape()),
                 parcel.getSymbol()
         );
     }

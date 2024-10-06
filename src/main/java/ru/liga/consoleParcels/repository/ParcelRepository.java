@@ -1,21 +1,16 @@
 package ru.liga.consoleParcels.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.liga.consoleParcels.entity.Parcel;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
  * Интерфейс для работы с репозиторием посылок.
  */
-public interface ParcelRepository {
-    /**
-     * Возвращает список всех посылок.
-     *
-     * @return Список всех посылок.
-     */
-    List<Parcel> findAll();
-
+@Repository
+public interface ParcelRepository extends JpaRepository<Parcel, String> {
     /**
      * Находит посылку по имени.
      *
@@ -31,18 +26,4 @@ public interface ParcelRepository {
      * @return {@code true}, если посылка существует, иначе {@code false}.
      */
     boolean existsByName(String name);
-
-    /**
-     * Сохраняет новую посылку.
-     *
-     * @param parcel Посылка для сохранения.
-     */
-    void save(Parcel parcel);
-
-    /**
-     * Удаляет посылку по имени.
-     *
-     * @param nameOfParcelForDelete Имя посылки для удаления.
-     */
-    void deleteParcelByParcelName(String nameOfParcelForDelete);
 }
