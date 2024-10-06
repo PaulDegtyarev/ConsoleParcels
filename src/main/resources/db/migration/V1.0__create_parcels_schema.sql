@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS parcels;
+create schema parcels;

@@ -39,5 +39,7 @@
    mvn package
 
 2. **Запустите приложение с помощью Maven:**
-    ```bash
-    mvn exec:java -Dexec.mainClass="ru.liga.consoleParcels.ConsoleParcelsApplication"
+   ```bash
+   mvn exec:java -Dexec.mainClass="ru.liga.consoleParcels.ConsoleParcelsApplication"
+   
+3. пока что будет тут если миграции не случатся mvn flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/parcels_db -Dflyway.user=admin -Dflyway.password=123

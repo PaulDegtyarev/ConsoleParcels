@@ -1,0 +1,20 @@
+[
+  {
+    "truck": 1,
+    "parcels": [
+      {
+        "form": "3",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "truck": 2,
+    "parcels": [
+      {
+        "form": "1",
+        "quantity": 3
+      }
+    ]
+  }
+]

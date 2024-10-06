@@ -1,4 +1,4 @@
-INSERT INTO parcels (name, shape, symbol) VALUES
+insert into parcels.parcels (name, shape, symbol) values
 ('чипсы с сыром', '1', '1'),
 ('магнезия', '22', '2'),
 ('веревка', '333', '3'),
@@ -7,4 +7,4 @@ INSERT INTO parcels (name, shape, symbol) VALUES
 ('черная икра', '666\n666', '6'),
 ('кроссовки Nike Air Force', '777\n7777', '7'),
 ('iphone 15', '8888\n8888', '8'),
-('торт Панчо', '999\n999\n', '9');
+('торт Панчо', '999\n999\n999', '9');
