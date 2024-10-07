@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -57,6 +55,42 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             sendMsg(chatId, "Привет! Я помогу тебе упаковать и распаковать грузы. Отправь мне файл с данными.");
         } else if (messageText.equalsIgnoreCase("/help")) {
             sendMsg(chatId, "Используй команды /pack и /unpack для упаковки и распаковки. Отправь мне файлы с данными.");
+        } else if (messageText.startsWith("/pack")) {
+            handlePackCommand(chatId, messageText);
+        }
+//        else if (messageText.startsWith("/unpack")) {
+//            handleUnpackCommand(chatId, messageText);
+//        }
+    }
+
+    private void handlePackCommand(long chatId, String messageText) {
+        final int INDEX_OF_FIRST_CHARACTER_OF_COMMAND_IN_MESSAGE = 6;
+        String commandInMessage = messageText.substring(INDEX_OF_FIRST_CHARACTER_OF_COMMAND_IN_MESSAGE);
+
+        final int CORRECT_COMMAND_LENGTH_FOR_PACKAGING = 4;
+        final int POSITION_OF_TRUCKS_IN_MESSAGE = 0;
+        final int POSITION_OF_INPUT_DATA_IN_MESSAGE = 1;
+        final int POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE = 2;
+        final int POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE = 3;
+
+        try {
+            String[] parts = commandInMessage.split("; ");
+            if (parts.length != CORRECT_COMMAND_LENGTH_FOR_PACKAGING) {
+                sendMsg(chatId, "Неправильный формат команды. Пожалуйста, отправьте команду в формате '/pack 6x6 MAX_SPACE output_filepath.json; данные'.");
+                return;
+            }
+
+            String trucks = parts[POSITION_OF_TRUCKS_IN_MESSAGE];
+            String inputData = parts[POSITION_OF_INPUT_DATA_IN_MESSAGE];
+            UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
+            String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
+
+            PackRequestDto packRequestDto = new PackRequestDto(trucks, inputData, algorithmChoice, filePathToWrite);
+            String result = packagingManager.packParcels(packRequestDto);
+            sendMsg(chatId, result);
+        } catch (Exception e) {
+            log.error("Ошибка при упаковке", e);
+            sendMsg(chatId, "Произошла ошибка при упаковке. Попробуйте снова.");
         }
     }
 
@@ -122,7 +156,6 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
     private void processJsonFile(long chatId, File file) {
         try {
-            // Пример: распаковка
             String truckFilePath = file.getAbsolutePath();
             String parcelCountFilePath = "parcel_count_data.txt";
 

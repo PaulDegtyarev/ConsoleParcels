@@ -15,12 +15,12 @@ public class DefaultUnPackagingServiceTest {
 
     @Test
     void unpackTruck_withValidInput_shouldReturnValidOutput() {
-        String truckFilePath = "data/trucks.json";
+        String truckFilePath = "src/test/resources/input/valid-input-trucks.json";
         String parcelCountFilePath = "src/test/resources/input/valid-input-trucks-with-number-of-parcels.json";
 
         List<UnPackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.size()).isEqualTo(1);
 
         UnPackedTruckDto unPackedTruck = result.get(0);
         assertThat(unPackedTruck.getTruckId()).isEqualTo(1);

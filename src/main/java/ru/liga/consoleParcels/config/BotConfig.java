@@ -13,8 +13,8 @@ import ru.liga.consoleParcels.telegramBot.CargoManagementBot;
 @Configuration
 public class BotConfig {
 
-    @Value("${bot.token}")
-    private String botToken;
+//    @Value("${bot.token}")
+//    private String botToken;
 
     @Bean
     public TelegramBotsApi telegramBotsApi(CargoManagementBot cargoManagementBot) throws TelegramApiException {
