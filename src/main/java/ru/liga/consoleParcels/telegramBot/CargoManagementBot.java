@@ -113,7 +113,6 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             String inputFilePath = file.getAbsolutePath();
 
             String result = packagingManager.packParcels(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
-
             sendMsg(chatId, result);
         } catch (Exception e) {
             log.error("Ошибка при упаковке", e);
