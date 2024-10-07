@@ -15,12 +15,17 @@ import ru.liga.consoleParcels.service.PackagingManager;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Log4j2
 public class CargoManagementBot extends TelegramLongPollingBot {
     private final PackagingManager packagingManager;
     private final UnPackagingManager unPackagingManager;
+
+    private Map<Long, File> firstDocumentMap = new HashMap<>();
+    private Map<Long, String> documentStateMap = new HashMap<>();
 
     @Autowired
     public CargoManagementBot(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
@@ -58,9 +63,6 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         } else if (messageText.startsWith("/pack")) {
             handlePackCommand(chatId, messageText);
         }
-//        else if (messageText.startsWith("/unpack")) {
-//            handleUnpackCommand(chatId, messageText);
-//        }
     }
 
     private void handlePackCommand(long chatId, String messageText) {
@@ -104,24 +106,28 @@ public class CargoManagementBot extends TelegramLongPollingBot {
                 return;
             }
 
-            String documentName = message.getDocument().getFileName();
-
-            String messageText = message.getCaption();
-            if (messageText == null || messageText.isEmpty()) {
-                sendMsg(chatId, "Пожалуйста, добавьте подпись к файлу с параметрами.");
-                return;
-            }
-
             org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(new GetFile(message.getDocument().getFileId()));
-
             File file = downloadFile(telegramFile);
 
-            if (documentName.endsWith(".txt")) {
-                processTextFile(chatId, file, messageText);
-            } else if (documentName.endsWith(".json")) {
-                processJsonFile(chatId, file);
+            if (documentStateMap.containsKey(chatId)) {
+                String state = documentStateMap.get(chatId);
+                if (state.equals("waiting_for_first_unpack_file")) {
+                    firstDocumentMap.put(chatId, file);
+                    documentStateMap.put(chatId, "waiting_for_second_unpack_file");
+                    sendMsg(chatId, "Первый файл получен. Теперь отправьте второй файл.");
+                } else if (state.equals("waiting_for_second_unpack_file")) {
+                    processUnpackFiles(chatId, file);
+                    documentStateMap.remove(chatId);
+                    firstDocumentMap.remove(chatId);
+                }
             } else {
-                sendMsg(chatId, "Неподдерживаемый формат файла. Пожалуйста, отправьте .txt или .json файл.");
+                // Обработка команды /pack с файлом
+                String messageText = message.getCaption();
+                if (messageText == null || messageText.isEmpty()) {
+                    sendMsg(chatId, "Пожалуйста, добавьте подпись к файлу с параметрами.");
+                    return;
+                }
+                processTextFile(chatId, file, messageText);
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка при обработке документа", e);
@@ -154,10 +160,12 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void processJsonFile(long chatId, File file) {
+    private void processUnpackFiles(long chatId, File secondFile) {
+        File firstFile = firstDocumentMap.get(chatId);
+
         try {
-            String truckFilePath = file.getAbsolutePath();
-            String parcelCountFilePath = "parcel_count_data.txt";
+            String truckFilePath = firstFile.getAbsolutePath();
+            String parcelCountFilePath = secondFile.getAbsolutePath();
 
             String result = unPackagingManager.unpackParcels(truckFilePath, parcelCountFilePath);
             sendMsg(chatId, result);
@@ -180,17 +188,4 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             log.error("Ошибка при отправке сообщения", e);
         }
     }
-
-//    private void sendDocument(long chatId, File file, String caption) {
-//        SendDocument sendDocument = new SendDocument();
-//        sendDocument.setChatId(String.valueOf(chatId));
-//        sendDocument.setDocument(new InputFile(file));
-//        sendDocument.setCaption(caption);
-//
-//        try {
-//            execute(sendDocument);
-//        } catch (TelegramApiException e) {
-//            log.error("Ошибка при отправке документа", e);
-//        }
-//    }
 }
