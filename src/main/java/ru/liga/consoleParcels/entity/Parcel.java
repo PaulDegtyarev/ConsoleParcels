@@ -30,11 +30,10 @@ public class Parcel {
     /**
      * Обновляет форму посылки и символ, используемый для представления посылки.
      *
-     * @param newShape  Новая матрица символов для формы посылки.
      * @param newSymbol Новый символ для представления посылки.
      */
-    public void updateShapeWithNewSymbol(String newShape, char newSymbol) {
-        this.shape = newShape;
+    public void updateShapeWithNewSymbol(char newSymbol) {
+        this.shape = shape.replace(symbol, newSymbol);
         this.symbol = newSymbol;
     }
 
@@ -72,19 +71,5 @@ public class Parcel {
             charArray[i] = rows[i].toCharArray();
         }
         return charArray;
-    }
-
-    /**
-     * Преобразует матрицу символов в строку.
-     *
-     * @param charArray Матрица символов.
-     * @return Строковое представление матрицы символов.
-     */
-    public String convertCharArrayToString(char[][] charArray) {
-        StringBuilder sb = new StringBuilder();
-        for (char[] row : charArray) {
-            sb.append(new String(row)).append("\n");
-        }
-        return sb.toString();
     }
 }
