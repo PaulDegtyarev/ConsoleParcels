@@ -15,7 +15,9 @@ import ru.liga.consoleParcels.service.PackagingManager;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -24,8 +26,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
     private final PackagingManager packagingManager;
     private final UnPackagingManager unPackagingManager;
 
-    private Map<Long, File> firstDocumentMap = new HashMap<>();
-    private Map<Long, String> documentStateMap = new HashMap<>();
+    private Map<Long, List<File>> userFilesMap = new HashMap<>();
 
     @Autowired
     public CargoManagementBot(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
@@ -101,33 +102,28 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             Message message = update.getMessage();
             long chatId = message.getChatId();
 
-            if (!message.hasDocument()) {
-                sendMsg(chatId, "Пожалуйста, отправьте документ.");
-                return;
-            }
-
             org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(new GetFile(message.getDocument().getFileId()));
             File file = downloadFile(telegramFile);
 
-            if (documentStateMap.containsKey(chatId)) {
-                String state = documentStateMap.get(chatId);
-                if (state.equals("waiting_for_first_unpack_file")) {
-                    firstDocumentMap.put(chatId, file);
-                    documentStateMap.put(chatId, "waiting_for_second_unpack_file");
-                    sendMsg(chatId, "Первый файл получен. Теперь отправьте второй файл.");
-                } else if (state.equals("waiting_for_second_unpack_file")) {
-                    processUnpackFiles(chatId, file);
-                    documentStateMap.remove(chatId);
-                    firstDocumentMap.remove(chatId);
-                }
-            } else {
-                // Обработка команды /pack с файлом
-                String messageText = message.getCaption();
-                if (messageText == null || messageText.isEmpty()) {
-                    sendMsg(chatId, "Пожалуйста, добавьте подпись к файлу с параметрами.");
+            log.info("Путь к файлу: {}", file.getAbsolutePath());
+            if (message.getDocument().getFileName().endsWith(".txt")) {
+                String caption = message.getCaption();
+                if (caption == null || caption.isEmpty()) {
+                    sendMsg(chatId, "К текстовому файлу должна быть добавлена подпись с параметрами упаковки.");
                     return;
                 }
-                processTextFile(chatId, file, messageText);
+                processTextFile(chatId, file, caption);
+            } else {
+                List<File> files = userFilesMap.getOrDefault(chatId, new ArrayList<>());
+                files.add(file);
+                userFilesMap.put(chatId, files);
+
+                if (files.size() == 2) {
+                    processUnpackFiles(chatId, files.get(0), files.get(1));
+                    userFilesMap.remove(chatId);
+                } else {
+                    sendMsg(chatId, "Файл получен. Отправьте второй файл.");
+                }
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка при обработке документа", e);
@@ -160,9 +156,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void processUnpackFiles(long chatId, File secondFile) {
-        File firstFile = firstDocumentMap.get(chatId);
-
+    private void processUnpackFiles(long chatId, File firstFile, File secondFile) {
         try {
             String truckFilePath = firstFile.getAbsolutePath();
             String parcelCountFilePath = secondFile.getAbsolutePath();
