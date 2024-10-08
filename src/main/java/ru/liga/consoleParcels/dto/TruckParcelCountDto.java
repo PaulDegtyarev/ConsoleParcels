@@ -18,6 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TruckParcelCountDto {
-    private int truck;
-    private List<ParcelCountDto> parcels;
+    private int truckId;
+    private List<ParcelCountDto> parcelCounts;
 }

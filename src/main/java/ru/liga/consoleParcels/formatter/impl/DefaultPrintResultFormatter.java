@@ -2,7 +2,7 @@ package ru.liga.consoleParcels.formatter.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.liga.consoleParcels.dto.UnPackedTruckDto;
+import ru.liga.consoleParcels.dto.UnpackedTruckDto;
 import ru.liga.consoleParcels.formatter.PrintResultFormatter;
 import ru.liga.consoleParcels.model.Truck;
 
@@ -25,10 +25,11 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
     public StringBuilder transferPackagingResultsToConsole(List<Truck> trucks) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < trucks.size(); i++) {
-            log.debug("Печать информации для грузовика {}", i + 1);
+            int truckId = i + 1;
+            log.debug("Печать информации для грузовика {}", truckId);
             Truck actualTruck = trucks.get(i);
 
-            result.append("Грузовик ").append(i + 1).append(":\n");
+            result.append("Грузовик ").append(truckId).append(":\n");
 
             for (char[] row : actualTruck.getSpace()) {
                 result.append("+");
@@ -36,8 +37,9 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
                 result.append("+\n");
             }
 
+
             result.append("+");
-            result.append("+".repeat(Math.max(0, actualTruck.getTruckWidth())));
+            result.append("+".repeat(actualTruck.getTruckWidth()));
             result.append("+\n");
         }
 
@@ -52,12 +54,12 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
      * @return Строка с результатами распаковки.
      */
     @Override
-    public StringBuilder transferUnpackingResultsToConsole(List<UnPackedTruckDto> unPackedTrucks) {
+    public StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();
 
-        for (UnPackedTruckDto unPackedTruck : unPackedTrucks) {
+        for (UnpackedTruckDto unPackedTruck : unPackedTrucks) {
             int truckId = unPackedTruck.getTruckId();
-            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCounts();
+            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCountMap();
             List<List<String>> packageLayout = unPackedTruck.getPackageLayout();
 
             log.debug("Генерация строки для грузовика ID: {}", truckId);

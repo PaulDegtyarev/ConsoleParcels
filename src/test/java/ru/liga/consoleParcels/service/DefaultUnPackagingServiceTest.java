@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.service;
 
 import org.junit.jupiter.api.Test;
-import ru.liga.consoleParcels.dto.UnPackedTruckDto;
+import ru.liga.consoleParcels.dto.UnpackedTruckDto;
 import ru.liga.consoleParcels.exception.FileReadException;
 import ru.liga.consoleParcels.service.impl.DefaultUnPackagingService;
 
@@ -18,11 +18,11 @@ public class DefaultUnPackagingServiceTest {
         String truckFilePath = "data/trucks.json";
         String parcelCountFilePath = "data/trucks-with-number-of-parcels.json";
 
-        List<UnPackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
+        List<UnpackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath);
 
         assertThat(result.size()).isEqualTo(1);
 
-        UnPackedTruckDto unPackedTruck = result.get(0);
+        UnpackedTruckDto unPackedTruck = result.get(0);
         assertThat(unPackedTruck.getTruckId()).isEqualTo(1);
 
         List<List<String>> packageLayout = unPackedTruck.getPackageLayout();
@@ -34,7 +34,7 @@ public class DefaultUnPackagingServiceTest {
         String invalidTruckFilePath = "invalid_truck_file.json";
         String parcelCountFilePath = "src/test/resources/input/parcel-count-to-test-unpacking.json";
 
-        assertThatThrownBy(() -> unPackagingService.unpackTruck(invalidTruckFilePath, parcelCountFilePath))
+        assertThatThrownBy(() -> unPackagingService.unpackTruck(invalidTruckFilePath))
                 .isInstanceOf(FileReadException.class)
                 .hasMessageContaining("Ошибка при чтении JSON файла: " + invalidTruckFilePath);
     }
@@ -44,7 +44,7 @@ public class DefaultUnPackagingServiceTest {
         String truckFilePath = "src/test/resources/input/truck-to-test-unpacking.json";
         String invalidParcelCountFilePath = "invalid_parcel_count_file.json";
 
-        assertThatThrownBy(() -> unPackagingService.unpackTruck(truckFilePath, invalidParcelCountFilePath))
+        assertThatThrownBy(() -> unPackagingService.unpackTruck(truckFilePath))
                 .isInstanceOf(FileReadException.class)
                 .hasMessageContaining("Ошибка при чтении JSON файла: " + invalidParcelCountFilePath);
     }

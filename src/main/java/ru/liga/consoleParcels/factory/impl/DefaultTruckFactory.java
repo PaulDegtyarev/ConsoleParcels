@@ -27,13 +27,16 @@ public class DefaultTruckFactory implements TruckFactory {
      */
     @Override
     public List<Truck> createTrucks(String truckSizes) {
+        int indexOfTruckHeight = 0;
+        int indexOfTruckWidth = 1;
+
         List<Truck> trucks = new ArrayList<>();
 
         String[] sizePairs = truckSizes.split(", ");
         for (String sizePair : sizePairs) {
             String[] heightAndWidth = sizePair.split("x");
-            int height = Integer.parseInt(heightAndWidth[0]);
-            int width = Integer.parseInt(heightAndWidth[1]);
+            int height = Integer.parseInt(heightAndWidth[indexOfTruckHeight]);
+            int width = Integer.parseInt(heightAndWidth[indexOfTruckWidth]);
 
             Truck truck = new Truck(width, height);
             log.debug("Создан грузовик размерами {} x {}", height, width);

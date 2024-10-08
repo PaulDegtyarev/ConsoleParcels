@@ -1,7 +1,7 @@
 package ru.liga.consoleParcels.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.consoleParcels.dto.PackRequestDto;
@@ -24,21 +24,10 @@ import ru.liga.consoleParcels.service.UnPackagingManager;
  */
 @Log4j2
 @ShellComponent
+@RequiredArgsConstructor
 public class CargoManagementController {
-    private PackagingManager packagingManager;
-    private UnPackagingManager unPackagingManager;
-
-    /**
-     * Конструктор класса CargoManagementController.
-     *
-     * @param packagingManager   Менеджер для управления процессом упаковки.
-     * @param unPackagingManager Менеджер для управления процессом распаковки.
-     */
-    @Autowired
-    public CargoManagementController(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
-        this.packagingManager = packagingManager;
-        this.unPackagingManager = unPackagingManager;
-    }
+    private final PackagingManager packagingManager;
+    private final UnPackagingManager unPackagingManager;
 
     /**
      * Метод для упаковки посылок в грузовики.
@@ -76,14 +65,13 @@ public class CargoManagementController {
      * предоставленных файлов.
      * </p>
      *
-     * @param truckFilePath       Путь к файлу с информацией о грузовиках.
-     * @param parcelCountFilePath Путь к файлу с информацией о количестве посылок.
+     * @param truckFilePath Путь к файлу с информацией о грузовиках.
      * @return Строка с результатом операции распаковки.
      */
     @ShellMethod
-    public String unpack(String truckFilePath, String parcelCountFilePath) {
+    public String unpack(String truckFilePath) {
         log.info("Пользователь выбрал распаковку");
 
-        return unPackagingManager.unpackParcels(truckFilePath, parcelCountFilePath);
+        return unPackagingManager.unpackParcels(truckFilePath);
     }
 }

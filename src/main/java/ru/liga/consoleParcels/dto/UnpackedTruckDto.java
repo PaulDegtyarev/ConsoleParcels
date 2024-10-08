@@ -14,15 +14,12 @@ import java.util.Map;
  * Этот класс представляет данные о распакованном грузовике, включая идентификатор грузовика,
  * количество посылок каждого типа и макет раскладки посылок.
  * </p>
- *
- * @author Ваше Имя
- * @since 1.0
  */
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UnPackedTruckDto {
+public class UnpackedTruckDto {
     private int truckId;
-    private Map<String, Integer> packageCounts;
+    private Map<String, Integer> packageCountMap;
     private List<List<String>> packageLayout;
 }

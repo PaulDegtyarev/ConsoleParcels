@@ -1,6 +1,6 @@
 package ru.liga.consoleParcels.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
@@ -21,19 +21,10 @@ import ru.liga.consoleParcels.service.ParcelService;
  * через командную строку.
  * </p>
  */
+@RequiredArgsConstructor
 @ShellComponent
 public class ParcelController {
-    private ParcelService parcelService;
-
-    /**
-     * Конструктор класса ParcelController.
-     *
-     * @param parcelService Сервис для управления посылками.
-     */
-    @Autowired
-    public ParcelController(ParcelService parcelService) {
-        this.parcelService = parcelService;
-    }
+    private final ParcelService parcelService;
 
     /**
      * Метод для получения информации обо всех посылках.

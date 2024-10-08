@@ -1,6 +1,6 @@
 package ru.liga.consoleParcels.formatter;
 
-import ru.liga.consoleParcels.dto.UnPackedTruckDto;
+import ru.liga.consoleParcels.dto.UnpackedTruckDto;
 import ru.liga.consoleParcels.model.Truck;
 
 import java.util.List;
@@ -23,5 +23,5 @@ public interface PrintResultFormatter {
      * @param unPackedTrucks Список распакованных грузовиков.
      * @return Строка с результатами распаковки.
      */
-    StringBuilder transferUnpackingResultsToConsole(List<UnPackedTruckDto> unPackedTrucks);
+    StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks);
 }

@@ -42,6 +42,6 @@ public class ParcelResponseDto {
             shapeString.setLength(shapeString.length() - 1);
         }
 
-        return String.format("name=%s,\nshape=%s,\nsymbol=%s", name, shapeString, symbol);
+        return String.format("name=%s,%nshape=%s,%nsymbol=%s", name, shapeString, symbol);
     }
 }
