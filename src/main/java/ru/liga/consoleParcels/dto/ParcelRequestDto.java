@@ -15,13 +15,12 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Getter
-@AllArgsConstructor
 @RequiredArgsConstructor
 @Log4j2
 public class ParcelRequestDto {
-    private String name;
-    private String shape;
-    private char symbol;
+    private final String name;
+    private final String shape;
+    private final char symbol;
 
     /**
      * Метод для проверки наличия в форме посылки символов, отличных от указанного.

@@ -3,6 +3,8 @@ package ru.liga.consoleParcels.service;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 
+import java.util.List;
+
 /**
  * Интерфейс для управления посылками.
  */
@@ -13,7 +15,7 @@ public interface ParcelService {
      *
      * @return Строка с информацией о всех посылках.
      */
-    String findAllParcels();
+    List<ParcelResponseDto> findAllParcels();
 
     /**
      * Находит посылку по имени.

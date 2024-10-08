@@ -44,9 +44,9 @@ public class DefaultParcelServiceTest {
     void testFindAllParcels_shouldReturnEmptyList() {
         when(parcelRepository.findAll()).thenReturn(Collections.emptyList());
 
-        String result = defaultParcelService.findAllParcels();
+        String result = defaultParcelService.findAllParcels().toString();
 
-        assertThat(result).isEmpty();
+        assertThat(result).isEqualTo("[]");
     }
 
     @Test
@@ -58,19 +58,19 @@ public class DefaultParcelServiceTest {
         List<Parcel> parcels = new ArrayList<>(List.of(parcel1, parcel2, parcel3));
         when(parcelRepository.findAll()).thenReturn(parcels);
 
-        ParcelResponseDto response1 = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
-        ParcelResponseDto response2 = new ParcelResponseDto("Макароны", new char[][]{{'2', '2'}}, '2');
-        ParcelResponseDto response3 = new ParcelResponseDto("Конфеты", new char[][]{{'3', '3', '3'}}, '3');
+        ParcelResponseDto response1 = new ParcelResponseDto("Чипсы", "1", '1');
+        ParcelResponseDto response2 = new ParcelResponseDto("Макароны", "22", '2');
+        ParcelResponseDto response3 = new ParcelResponseDto("Конфеты", "333", '3');
 
         when(parcelServiceResponseFactory.createServiceResponse(parcel1)).thenReturn(response1);
         when(parcelServiceResponseFactory.createServiceResponse(parcel2)).thenReturn(response2);
         when(parcelServiceResponseFactory.createServiceResponse(parcel3)).thenReturn(response3);
 
-        String result = defaultParcelService.findAllParcels();
+        String result = defaultParcelService.findAllParcels().toString();
 
-        String expectedResult = "name=Чипсы,\nshape=1,\nsymbol=1\n\n" +
-                "name=Макароны,\nshape=22,\nsymbol=2\n\n" +
-                "name=Конфеты,\nshape=333,\nsymbol=3";
+        String expectedResult = "[name=Чипсы,\nshape=1,\nsymbol=1, " +
+                "name=Макароны,\nshape=22,\nsymbol=2, " +
+                "name=Конфеты,\nshape=333,\nsymbol=3]";
 
         assertThat(result).isEqualTo(expectedResult);
     }
@@ -79,7 +79,7 @@ public class DefaultParcelServiceTest {
     void findParcelByName_withValidName_shouldReturnParcelResponseDto() {
         String name = "Чипсы";
         Parcel parcel = new Parcel("Чипсы", "1", '1');
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "1", '1');
 
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(parcel));
         when(parcelServiceResponseFactory.createServiceResponse(parcel)).thenReturn(expectedResponse);
@@ -95,7 +95,7 @@ public class DefaultParcelServiceTest {
     void findParcelByName_withNameContainingWhitespace_shouldTrimAndLowercase() {
         String name = "  Чипсы  ";
         Parcel parcel = new Parcel("Чипсы", "1", '1');
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "1", '1');
 
         when(parcelRepository.findParcelByName("чипсы")).thenReturn(Optional.of(parcel));
         when(parcelServiceResponseFactory.createServiceResponse(parcel)).thenReturn(expectedResponse);
@@ -127,7 +127,7 @@ public class DefaultParcelServiceTest {
 
         when(parcelRepository.existsByName(anyString())).thenReturn(false);
 
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "1", '1');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
         ParcelResponseDto result = defaultParcelService.addParcel(parcelRequestDto);
@@ -180,16 +180,14 @@ public class DefaultParcelServiceTest {
         Parcel existingParcel = new Parcel(name, "000000000", '0');
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
 
-        char[][] expectedShape = new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}};
-
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'9', '9', '9'}, {'9', '9', '9'}, {'9', '9', '9'}}, '9');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "999\n999\n999", '9');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
         ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequestDto);
 
         assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
-        assertThat(result.getShape()).isEqualTo(expectedShape);
+        assertThat(result.getShape()).isEqualTo(expectedResponse.getShape());
         assertThat(result.getSymbol()).isEqualTo(symbol);
 
         verify(parcelRepository, times(1)).findParcelByName(name.trim().toLowerCase());
@@ -251,7 +249,7 @@ public class DefaultParcelServiceTest {
         Parcel existingParcel = new Parcel(name, "1111", oldSymbol);
         when(parcelRepository.findParcelByName(name)).thenReturn(Optional.of(existingParcel));
 
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("чипсы", new char[][]{{'9', '9'}, {'9', '9'}}, '9');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("чипсы", "99\n99", '9');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
         ParcelResponseDto result = defaultParcelService.updateSymbolByParcelName(name, newSymbol);
@@ -259,7 +257,7 @@ public class DefaultParcelServiceTest {
         assertThat(expectedResponse).isEqualTo(result);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getSymbol()).isEqualTo(newSymbol);
-        assertThat(result.getShape()).isEqualTo(new char[][]{{newSymbol, newSymbol}, {newSymbol, newSymbol}});
+        assertThat(result.getShape()).isEqualTo("99\n99");
 
         verify(parcelRepository, times(1)).findParcelByName(name);
         verify(parcelRepository, times(1)).save(any(Parcel.class));
@@ -301,7 +299,7 @@ public class DefaultParcelServiceTest {
         Parcel existingParcel = new Parcel(name, "1111", symbol);
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.of(existingParcel));
 
-        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", new char[][]{{'1', '1', '1'}, {'1', '1', '1'}}, '1');
+        ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "111\n111", '1');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
         ParcelResponseDto result = defaultParcelService.updateShapeByParcelName(name, newShape);

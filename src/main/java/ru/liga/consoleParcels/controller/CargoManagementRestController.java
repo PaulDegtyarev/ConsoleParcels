@@ -22,7 +22,7 @@ import java.nio.file.Path;
 public class CargoManagementRestController {
     private final PackagingManager packagingManager;
     private final UnPackagingManager unPackagingManager;
-    private FileDownloadService fileDownloadService;
+    private final FileDownloadService fileDownloadService;
 
     @PostMapping("/pack")
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
@@ -52,8 +52,7 @@ public class CargoManagementRestController {
         String fullPath = path.toAbsolutePath().toString();
 
         String packedTruck = unPackagingManager.unpackParcels(fullPath);
-        
-        return new ResponseEntity<>(packedTruck, HttpStatus.OK);
 
+        return new ResponseEntity<>(packedTruck, HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
 import ru.liga.consoleParcels.service.ParcelService;
 
+import java.util.stream.Collectors;
+
 /**
  * Контроллер для управления операциями с посылками.
  *
@@ -22,7 +24,7 @@ import ru.liga.consoleParcels.service.ParcelService;
  * </p>
  */
 @ShellComponent
-public class ParcelController {
+public class ParcelControllerShellController {
     private ParcelService parcelService;
 
     /**
@@ -31,7 +33,7 @@ public class ParcelController {
      * @param parcelService Сервис для управления посылками.
      */
     @Autowired
-    public ParcelController(ParcelService parcelService) {
+    public ParcelControllerShellController(ParcelService parcelService) {
         this.parcelService = parcelService;
     }
 
@@ -42,7 +44,10 @@ public class ParcelController {
      */
     @ShellMethod
     public String findAllParcels() {
-        return parcelService.findAllParcels();
+        return parcelService.findAllParcels()
+                .stream()
+                .map(ParcelResponseDto::toString)
+                .collect(Collectors.joining("\n\n"));
     }
 
     /**

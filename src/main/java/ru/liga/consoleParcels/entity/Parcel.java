@@ -32,8 +32,8 @@ public class Parcel {
      *
      * @param newSymbol Новый символ для представления посылки.
      */
-    public void updateShapeWithNewSymbol(char newSymbol) {
-        this.shape = shape.replace(symbol, newSymbol);
+    public void updateShapeWithNewSymbol(String shape, char newSymbol) {
+        this.shape = shape;
         this.symbol = newSymbol;
     }
 

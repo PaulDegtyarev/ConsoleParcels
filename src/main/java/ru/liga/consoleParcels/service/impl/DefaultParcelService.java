@@ -13,9 +13,8 @@ import ru.liga.consoleParcels.entity.Parcel;
 import ru.liga.consoleParcels.repository.ParcelRepository;
 import ru.liga.consoleParcels.service.ParcelService;
 import ru.liga.consoleParcels.service.ParcelValidator;
-import ru.liga.consoleParcels.service.ShapeParser;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
  * Реализация сервиса для управления посылками.
@@ -23,10 +22,9 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 public class DefaultParcelService implements ParcelService {
-    private ParcelRepository parcelRepository;
-    private ParcelServiceResponseFactory parcelServiceResponseFactory;
-    private ParcelValidator parcelValidator;
-    private ShapeParser shapeParser;
+    private final ParcelRepository parcelRepository;
+    private final ParcelServiceResponseFactory parcelServiceResponseFactory;
+    private final ParcelValidator parcelValidator;
 
     /**
      * Конструктор с зависимостями.
@@ -34,14 +32,12 @@ public class DefaultParcelService implements ParcelService {
      * @param parcelRepository             Репозиторий посылок.
      * @param parcelServiceResponseFactory Фабрика ответов сервиса посылок.
      * @param parcelValidator              Валидатор посылок.
-     * @param shapeParser                  Парсер формы посылок.
      */
     @Autowired
-    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelValidator parcelValidator, ShapeParser shapeParser) {
+    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelValidator parcelValidator) {
         this.parcelRepository = parcelRepository;
         this.parcelServiceResponseFactory = parcelServiceResponseFactory;
         this.parcelValidator = parcelValidator;
-        this.shapeParser = shapeParser;
     }
 
     /**
@@ -50,13 +46,12 @@ public class DefaultParcelService implements ParcelService {
      * @return Строка с информацией о всех посылках.
      */
     @Override
-    public String findAllParcels() {
+    public List<ParcelResponseDto> findAllParcels() {
         log.info("Получение списка всех посылок");
         return parcelRepository.findAll()
                 .stream()
                 .map(parcelServiceResponseFactory::createServiceResponse)
-                .map(ParcelResponseDto::toString)
-                .collect(Collectors.joining("\n\n"));
+                .toList();
     }
 
     /**
@@ -139,7 +134,7 @@ public class DefaultParcelService implements ParcelService {
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
         shape = shape.replace(" ", "\n");
-        parcelToUpdate.updateShapeWithNewSymbol(newSymbol);
+        parcelToUpdate.updateShapeWithNewSymbol(shape, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
         log.info("Посылка успешно обновлена: {}", parcelToUpdate);
@@ -163,7 +158,11 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        parcelWithUpdateSymbol.updateShapeWithNewSymbol(newSymbol);
+        String shape = parcelWithUpdateSymbol.getShape();
+        char oldSymbol = parcelWithUpdateSymbol.getSymbol();
+        shape = shape.replace(oldSymbol, newSymbol);
+
+        parcelWithUpdateSymbol.updateShapeWithNewSymbol(shape, newSymbol);
         parcelRepository.save(parcelWithUpdateSymbol);
 
         log.info("Символ посылки успешно обновлен: {}", parcelWithUpdateSymbol);

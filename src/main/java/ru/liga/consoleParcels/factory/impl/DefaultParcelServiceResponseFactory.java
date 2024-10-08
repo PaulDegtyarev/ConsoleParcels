@@ -2,8 +2,8 @@ package ru.liga.consoleParcels.factory.impl;
 
 import org.springframework.stereotype.Component;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
-import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
 import ru.liga.consoleParcels.entity.Parcel;
+import ru.liga.consoleParcels.factory.ParcelServiceResponseFactory;
 
 /**
  * Фабрика ответов сервиса по умолчанию.
@@ -25,7 +25,7 @@ public class DefaultParcelServiceResponseFactory implements ParcelServiceRespons
     public ParcelResponseDto createServiceResponse(Parcel parcel) {
         return new ParcelResponseDto(
                 parcel.getName(),
-                parcel.convertStringToCharArray(parcel.getShape()),
+                parcel.getShape(),
                 parcel.getSymbol()
         );
     }

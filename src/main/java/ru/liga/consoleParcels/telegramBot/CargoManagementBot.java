@@ -191,7 +191,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
     private void handleAllParcelsCommand(long chatId) {
         try {
-            String allParcels = parcelService.findAllParcels();
+            String allParcels = parcelService.findAllParcels().toString();
             sendMsg(chatId, allParcels);
         } catch (Exception e) {
             log.error("Ошибка при получении всех посылок", e);
