@@ -93,6 +93,6 @@ public class DefaultPackagingManager implements PackagingManager {
         log.info("Запись результатов упаковки в JSON завершена");
 
         log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
-        return printResultFormatter.transferPackagingResultsToConsole(trucks).toString();
+        return printResultFormatter.transferPackagingResultsToString(trucks);
     }
 }

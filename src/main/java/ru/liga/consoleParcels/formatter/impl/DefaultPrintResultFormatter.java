@@ -22,10 +22,11 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
      * @return Строка с результатами упаковки.
      */
     @Override
-    public StringBuilder transferPackagingResultsToConsole(List<Truck> trucks) {
+    public String transferPackagingResultsToString(List<Truck> trucks) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < trucks.size(); i++) {
-            int truckId = i + 1;
+            int indexOffset = 1;
+            int truckId = i + indexOffset;
             log.debug("Печать информации для грузовика {}", truckId);
             Truck actualTruck = trucks.get(i);
 
@@ -37,14 +38,13 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
                 result.append("+\n");
             }
 
-
             result.append("+");
             result.append("+".repeat(actualTruck.getTruckWidth()));
             result.append("+\n");
         }
 
         log.info("Форматирование результатов упаковки завершено для {} грузовиков", trucks.size());
-        return result;
+        return result.toString();
     }
 
     /**
@@ -54,40 +54,52 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
      * @return Строка с результатами распаковки.
      */
     @Override
-    public StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks) {
+    public String transferUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();
 
+
         for (UnpackedTruckDto unPackedTruck : unPackedTrucks) {
-            int truckId = unPackedTruck.getTruckId();
-            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCountMap();
-            List<List<String>> packageLayout = unPackedTruck.getPackageLayout();
-
-            log.debug("Генерация строки для грузовика ID: {}", truckId);
-
-            builder.append("Грузовик ").append(truckId).append(":\n");
-
-            int truckWidth = packageLayout.stream().mapToInt(List::size).max().orElse(0);
-            for (List<String> row : packageLayout) {
-                builder.append("+");
-                for (String packageId : row) {
-                    builder.append(packageId);
-                }
-                builder.append("+\n");
-            }
-            builder.append("+").append("+".repeat(Math.max(0, truckWidth))).append("+\n");
-
-            builder.append("Количество посылок:\n");
-            for (Map.Entry<String, Integer> entry : parcelCounts.entrySet()) {
-                String form = entry.getKey();
-                int count = entry.getValue();
-                builder.append("Форма ").append(form).append(" - ").append(count).append(" шт.\n");
-            }
-
-            builder.append("\n");
-            log.info("Форматирование завершено для грузовика ID: {}", truckId);
-        }
+            builder.append(buildTruckHeader(unPackedTruck));
+            builder.append(buildTruckLayout(unPackedTruck));
+            builder.append(buildParcelCounts(unPackedTruck));
+            builder.append("\n");}
 
         log.info("Форматирование результатов распаковки завершено для {} грузовиков", unPackedTrucks.size());
-        return builder;
+        return builder.toString();
+    }
+
+    private String buildTruckHeader(UnpackedTruckDto unPackedTruck) {
+        log.debug("Генерация строки для грузовика ID: {}", unPackedTruck.getTruckId());
+        return "Грузовик " + unPackedTruck.getTruckId() + ":\n";
+    }
+
+    private String buildTruckLayout(UnpackedTruckDto unPackedTruck) {
+        int defaultTruckWidth = 0;
+        int truckWidth = unPackedTruck.getPackageLayout().stream().mapToInt(List::size).max().orElse(defaultTruckWidth);
+        StringBuilder builder = new StringBuilder();
+
+        for (List<String> row : unPackedTruck.getPackageLayout()) {
+            builder.append("+");
+            for (String packageId : row) {
+                builder.append(packageId);
+            }
+            builder.append("+\n");
+        }
+        builder.append("+").append("+".repeat(truckWidth)).append("+\n");
+
+        return builder.toString();
+    }
+
+    private String buildParcelCounts(UnpackedTruckDto unPackedTruck) {
+        StringBuilder builder = new StringBuilder("Количество посылок:\n");
+
+        for (Map.Entry<String, Integer> entry : unPackedTruck.getPackageCountMap().entrySet()) {
+            String form = entry.getKey();
+            int count = entry.getValue();
+            builder.append("Форма ").append(form).append(" - ").append(count).append(" шт.\n");
+        }
+
+        log.info("Форматирование завершено для грузовика ID: {}", unPackedTruck.getTruckId());
+        return builder.toString();
     }
 }

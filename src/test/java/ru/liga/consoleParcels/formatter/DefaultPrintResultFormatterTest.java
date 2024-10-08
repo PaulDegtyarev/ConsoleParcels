@@ -23,7 +23,7 @@ public class DefaultPrintResultFormatterTest {
     }
 
     @Test
-    void transferUnpackingResultsToConsole_withValidUnPackedTrucks_shouldFormatCorrectly() {
+    void transferUnpackingResultsToString_withValidUnPackedTrucks_shouldFormatCorrectly() {
         UnpackedTruckDto unpackedTruck1 = mock(UnpackedTruckDto.class);
         UnpackedTruckDto unpackedTruck2 = mock(UnpackedTruckDto.class);
 
@@ -53,7 +53,7 @@ public class DefaultPrintResultFormatterTest {
 
         List<UnpackedTruckDto> unpackedTrucks = List.of(unpackedTruck1, unpackedTruck2);
 
-        StringBuilder result = formatter.transferUnpackingResultsToConsole(unpackedTrucks);
+        String result = formatter.transferUnpackingResultsToString(unpackedTrucks);
 
         String expectedOutput = """
                 Грузовик 1:

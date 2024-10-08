@@ -45,8 +45,7 @@ public class DefaultUnPackagingManager implements UnPackagingManager {
         log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
 
         log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
-        StringBuilder unPackagingResult = printResultFormatter.transferUnpackingResultsToConsole(unpackedTrucks);
 
-        return unPackagingResult.toString();
+        return printResultFormatter.transferUnpackingResultsToString(unpackedTrucks);
     }
 }

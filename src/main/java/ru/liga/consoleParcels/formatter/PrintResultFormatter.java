@@ -15,7 +15,7 @@ public interface PrintResultFormatter {
      * @param trucks Список грузовиков.
      * @return Строка с результатами упаковки.
      */
-    StringBuilder transferPackagingResultsToConsole(List<Truck> trucks);
+    String transferPackagingResultsToString(List<Truck> trucks);
 
     /**
      * Форматирует результаты распаковки в строку.
@@ -23,5 +23,5 @@ public interface PrintResultFormatter {
      * @param unPackedTrucks Список распакованных грузовиков.
      * @return Строка с результатами распаковки.
      */
-    StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks);
+    String transferUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks);
 }
