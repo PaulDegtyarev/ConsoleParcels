@@ -24,15 +24,13 @@ public class DefaultUnPackagingService implements UnPackagingService {
      * Распаковывает грузовики из файлов и формирует данные о распаковке.
      *
      * @param truckFilePath       Путь к файлу с данными грузовиков.
-     * @param parcelCountFilePath Путь к файлу с данными о количестве посылок.
      * @return Список DTO с данными о распаковке грузовиков.
      */
     @Override
-    public List<UnPackedTruckDto> unpackTruck(String truckFilePath, String parcelCountFilePath) {
-        log.info("Начало процесса распаковки грузовиков из файлов: {} и {}", truckFilePath, parcelCountFilePath);
+    public List<UnPackedTruckDto> unpackTruck(String truckFilePath) {
+        log.info("Начало процесса распаковки грузовиков из файлов: {}", truckFilePath);
 
         JsonNode trucksNode = readJsonFile(truckFilePath).get("trucks");
-        JsonNode parcelCountsNode = readJsonFile(parcelCountFilePath);
 
         List<UnPackedTruckDto> unPackedTrucks = new ArrayList<>();
         for (JsonNode truckNode : trucksNode) {

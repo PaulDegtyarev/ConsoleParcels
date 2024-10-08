@@ -16,9 +16,8 @@ public class DefaultUnPackagingServiceTest {
     @Test
     void unpackTruck_withValidInput_shouldReturnValidOutput() {
         String truckFilePath = "src/test/resources/input/valid-input-trucks.json";
-        String parcelCountFilePath = "src/test/resources/input/valid-input-trucks-with-number-of-parcels.json";
 
-        List<UnPackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
+        List<UnPackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath);
 
         assertThat(result.size()).isEqualTo(1);
 
@@ -34,18 +33,8 @@ public class DefaultUnPackagingServiceTest {
         String invalidTruckFilePath = "invalid_truck_file.json";
         String parcelCountFilePath = "src/test/resources/input/parcel-count-to-test-unpacking.json";
 
-        assertThatThrownBy(() -> unPackagingService.unpackTruck(invalidTruckFilePath, parcelCountFilePath))
+        assertThatThrownBy(() -> unPackagingService.unpackTruck(invalidTruckFilePath))
                 .isInstanceOf(FileReadException.class)
                 .hasMessageContaining("Ошибка при чтении JSON файла: " + invalidTruckFilePath);
-    }
-
-    @Test
-    void unpackTruck_withInvalidParcelCountFilePath_shouldThrowFileReadException() {
-        String truckFilePath = "src/test/resources/input/truck-to-test-unpacking.json";
-        String invalidParcelCountFilePath = "invalid_parcel_count_file.json";
-
-        assertThatThrownBy(() -> unPackagingService.unpackTruck(truckFilePath, invalidParcelCountFilePath))
-                .isInstanceOf(FileReadException.class)
-                .hasMessageContaining("Ошибка при чтении JSON файла: " + invalidParcelCountFilePath);
     }
 }

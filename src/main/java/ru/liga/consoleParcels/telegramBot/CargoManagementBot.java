@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -18,10 +19,6 @@ import ru.liga.consoleParcels.service.ParcelService;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 @Log4j2
@@ -29,8 +26,6 @@ public class CargoManagementBot extends TelegramLongPollingBot {
     private final PackagingManager packagingManager;
     private final UnPackagingManager unPackagingManager;
     private final ParcelService parcelService;
-
-    private Map<Long, List<File>> userFilesMap = new HashMap<>();
 
     @Autowired
     public CargoManagementBot(PackagingManager packagingManager, UnPackagingManager unPackagingManager, ParcelService parcelService) {
@@ -134,29 +129,23 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         try {
             Message message = update.getMessage();
             long chatId = message.getChatId();
+            Document messageDocument = message.getDocument();
 
-            org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(new GetFile(message.getDocument().getFileId()));
+            org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(new GetFile(messageDocument.getFileId()));
             File file = downloadFile(telegramFile);
 
             log.info("Путь к файлу: {}", file.getAbsolutePath());
-            if (message.getDocument().getFileName().endsWith(".txt")) {
+            if (messageDocument.getFileName().endsWith(".txt")) {
                 String caption = message.getCaption();
                 if (caption == null || caption.isEmpty()) {
                     sendMsg(chatId, "К текстовому файлу должна быть добавлена подпись с параметрами упаковки.");
                     return;
                 }
                 processTextFile(chatId, file, caption);
+            } else if (messageDocument.getFileName().endsWith(".json")) {
+                processUnpackFiles(chatId, file);
             } else {
-                List<File> files = userFilesMap.getOrDefault(chatId, new ArrayList<>());
-                files.add(file);
-                userFilesMap.put(chatId, files);
-
-                if (files.size() == 2) {
-                    processUnpackFiles(chatId, files.get(0), files.get(1));
-                    userFilesMap.remove(chatId);
-                } else {
-                    sendMsg(chatId, "Файл получен. Отправьте второй файл.");
-                }
+                sendMsg(chatId, "Файл получен. Отправьте второй файл.");
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка при обработке документа", e);
@@ -189,12 +178,11 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void processUnpackFiles(long chatId, File firstFile, File secondFile) {
+    private void processUnpackFiles(long chatId, File firstFile) {
         try {
             String truckFilePath = firstFile.getAbsolutePath();
-            String parcelCountFilePath = secondFile.getAbsolutePath();
 
-            String result = unPackagingManager.unpackParcels(truckFilePath, parcelCountFilePath);
+            String result = unPackagingManager.unpackParcels(truckFilePath);
             sendMsg(chatId, result);
         } catch (Exception e) {
             log.error("Ошибка при распаковке", e);

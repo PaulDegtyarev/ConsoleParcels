@@ -24,7 +24,7 @@ import ru.liga.consoleParcels.service.UnPackagingManager;
  */
 @Log4j2
 @ShellComponent
-public class CargoManagementController {
+public class CargoManagementShellController {
     private PackagingManager packagingManager;
     private UnPackagingManager unPackagingManager;
 
@@ -35,7 +35,7 @@ public class CargoManagementController {
      * @param unPackagingManager Менеджер для управления процессом распаковки.
      */
     @Autowired
-    public CargoManagementController(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
+    public CargoManagementShellController(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
         this.packagingManager = packagingManager;
         this.unPackagingManager = unPackagingManager;
     }
@@ -77,13 +77,12 @@ public class CargoManagementController {
      * </p>
      *
      * @param truckFilePath       Путь к файлу с информацией о грузовиках.
-     * @param parcelCountFilePath Путь к файлу с информацией о количестве посылок.
      * @return Строка с результатом операции распаковки.
      */
     @ShellMethod
-    public String unpack(String truckFilePath, String parcelCountFilePath) {
+    public String unpack(String truckFilePath) {
         log.info("Пользователь выбрал распаковку");
 
-        return unPackagingManager.unpackParcels(truckFilePath, parcelCountFilePath);
+        return unPackagingManager.unpackParcels(truckFilePath);
     }
 }

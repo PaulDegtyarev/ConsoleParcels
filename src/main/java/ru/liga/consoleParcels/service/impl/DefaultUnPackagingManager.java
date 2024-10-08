@@ -39,10 +39,10 @@ public class DefaultUnPackagingManager implements UnPackagingManager {
      * @return Строка с результатами распаковки.
      */
     @Override
-    public String unpackParcels(String truckFilePath, String parcelCountFilePath) {
+    public String unpackParcels(String truckFilePath) {
         log.info("Начало процесса распаковки");
 
-        List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(truckFilePath, parcelCountFilePath);
+        List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(truckFilePath);
         log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
 
         log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());
