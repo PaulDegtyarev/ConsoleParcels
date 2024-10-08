@@ -39,7 +39,7 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
             }
 
             result.append("+");
-            result.append("+".repeat(actualTruck.getTruckWidth()));
+            result.append("+".repeat(actualTruck.getWidth()));
             result.append("+\n");
         }
 
@@ -56,7 +56,6 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
     @Override
     public String transferUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();
-
 
         for (UnpackedTruckDto unPackedTruck : unPackedTrucks) {
             builder.append(buildTruckHeader(unPackedTruck));

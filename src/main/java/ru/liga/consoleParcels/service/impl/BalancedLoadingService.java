@@ -7,7 +7,7 @@ import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.model.Point;
+import ru.liga.consoleParcels.model.ParcelPosition;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.model.TruckPlacement;
 import ru.liga.consoleParcels.service.PackagingService;
@@ -83,7 +83,7 @@ public class BalancedLoadingService implements PackagingService {
 
             Optional<TruckPlacement> bestPlacement = trucks.stream()
                     .map(truck -> {
-                        Optional<Point> position = truck.findPosition(parcel);
+                        Optional<ParcelPosition> position = truck.findPosition(parcel);
                         return position.map(point -> new TruckPlacement(truck, point));
                     })
                     .flatMap(Optional::stream)
@@ -92,7 +92,7 @@ public class BalancedLoadingService implements PackagingService {
             if (bestPlacement.isPresent()) {
                 TruckPlacement truckPlacement = bestPlacement.get();
                 Truck truck = truckPlacement.getTruck();
-                Point position = truckPlacement.getPosition();
+                ParcelPosition position = truckPlacement.getPosition();
                 truck.place(parcel, position.getX(), position.getY());
                 log.info("Посылка размещена в грузовике {} на позиции ({}, {})",
                         trucks.indexOf(truck) + 1, position.getX(), position.getY());

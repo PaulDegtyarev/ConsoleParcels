@@ -3,6 +3,7 @@ package ru.liga.consoleParcels.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * Класс для представления посылки.
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Parcel {
     private final String name;
+
+    @Setter
     private char[][] shape;
     private char symbol;
 
@@ -24,15 +27,6 @@ public class Parcel {
     public void updateShapeWithNewSymbol(char[][] newShape, char newSymbol) {
         this.shape = newShape;
         this.symbol = newSymbol;
-    }
-
-    /**
-     * Обновляет форму посылки.
-     *
-     * @param newShape Новая матрица символов для формы посылки.
-     */
-    public void updateShape(char[][] newShape) {
-        this.shape = newShape;
     }
 
     /**

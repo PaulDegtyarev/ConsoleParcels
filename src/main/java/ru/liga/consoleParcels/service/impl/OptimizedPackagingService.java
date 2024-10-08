@@ -7,7 +7,7 @@ import ru.liga.consoleParcels.dto.ParcelForPackagingDto;
 import ru.liga.consoleParcels.dto.TruckParcelCountDto;
 import ru.liga.consoleParcels.exception.PackingException;
 import ru.liga.consoleParcels.factory.TruckFactory;
-import ru.liga.consoleParcels.model.Point;
+import ru.liga.consoleParcels.model.ParcelPosition;
 import ru.liga.consoleParcels.model.Truck;
 import ru.liga.consoleParcels.service.PackagingService;
 import ru.liga.consoleParcels.service.ParcelCountingService;
@@ -75,7 +75,7 @@ public class OptimizedPackagingService implements PackagingService {
                         .filter(truck -> truck.findPosition(parcel).isPresent())
                         .findFirst()
                         .ifPresentOrElse(truck -> {
-                            Point position = truck.findPosition(parcel).orElseThrow();
+                            ParcelPosition position = truck.findPosition(parcel).orElseThrow();
                             truck.place(parcel, position.getX(), position.getY());
                             log.info("Посылка размещена в грузовике на позиции ({}, {})", position.getX(), position.getY());
                         }, () -> {

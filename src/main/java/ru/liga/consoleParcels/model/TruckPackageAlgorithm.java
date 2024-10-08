@@ -3,7 +3,7 @@ package ru.liga.consoleParcels.model;
 /**
  * Перечисление для выбора алгоритма упаковки посылок.
  */
-public enum UserAlgorithmChoice {
+public enum TruckPackageAlgorithm {
     /**
      * Алгоритм, который максимально использует пространство грузовика.
      */

@@ -12,5 +12,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class TruckPlacement {
     private Truck truck;
-    private Point position;
+    private ParcelPosition position;
 }

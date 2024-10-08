@@ -11,54 +11,25 @@ import java.util.Optional;
  */
 public class Truck {
     @Getter
-    private final int truckWidth;
-    private final int truckHeight;
+    private final int width;
+    private final int height;
     @Getter
     private final char[][] space;
 
     /**
      * Конструктор грузовика.
      *
-     * @param truckWidth  Ширина грузовика.
-     * @param truckHeight Высота грузовика.
+     * @param width  Ширина грузовика.
+     * @param height Высота грузовика.
      */
-    public Truck(int truckWidth, int truckHeight) {
-        this.truckWidth = truckWidth;
-        this.truckHeight = truckHeight;
-        space = new char[truckHeight][truckWidth];
+    public Truck(int width, int height) {
+        this.width = width;
+        this.height = height;
+        space = new char[height][width];
 
         for (char[] row : space) {
             Arrays.fill(row, ' ');
         }
-    }
-
-    private boolean canFit(ParcelForPackagingDto parcel, int x, int y) {
-        if (x + parcel.getWidth() > truckWidth || y + parcel.getHeight() > truckHeight) {
-            return false;
-        }
-        for (int i = 0; i < parcel.getHeight(); i++) {
-            for (int j = 0; j < parcel.getWidth(); j++) {
-                if (parcel.getShape()[i][j] != ' ' && space[y + i][x + j] != ' ') {
-                    return false;
-                }
-            }
-        }
-
-        if (y + parcel.getHeight() < truckHeight) {
-
-            boolean hasSupport = false;
-
-            for (int j = 0; j < parcel.getWidth(); j++) {
-                if (parcel.getShape()[parcel.getHeight() - 1][j] != ' ' && space[y + parcel.getHeight()][x + j] != ' ') {
-                    hasSupport = true;
-                    break;
-                }
-            }
-
-            return hasSupport;
-        }
-
-        return true;
     }
 
     /**
@@ -86,11 +57,11 @@ public class Truck {
      * @param parcel Посылка для размещения.
      * @return Опциональная позиция (Point), если посылка может быть размещена, иначе пустой опционал.
      */
-    public Optional<Point> findPosition(ParcelForPackagingDto parcel) {
-        for (int y = truckHeight - parcel.getHeight(); y >= 0; y--) {
-            for (int x = 0; x <= truckWidth - parcel.getWidth(); x++) {
+    public Optional<ParcelPosition> findPosition(ParcelForPackagingDto parcel) {
+        for (int y = height - parcel.getHeight(); y >= 0; y--) {
+            for (int x = 0; x <= width - parcel.getWidth(); x++) {
                 if (canFit(parcel, x, y)) {
-                    return Optional.of(new Point(x, y));
+                    return Optional.of(new ParcelPosition(x, y));
                 }
             }
         }
@@ -113,5 +84,34 @@ public class Truck {
             }
         }
         return usedSpace;
+    }
+
+    private boolean canFit(ParcelForPackagingDto parcel, int x, int y) {
+        if (x + parcel.getWidth() > width || y + parcel.getHeight() > height) {
+            return false;
+        }
+        for (int i = 0; i < parcel.getHeight(); i++) {
+            for (int j = 0; j < parcel.getWidth(); j++) {
+                if (parcel.getShape()[i][j] != ' ' && space[y + i][x + j] != ' ') {
+                    return false;
+                }
+            }
+        }
+
+        if (y + parcel.getHeight() < height) {
+
+            boolean hasSupport = false;
+
+            for (int j = 0; j < parcel.getWidth(); j++) {
+                if (parcel.getShape()[parcel.getHeight() - 1][j] != ' ' && space[y + parcel.getHeight()][x + j] != ' ') {
+                    hasSupport = true;
+                    break;
+                }
+            }
+
+            return hasSupport;
+        }
+
+        return true;
     }
 }

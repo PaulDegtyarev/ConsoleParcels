@@ -32,12 +32,13 @@ public class DefaultParcelRepository implements ParcelRepository {
 
     @PostConstruct
     private void init() {
+        int parcelSymbolIndex = 0;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ParcelsInitData initData = objectMapper.readValue(new File(parcelsInitDataFile), ParcelsInitData.class);
 
             for (ParcelData parcelData : initData.getParcels()) {
-                Parcel parcel = new Parcel(parcelData.getName().trim().toLowerCase(), parcelData.createShape(), parcelData.getSymbol().charAt(0));
+                Parcel parcel = new Parcel(parcelData.getName().trim().toLowerCase(), parcelData.createShape(), parcelData.getSymbol().charAt(parcelSymbolIndex));
                 parcels.put(parcelData.getName().toLowerCase(), parcel);
             }
         } catch (IOException e) {
@@ -86,9 +87,10 @@ public class DefaultParcelRepository implements ParcelRepository {
      */
     @Override
     public void save(Parcel parcel) {
+        int indexOffset = 1;
         log.info("Добавляется посылка с названием = {}", parcel.getName());
         parcels.put(parcel.getName(), parcel);
-        log.info("Добавлена посылка с id = {}", parcels.size() + 1);
+        log.info("Добавлена посылка с id = {}", parcels.size() + indexOffset);
     }
 
     /**
@@ -99,15 +101,14 @@ public class DefaultParcelRepository implements ParcelRepository {
      */
     @Override
     public void deleteParcelByParcelName(String nameOfParcelForDelete) {
-        Optional<Parcel> removedParcel = parcels.entrySet().stream()
+        parcels.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(nameOfParcelForDelete))
                 .map(Map.Entry::getValue)
                 .findFirst()
                 .map(parcel -> {
                     parcels.remove(nameOfParcelForDelete);
                     return parcel;
-                });
-
-        removedParcel.orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfParcelForDelete + " не найдена"));
+                })
+                .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfParcelForDelete + " не найдена"));
     }
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.consoleParcels.factory.PackagingServiceFactory;
 import ru.liga.consoleParcels.factory.impl.DefaultPackagingServiceFactory;
-import ru.liga.consoleParcels.model.UserAlgorithmChoice;
+import ru.liga.consoleParcels.model.TruckPackageAlgorithm;
 import ru.liga.consoleParcels.service.impl.DefaultPackagingSelectionService;
 import ru.liga.consoleParcels.service.impl.OptimizedPackagingService;
 
@@ -22,7 +22,7 @@ public class DefaultPackagingSelectionServiceTest {
 
     @Test
     void selectPackagingService_withValidInput_shouldReturnValidOutput() {
-        UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.MAX_SPACE;
+        TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.MAX_SPACE;
         PackagingService actualResponse = packagingSelectionService.selectPackagingService(algorithmChoice);
 
         assertThat(actualResponse).isInstanceOf(OptimizedPackagingService.class);

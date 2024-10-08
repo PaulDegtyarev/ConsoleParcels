@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.consoleParcels.dto.PackRequestDto;
-import ru.liga.consoleParcels.model.UserAlgorithmChoice;
+import ru.liga.consoleParcels.model.TruckPackageAlgorithm;
 import ru.liga.consoleParcels.service.PackagingManager;
 import ru.liga.consoleParcels.service.UnPackagingManager;
 
@@ -44,7 +44,7 @@ public class CargoManagementController {
      * @return Строка с результатом операции упаковки.
      */
     @ShellMethod
-    public String pack(String trucks, String inputFilePath, UserAlgorithmChoice algorithmChoice, String filePathToWrite) {
+    public String pack(String trucks, String inputFilePath, TruckPackageAlgorithm algorithmChoice, String filePathToWrite) {
         log.info("Пользователь выбрал упаковку");
 
         PackRequestDto packRequestDto = new PackRequestDto(

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Point {
-    private int x, y;
+public class ParcelPosition {
+    private int x;
+    private int y;
 }

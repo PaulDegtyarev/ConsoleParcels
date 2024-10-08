@@ -201,7 +201,7 @@ public class DefaultParcelService implements ParcelService {
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
         char[][] parsedShape = shapeParser.parseShape(newShape);
-        parcelWithUpdateShape.updateShape(parsedShape);
+        parcelWithUpdateShape.setShape(parsedShape);
         parcelRepository.save(parcelWithUpdateShape);
 
         log.info("Форма посылки успешно обновлена: {}", parcelWithUpdateShape);

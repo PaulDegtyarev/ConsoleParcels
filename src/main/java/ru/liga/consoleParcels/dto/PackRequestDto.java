@@ -3,7 +3,7 @@ package ru.liga.consoleParcels.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.liga.consoleParcels.model.UserAlgorithmChoice;
+import ru.liga.consoleParcels.model.TruckPackageAlgorithm;
 
 /**
  * Класс DTO для запроса на упаковку посылок.
@@ -20,6 +20,6 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 public class PackRequestDto {
     private String trucks;
     private String inputData;
-    private UserAlgorithmChoice algorithmChoice;
+    private TruckPackageAlgorithm algorithmChoice;
     private String filePathToWrite;
 }
