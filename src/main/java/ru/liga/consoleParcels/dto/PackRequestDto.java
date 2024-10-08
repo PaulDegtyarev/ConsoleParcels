@@ -1,5 +1,7 @@
 package ru.liga.consoleParcels.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,8 @@ import ru.liga.consoleParcels.model.UserAlgorithmChoice;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PackRequestDto {
-    private String trucks;
-    private String inputData;
-    private UserAlgorithmChoice algorithmChoice;
-    private String filePathToWrite;
+    @NotBlank private String trucks;
+    @NotBlank private String inputData;
+    @NotNull private UserAlgorithmChoice algorithmChoice;
+    @NotBlank private String filePathToWrite;
 }
