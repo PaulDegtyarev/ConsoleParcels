@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +17,10 @@ import java.util.Map;
  */
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class DefaultPackagingSelectionService implements PackagingSelectionService {
-    private PackagingServiceFactory packagingServiceFactory;
+    private final PackagingServiceFactory packagingServiceFactory;
     private Map<TruckPackageAlgorithm, PackagingService> serviceMap = new HashMap<>();
-
-    /**
-     * Конструктор с зависимостью от фабрики сервисов упаковки.
-     *
-     * @param packagingServiceFactory Фабрика сервисов упаковки.
-     */
-    @Autowired
-    public DefaultPackagingSelectionService(PackagingServiceFactory packagingServiceFactory) {
-        this.packagingServiceFactory = packagingServiceFactory;
-        initializeServiceMap();
-    }
 
     private void initializeServiceMap() {
         serviceMap.put(TruckPackageAlgorithm.MAX_SPACE, packagingServiceFactory.createOptimizedPackagingService());

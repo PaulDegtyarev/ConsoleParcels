@@ -19,6 +19,8 @@ import java.util.List;
 @Log4j2
 @Service
 public class DefaultPackageReader implements PackageReader {
+    private static final String EMPTY_LINE = "";
+
     /**
      * Читает посылки из файла.
      *
@@ -28,60 +30,115 @@ public class DefaultPackageReader implements PackageReader {
     @Override
     public List<ParcelForPackagingDto> readPackages(String filename) {
         log.info("Начало чтения посылок из файла: {}", filename);
-        List<ParcelForPackagingDto> parcelsForPackaging = new ArrayList<>();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             log.debug("Файл {} успешно открыт для чтения", filename);
-            StringBuilder parcelData = new StringBuilder();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                log.trace("Чтение строки {}", line);
-                if (line.trim().isEmpty()) {
-                    if (!parcelData.isEmpty()) {
-                        String[] split = parcelData.toString().trim().split("\n");
-                        int height = split.length;
-                        int width = split[0].length();
-
-                        char[][] shape = new char[height][width];
-                        for (int i = 0; i < height; i++) {
-                            for (int j = 0; j < width; j++) {
-                                shape[i][j] = split[i].charAt(j);
-                            }
-                        }
-
-                        ParcelForPackagingDto parcel = new ParcelForPackagingDto(height, width, shape);
-                        parcelsForPackaging.add(parcel);
-                        log.info("Посылка {} добавлена в список. Размер: {}x{}", parcelsForPackaging.size(), parcel.getHeight(), parcel.getWidth());
-                        log.debug("Форма посылки {}: {}", parcelsForPackaging.size(), Arrays.deepToString(parcel.getShape()));
-                        parcelData.setLength(0);
-                    }
-                } else {
-                    parcelData.append(line).append("\n");
-                }
-            }
-
-            if (!parcelData.isEmpty()) {
-                String[] split = parcelData.toString().trim().split("\n");
-                int height = split.length;
-                int width = split[0].length();
-
-                char[][] shape = new char[height][width];
-                for (int i = 0; i < height; i++) {
-                    for (int j = 0; j < width; j++) {
-                        shape[i][j] = split[i].charAt(j);
-                    }
-                }
-                parcelsForPackaging.add(new ParcelForPackagingDto(height, width, shape));
-                log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
-            }
-
-            log.info("Чтение файла завершено. Всего прочитано {} посылок", parcelsForPackaging.size());
-
-        } catch (IOException ioException) {
+            List<ParcelForPackagingDto> parcels = readParcelsFromFile(reader);
+            log.info("Чтение файла завершено. Всего прочитано {} посылок", parcels.size());
+            return parcels;
+        } catch (IOException e) {
             throw new FileNotFoundException(String.format("Файл %s не найден", filename));
         }
-
-        return parcelsForPackaging;
     }
+
+    private List<ParcelForPackagingDto> readParcelsFromFile(BufferedReader reader) throws IOException {
+        List<ParcelForPackagingDto> parcels = new ArrayList<>();
+        StringBuilder parcelData = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            log.trace("Чтение строки: {}", line);
+            if (line.trim().equals(EMPTY_LINE)) {
+                if (!parcelData.isEmpty()) {
+                    parcels.add(createParcel(parcelData.toString().trim().split("\n")));
+                    parcelData.setLength(0);
+                }
+            } else {
+                parcelData.append(line).append("\n");
+            }
+        }
+
+        if (!parcelData.isEmpty()) {
+            parcels.add(createParcel(parcelData.toString().trim().split("\n")));
+        }
+
+        return parcels;
+    }
+
+    private ParcelForPackagingDto createParcel(String[] lines) {
+        int firstRowIndex = 0;
+        char[][] shape = parseParcelShape(lines);
+        return new ParcelForPackagingDto(shape.length, shape[firstRowIndex].length, shape);
+    }
+
+    private char[][] parseParcelShape(String[] split) {
+        int height = split.length;
+        int width = split[0].length();
+        char[][] shape = new char[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                shape[i][j] = split[i].charAt(j);
+            }
+        }
+        return shape;
+    }
+
+
+
+//        log.info("Начало чтения посылок из файла: {}", filename);
+//        List<ParcelForPackagingDto> parcelsForPackaging = new ArrayList<>();
+//
+//        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+//            log.debug("Файл {} успешно открыт для чтения", filename);
+//            StringBuilder parcelData = new StringBuilder();
+//            String line;
+//
+//            while ((line = reader.readLine()) != null) {
+//                log.trace("Чтение строки {}", line);
+//                if (line.trim().isEmpty()) {
+//                    if (!parcelData.isEmpty()) {
+//                        String[] split = parcelData.toString().trim().split("\n");
+//                        int height = split.length;
+//                        int width = split[0].length();
+//
+//                        char[][] shape = new char[height][width];
+//                        for (int i = 0; i < height; i++) {
+//                            for (int j = 0; j < width; j++) {
+//                                shape[i][j] = split[i].charAt(j);
+//                            }
+//                        }
+//
+//                        ParcelForPackagingDto parcel = new ParcelForPackagingDto(height, width, shape);
+//                        parcelsForPackaging.add(parcel);
+//                        log.info("Посылка {} добавлена в список. Размер: {}x{}", parcelsForPackaging.size(), parcel.getHeight(), parcel.getWidth());
+//                        log.debug("Форма посылки {}: {}", parcelsForPackaging.size(), Arrays.deepToString(parcel.getShape()));
+//                        parcelData.setLength(0);
+//                    }
+//                } else {
+//                    parcelData.append(line).append("\n");
+//                }
+//            }
+//
+//            if (!parcelData.isEmpty()) {
+//                String[] split = parcelData.toString().trim().split("\n");
+//                int height = split.length;
+//                int width = split[0].length();
+//
+//                char[][] shape = new char[height][width];
+//                for (int i = 0; i < height; i++) {
+//                    for (int j = 0; j < width; j++) {
+//                        shape[i][j] = split[i].charAt(j);
+//                    }
+//                }
+//                parcelsForPackaging.add(new ParcelForPackagingDto(height, width, shape));
+//                log.info("Посылка с формой {} добавлена в список", Arrays.deepToString(shape));
+//            }
+//
+//            log.info("Чтение файла завершено. Всего прочитано {} посылок", parcelsForPackaging.size());
+//
+//        } catch (IOException ioException) {
+//            throw new FileNotFoundException(String.format("Файл %s не найден", filename));
+//        }
+//
+//        return parcelsForPackaging;
+//    }
 }

@@ -1,5 +1,6 @@
 package ru.liga.consoleParcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,30 +22,13 @@ import java.util.stream.Collectors;
  */
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class DefaultPackagingManager implements PackagingManager {
-    private PackagingSelectionService packagingSelectionService;
-    private TruckToJsonWriterService truckToJsonWriterService;
-    private PrintResultFormatter printResultFormatter;
-    private PackageReader packageReader;
-    private ParcelRepository parcelRepository;
-
-    /**
-     * Конструктор с зависимостями.
-     *
-     * @param packagingSelectionService Сервис выбора алгоритма упаковки.
-     * @param truckToJsonWriterService  Сервис записи данных о грузовиках в JSON.
-     * @param printResultFormatter      Форматировщик результатов упаковки.
-     * @param packageReader             Чтение посылок из файла.
-     * @param parcelRepository          Репозиторий посылок.
-     */
-    @Autowired
-    public DefaultPackagingManager(PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, PrintResultFormatter printResultFormatter, PackageReader packageReader, ParcelRepository parcelRepository) {
-        this.packagingSelectionService = packagingSelectionService;
-        this.truckToJsonWriterService = truckToJsonWriterService;
-        this.printResultFormatter = printResultFormatter;
-        this.packageReader = packageReader;
-        this.parcelRepository = parcelRepository;
-    }
+    private final PackagingSelectionService packagingSelectionService;
+    private final TruckToJsonWriterService truckToJsonWriterService;
+    private final PrintResultFormatter printResultFormatter;
+    private final PackageReader packageReader;
+    private final ParcelRepository parcelRepository;
 
     /**
      * Упаковывает посылки согласно запросу.
@@ -60,23 +44,10 @@ public class DefaultPackagingManager implements PackagingManager {
         log.debug("Выбран сервис для упаковки: {}", packagingService.getClass().getSimpleName());
 
         List<ParcelForPackagingDto> parcelsForPackaging;
-        try {
-            String[] inputDataElements = packRequestDto.getInputData().split(",");
-            List<String> parcelNames = Arrays.stream(inputDataElements)
-                    .map(String::trim)
-                    .toList();
 
-            parcelsForPackaging = parcelNames.stream()
-                    .map(parcelName -> {
-                        Parcel parcel = parcelRepository.findParcelByName(parcelName.trim().toLowerCase())
-                                .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
-                        return new ParcelForPackagingDto(
-                                parcel.getShape().length,
-                                parcel.getShape()[0].length,
-                                parcel.getShape()
-                        );
-                    })
-                    .collect(Collectors.toList());
+        try {
+            parcelsForPackaging = createParcelsForPackagingFromNames(packRequestDto);
+
             log.info("Получено {} посылок из репозитория", parcelsForPackaging.size());
         } catch (ParcelNotFoundException parcelNotFoundException) {
             parcelsForPackaging = packageReader.readPackages(packRequestDto.getInputData());
@@ -94,5 +65,21 @@ public class DefaultPackagingManager implements PackagingManager {
 
         log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
         return printResultFormatter.transferPackagingResultsToString(trucks);
+    }
+
+    private List<ParcelForPackagingDto> createParcelsForPackagingFromNames(PackRequestDto packRequestDto) {
+        int firstRowIndex = 0;
+
+        return Arrays.stream(packRequestDto.getInputData().split(","))
+                .map(parcelName -> {
+                    Parcel parcel = parcelRepository.findParcelByName(parcelName.trim().toLowerCase())
+                            .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
+                    return new ParcelForPackagingDto(
+                            parcel.getShape().length,
+                            parcel.getShape()[firstRowIndex].length,
+                            parcel.getShape()
+                    );
+                })
+                .toList();
     }
 }
