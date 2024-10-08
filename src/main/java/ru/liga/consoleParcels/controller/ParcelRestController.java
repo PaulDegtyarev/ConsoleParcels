@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.consoleParcels.dto.ParcelRequestDto;
 import ru.liga.consoleParcels.dto.ParcelResponseDto;
+import ru.liga.consoleParcels.dto.ShapeRequestBody;
+import ru.liga.consoleParcels.dto.SymbolRequestBody;
 import ru.liga.consoleParcels.service.ParcelService;
 
 import java.util.List;
@@ -37,5 +39,24 @@ public class ParcelRestController {
     @PutMapping()
     public ResponseEntity<ParcelResponseDto> updateByName(@RequestBody ParcelRequestDto parcelRequest) {
         return new ResponseEntity<>(parcelService.updateParcelByName(parcelRequest), HttpStatus.OK);
+    }
+
+    @PutMapping("/symbol")
+    public ResponseEntity<ParcelResponseDto> updateSymbolByName(
+            @RequestParam(required = false, defaultValue = "") String name,
+            @RequestBody SymbolRequestBody symbolRequest) {
+        return new ResponseEntity<>(parcelService.updateSymbolByParcelName(name, symbolRequest.getSymbol()), HttpStatus.OK);
+    }
+
+    @PutMapping("/shape")
+    public ResponseEntity<ParcelResponseDto> updateShapeByName(
+            @RequestParam(required = false, defaultValue = "") String name,
+            @RequestBody ShapeRequestBody shapeRequest) {
+        return new ResponseEntity<>(parcelService.updateShapeByParcelName(name, shapeRequest.getShape()), HttpStatus.OK);
+    }
+
+    @DeleteMapping()
+    public void delete(@RequestParam(required = false, defaultValue = "") String name) {
+        parcelService.deleteParcelByParcelName(name);
     }
 }
