@@ -79,25 +79,25 @@ public class CargoManagementBot extends TelegramLongPollingBot {
                 handlePackCommand(chatId, messageText);
                 break;
             case "/all":
-                handleAllParcelsCommand(chatId);
+                handleAllCommand(chatId);
                 break;
             case "/findByName":
-                handleFindParcelByNameCommand(chatId, messageText);
+                handleFindByNameCommand(chatId, messageText);
                 break;
             case "/add":
-                handleAddParcelCommand(chatId, messageText);
+                handleAddCommand(chatId, messageText);
                 break;
             case "/updateByName":
-                handleUpdateParcelByNameCommand(chatId, messageText);
+                handleUpdateByNameCommand(chatId, messageText);
                 break;
             case "/updateSymbolByName":
-                handleUpdateSymbolByParcelNameCommand(chatId, messageText);
+                handleUpdateSymbolByNameCommand(chatId, messageText);
                 break;
             case "/updateShapeByName":
-                handleUpdateShapeByParcelNameCommand(chatId, messageText);
+                handleUpdateShapeByNameCommand(chatId, messageText);
                 break;
             case "/deleteByName":
-                handleDeleteParcelByParcelNameCommand(chatId, messageText);
+                handleDeleteByNameCommand(chatId, messageText);
                 break;
             default:
                 sendMsg(chatId, "Неизвестная команда. Используйте /help для получения списка команд.");
@@ -207,7 +207,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleAllParcelsCommand(long chatId) {
+    private void handleAllCommand(long chatId) {
         try {
             String allParcels = parcelService.findAllParcels().toString();
             sendMsg(chatId, allParcels);
@@ -216,8 +216,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleFindParcelByNameCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 18;
+    private void handleFindByNameCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 12;
         int validPartsLength = 1;
         int indexOfParcelName = 0;
         messageText = messageText.substring(indexOfFirstCharOfInputData);
@@ -235,8 +235,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleAddParcelCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 11;
+    private void handleAddCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 5;
         messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             ParcelRequestDto parcelRequestDto = parseParcelRequestDto(messageText);
@@ -247,8 +247,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleUpdateParcelByNameCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 20;
+    private void handleUpdateByNameCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 14;
         messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             ParcelRequestDto parcelRequestDto = parseParcelRequestDto(messageText);
@@ -259,8 +259,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleUpdateSymbolByParcelNameCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 26;
+    private void handleUpdateSymbolByNameCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 20;
         int validPartsLength = 2;
         int indexOfName = 0;
         int indexOfSymbol = 1;
@@ -284,8 +284,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleUpdateShapeByParcelNameCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 25;
+    private void handleUpdateShapeByNameCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 19;
         int validPartsLength = 2;
         int indexOfName = 0;
         int indexOfShape = 1;
@@ -306,8 +306,8 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleDeleteParcelByParcelNameCommand(long chatId, String messageText) {
-        int indexOfFirstCharOfInputData = 26;
+    private void handleDeleteByNameCommand(long chatId, String messageText) {
+        int indexOfFirstCharOfInputData = 14;
         int validPartsLength = 1;
         int indexOfName = 0;
 

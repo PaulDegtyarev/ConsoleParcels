@@ -27,4 +27,12 @@ public class ParcelForPackagingDto {
     public int getArea() {
         return width * height;
     }
+
+    @Override
+    public String toString() {
+        return "ParcelForPackagingDto{" +
+                "height=" + height +
+                ", width=" + width +
+                '}';
+    }
 }

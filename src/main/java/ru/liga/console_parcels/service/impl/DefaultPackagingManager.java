@@ -26,7 +26,7 @@ public class DefaultPackagingManager implements PackagingManager {
 
     @Override
     public List<Truck> pack(PackRequestDto packRequestDto) {
-        TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
+        TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getPackageAlgorithm());
         log.debug("Выбран сервис для упаковки: {}", truckPackageService.getClass().getSimpleName());
 
         List<ParcelForPackagingDto> parcelsForPackaging;

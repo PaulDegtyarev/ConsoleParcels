@@ -3,6 +3,7 @@ package ru.liga.console_parcels.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
  * </p>
  */
 @Getter
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 public class PackRequestDto {
     @NotBlank
@@ -22,7 +24,7 @@ public class PackRequestDto {
     @NotBlank
     private final String inputData;
     @NotNull
-    private final TruckPackageAlgorithm algorithmChoice;
+    private final TruckPackageAlgorithm packageAlgorithm;
     @NotBlank
     private final String filePathToWrite;
 }

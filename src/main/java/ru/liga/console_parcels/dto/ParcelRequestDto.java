@@ -1,8 +1,8 @@
 package ru.liga.console_parcels.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Класс DTO для запроса на посылку.
@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Getter
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 public class ParcelRequestDto {
     private final String name;
