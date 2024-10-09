@@ -11,8 +11,8 @@ import ru.liga.console_parcels.factory.TruckFactory;
 import ru.liga.console_parcels.entity.ParcelPosition;
 import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.TruckPackageService;
-import ru.liga.console_parcels.service.ParcelCountingService;
-import ru.liga.console_parcels.service.ParcelQuantityRecordingService;
+import ru.liga.console_parcels.service.ParcelCountService;
+import ru.liga.console_parcels.service.RecordingService;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OptimizedPackagingService implements TruckPackageService {
     private final TruckFactory truckFactory;
-    private final ParcelCountingService parcelCountingService;
-    private final ParcelQuantityRecordingService parcelQuantityRecordingService;
+    private final ParcelCountService parcelCountService;
+    private final RecordingService recordingService;
 
     /**
      * Упаковывает посылки в грузовики.
@@ -44,10 +44,10 @@ public class OptimizedPackagingService implements TruckPackageService {
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
         log.debug("Создано {} грузовиков для упаковки.", trucks.size());
 
-        List<TruckParcelCountDto> truckParcelCounts = parcelCountingService.countParcelsInTrucks(trucks);
+        List<TruckParcelCountDto> truckParcelCounts = parcelCountService.count(trucks);
         log.debug("Подсчитано количество посылок в каждом грузовике.");
 
-        parcelQuantityRecordingService.writeParcelCountToJsonFile(truckParcelCounts);
+        recordingService.write(truckParcelCounts);
         log.info("Информация о количестве посылок в каждом грузовике успешно записана в JSON файл.");
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");

@@ -1,5 +1,6 @@
 package ru.liga.console_parcels.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,5 +20,10 @@ public class AppConfig {
         serviceMap.put(TruckPackageAlgorithm.EVEN_LOADING, evenLoadingService);
         serviceMap.put(TruckPackageAlgorithm.MAX_SPACE, maxSpaceService);
         return serviceMap;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

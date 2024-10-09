@@ -27,7 +27,7 @@ public class DefaultPackageReader implements PackageReader {
      * @return Список посылок для упаковки.
      */
     @Override
-    public List<ParcelForPackagingDto> readPackages(String filename) {
+    public List<ParcelForPackagingDto> read(String filename) {
         log.info("Начало чтения посылок из файла: {}", filename);
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             return readParcelsFromFile(reader);

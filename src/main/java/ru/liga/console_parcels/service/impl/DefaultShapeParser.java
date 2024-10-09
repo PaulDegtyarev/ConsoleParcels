@@ -18,7 +18,7 @@ public class DefaultShapeParser implements ShapeParser {
      * @return Двумерный массив символов, представляющий форму посылки.
      */
     @Override
-    public char[][] parseShape(String shape) {
+    public char[][] parse(String shape) {
         log.debug("Начинается парсинг формы: {}", shape);
         String[] lines = shape.split(" ");
         int height = lines.length;

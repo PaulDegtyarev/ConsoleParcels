@@ -11,8 +11,8 @@ import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.entity.TruckPlacement;
 import ru.liga.console_parcels.exception.PackingException;
 import ru.liga.console_parcels.factory.TruckFactory;
-import ru.liga.console_parcels.service.ParcelCountingService;
-import ru.liga.console_parcels.service.ParcelQuantityRecordingService;
+import ru.liga.console_parcels.service.ParcelCountService;
+import ru.liga.console_parcels.service.RecordingService;
 import ru.liga.console_parcels.service.TruckPackageService;
 
 import java.util.Comparator;
@@ -28,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BalancedLoadingService implements TruckPackageService {
     private final TruckFactory truckFactory;
-    private final ParcelCountingService parcelCountingService;
-    private final ParcelQuantityRecordingService parcelQuantityRecordingService;
+    private final ParcelCountService parcelCountService;
+    private final RecordingService recordingService;
 
     /**
      * Упаковывает посылки в грузовики.
@@ -47,9 +47,9 @@ public class BalancedLoadingService implements TruckPackageService {
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
         log.info("Загрузка грузовиков завершена. Количество использованных грузовиков: {}", trucks.size());
 
-        List<TruckParcelCountDto> truckParcelCounts = parcelCountingService.countParcelsInTrucks(trucks);
+        List<TruckParcelCountDto> truckParcelCounts = parcelCountService.count(trucks);
 
-        parcelQuantityRecordingService.writeParcelCountToJsonFile(truckParcelCounts);
+        recordingService.write(truckParcelCounts);
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;

@@ -1,9 +1,10 @@
 package ru.liga.console_parcels.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
-import ru.liga.console_parcels.service.impl.DefaultUnPackagingService;
+import ru.liga.console_parcels.service.impl.JsonFileUnpackakingService;
 
 import java.util.List;
 
@@ -11,13 +12,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class DefaultUnTruckPackageServiceTest {
-    private UnPackagingService unPackagingService = new DefaultUnPackagingService();
+    private FileUnpackakingService fileUnpackakingService = new JsonFileUnpackakingService(
+            new ObjectMapper()
+    );
 
     @Test
     void unpackTruck_withValidInput_shouldReturnValidOutput() {
         String truckFilePath = "src/test/resources/input/valid-input-trucks.json";
 
-        List<UnpackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath);
+        List<UnpackedTruckDto> result = fileUnpackakingService.unpackTruck(truckFilePath);
 
         assertThat(result.size()).isEqualTo(1);
 
@@ -33,7 +36,7 @@ public class DefaultUnTruckPackageServiceTest {
         String invalidTruckFilePath = "invalid_truck_file.json";
         String parcelCountFilePath = "src/test/resources/input/parcel-count-to-test-unpacking.json";
 
-        assertThatThrownBy(() -> unPackagingService.unpackTruck(invalidTruckFilePath))
+        assertThatThrownBy(() -> fileUnpackakingService.unpackTruck(invalidTruckFilePath))
                 .isInstanceOf(FileReadException.class)
                 .hasMessageContaining("Ошибка при чтении JSON файла: " + invalidTruckFilePath);
     }

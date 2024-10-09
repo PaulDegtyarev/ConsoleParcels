@@ -2,11 +2,13 @@ package ru.liga.console_parcels.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
-import ru.liga.console_parcels.service.UnPackagingService;
+import ru.liga.console_parcels.service.FileUnpackakingService;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +19,15 @@ import java.util.*;
  */
 @Log4j2
 @Service
-public class DefaultUnPackagingService implements UnPackagingService {
-    private ObjectMapper objectMapper = new ObjectMapper();
+@RequiredArgsConstructor
+public class JsonFileUnpackakingService implements FileUnpackakingService {
+    @Autowired
+    private final ObjectMapper objectMapper;
 
     /**
      * Распаковывает грузовики из файлов и формирует данные о распаковке.
      *
-     * @param truckFilePath       Путь к файлу с данными грузовиков.
+     * @param truckFilePath Путь к файлу с данными грузовиков.
      * @return Список DTO с данными о распаковке грузовиков.
      */
     @Override
@@ -37,14 +41,11 @@ public class DefaultUnPackagingService implements UnPackagingService {
             int truckId = truckNode.get("truckId").asInt();
             JsonNode packagesNode = truckNode.get("packages");
 
-            log.debug("Обработка грузовика с ID: {}", truckId);
             List<List<String>> packageLayout = createPackageLayout(packagesNode);
-            log.trace("Схема расположения пакетов в грузовике:\n{}", packageLayout);
             Map<String, Integer> parcelCounts = calculateParcelCounts(packageLayout);
-            log.trace("Количество посылок каждого типа:\n{}", parcelCounts);
 
             unPackedTrucks.add(new UnpackedTruckDto(truckId, parcelCounts, packageLayout));
-            log.debug("Обработан грузовик с ID: {}", truckId);
+            log.info("Обработан грузовик с ID: {}", truckId);
         }
 
         log.info("Завершение процесса распаковки. Обработано {} грузовиков.", unPackedTrucks.size());
@@ -52,7 +53,6 @@ public class DefaultUnPackagingService implements UnPackagingService {
     }
 
     private JsonNode readJsonFile(String filePath) {
-        log.debug("Чтение JSON файла: {}", filePath);
         try {
             return objectMapper.readTree(new File(filePath));
         } catch (IOException e) {
@@ -61,8 +61,6 @@ public class DefaultUnPackagingService implements UnPackagingService {
     }
 
     private List<List<String>> createPackageLayout(JsonNode packagesNode) {
-        log.debug("Создание схемы расположения пакетов.");
-
         List<List<String>> packageLayout = new ArrayList<>();
         for (JsonNode packageRow : packagesNode) {
             List<String> row = new ArrayList<>();
@@ -72,12 +70,10 @@ public class DefaultUnPackagingService implements UnPackagingService {
             packageLayout.add(row);
         }
 
-        log.trace("Схема расположения пакетов:\n{}", packageLayout);
         return packageLayout;
     }
 
     private Map<String, Integer> calculateParcelCounts(List<List<String>> packageLayout) {
-        log.debug("Подсчет количества посылок каждого типа.");
         Map<String, Set<Character>> uniqueSymbols = new HashMap<>();
         Map<String, Integer> symbolCounts = new HashMap<>();
 
@@ -101,7 +97,6 @@ public class DefaultUnPackagingService implements UnPackagingService {
             }
         }
 
-        log.trace("Количество посылок каждого типа:\n{}", parcelCounts);
         return parcelCounts;
     }
 }

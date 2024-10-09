@@ -15,5 +15,5 @@ public interface PackageReader {
      * @return Список посылок для упаковки.
      * @throws ru.liga.console_parcels.exception.FileNotFoundException Если произошла ошибка при чтении файла.
      */
-    List<ParcelForPackagingDto> readPackages(String filename);
+    List<ParcelForPackagingDto> read(String filename);
 }

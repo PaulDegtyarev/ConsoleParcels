@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Интерфейс для подсчета количества посылок в грузовиках.
  */
-public interface ParcelCountingService {
+public interface ParcelCountService {
 
     /**
      * Подсчитывает количество посылок в каждом грузовике.
@@ -16,5 +16,5 @@ public interface ParcelCountingService {
      * @param trucks Список грузовиков.
      * @return Список DTO, содержащих информацию о количестве посылок в каждом грузовике.
      */
-    List<TruckParcelCountDto> countParcelsInTrucks(List<Truck> trucks);
+    List<TruckParcelCountDto> count(List<Truck> trucks);
 }

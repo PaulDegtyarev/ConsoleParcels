@@ -6,8 +6,12 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.PackagingManager;
-import ru.liga.console_parcels.service.UnPackagingManager;
+import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
+
+import java.util.List;
 
 /**
  * Контроллер для управления процессами упаковки и распаковки грузов.
@@ -15,7 +19,7 @@ import ru.liga.console_parcels.service.UnPackagingManager;
  * <p>
  * Этот контроллер отвечает за управление операциями по упаковке и распаковке грузов
  * на основе выбора пользователя и предоставленных файлов. Он использует сервисы
- * {@link PackagingManager} для упаковки и {@link UnPackagingManager} для распаковки.
+ * {@link PackagingManager} для упаковки и {@link TruckParcelsUnpackingService} для распаковки.
  * </p>
  *
  * <p>
@@ -27,7 +31,8 @@ import ru.liga.console_parcels.service.UnPackagingManager;
 @RequiredArgsConstructor
 public class CargoManagementShellController {
     private final PackagingManager packagingManager;
-    private final UnPackagingManager unPackagingManager;
+    private final TruckParcelsUnpackingService truckParcelsUnpackingService;
+    private final ResultFormatter resultFormatter;
 
     /**
      * Метод для упаковки посылок в грузовики.
@@ -72,6 +77,8 @@ public class CargoManagementShellController {
     public String unpack(String truckFilePath) {
         log.info("Пользователь выбрал распаковку");
 
-        return unPackagingManager.unpackParcels(truckFilePath);
+        List<UnpackedTruckDto> unpackedTruck = truckParcelsUnpackingService.unpack(truckFilePath);
+
+        return resultFormatter.convertUnpackingResultsToString(unpackedTruck);
     }
 }

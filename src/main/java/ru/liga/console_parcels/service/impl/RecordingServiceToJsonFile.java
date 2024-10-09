@@ -1,12 +1,13 @@
 package ru.liga.console_parcels.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.exception.FileNotFoundException;
 import ru.liga.console_parcels.exception.FileWriteException;
 import ru.liga.console_parcels.entity.Truck;
-import ru.liga.console_parcels.service.TruckToJsonWriterService;
+import ru.liga.console_parcels.service.FileWriterService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,8 +23,9 @@ import java.util.Map;
  */
 @Log4j2
 @Service
-public class DefaultTruckToJsonWriterService implements TruckToJsonWriterService {
-    private ObjectMapper objectMapper = new ObjectMapper();
+@RequiredArgsConstructor
+public class RecordingServiceToJsonFile implements FileWriterService {
+    private final ObjectMapper objectMapper;
 
     /**
      * Записывает данные о грузовиках в JSON файл.

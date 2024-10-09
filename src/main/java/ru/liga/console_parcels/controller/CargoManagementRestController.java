@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.FileDownloadService;
 import ru.liga.console_parcels.service.PackagingManager;
-import ru.liga.console_parcels.service.UnPackagingManager;
+import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @Log4j2
@@ -21,8 +24,9 @@ import java.nio.file.Path;
 @RequiredArgsConstructor
 public class CargoManagementRestController {
     private final PackagingManager packagingManager;
-    private final UnPackagingManager unPackagingManager;
+    private final TruckParcelsUnpackingService truckParcelsUnpackingService;
     private final FileDownloadService fileDownloadService;
+    private final ResultFormatter resultFormatter;
 
     @PostMapping("/pack")
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
@@ -56,8 +60,10 @@ public class CargoManagementRestController {
 
         String fullPath = path.toAbsolutePath().toString();
 
-        String packedTruck = unPackagingManager.unpackParcels(fullPath);
+        List<UnpackedTruckDto> packedTruck = truckParcelsUnpackingService.unpack(fullPath);
 
-        return new ResponseEntity<>(packedTruck, HttpStatus.OK);
+        String response = resultFormatter.convertUnpackingResultsToString(packedTruck);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

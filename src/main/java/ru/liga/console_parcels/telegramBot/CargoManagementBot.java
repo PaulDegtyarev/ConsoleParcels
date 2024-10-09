@@ -1,7 +1,7 @@
 package ru.liga.console_parcels.telegramBot;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
@@ -10,29 +10,23 @@ import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.liga.console_parcels.dto.PackRequestDto;
-import ru.liga.console_parcels.dto.ParcelRequestDto;
-import ru.liga.console_parcels.dto.ParcelResponseDto;
-import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
+import ru.liga.console_parcels.dto.*;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.PackagingManager;
 import ru.liga.console_parcels.service.ParcelService;
-import ru.liga.console_parcels.service.UnPackagingManager;
+import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 
 import java.io.File;
+import java.util.List;
 
 @Component
 @Log4j2
+@RequiredArgsConstructor
 public class CargoManagementBot extends TelegramLongPollingBot {
     private final PackagingManager packagingManager;
-    private final UnPackagingManager unPackagingManager;
+    private final TruckParcelsUnpackingService truckParcelsUnpackingService;
     private final ParcelService parcelService;
-
-    @Autowired
-    public CargoManagementBot(PackagingManager packagingManager, UnPackagingManager unPackagingManager, ParcelService parcelService) {
-        this.packagingManager = packagingManager;
-        this.unPackagingManager = unPackagingManager;
-        this.parcelService = parcelService;
-    }
+    private final ResultFormatter resultFormatter;
 
     @Override
     public String getBotUsername() {
@@ -182,7 +176,10 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         try {
             String truckFilePath = firstFile.getAbsolutePath();
 
-            String result = unPackagingManager.unpackParcels(truckFilePath);
+            List<UnpackedTruckDto> unpackedTruck = truckParcelsUnpackingService.unpack(truckFilePath);
+
+            String result = resultFormatter.convertUnpackingResultsToString(unpackedTruck);
+
             sendMsg(chatId, result);
         } catch (Exception e) {
             log.error("Ошибка при распаковке", e);

@@ -14,18 +14,18 @@ public class DefaultPackageReaderTest {
     private DefaultPackageReader defaultPackageReader = new DefaultPackageReader();
 
     @Test
-    void readPackages_withNonExistenceFile_shouldThrowFileNotFoundException() {
+    void read_withNonExistenceFile_shouldThrowFileNotFoundException() {
         String filePath = "/home/non-existent-file.txt";
 
         assertThatThrownBy(
-                () -> defaultPackageReader.readPackages(filePath)).isInstanceOf(FileNotFoundException.class);
+                () -> defaultPackageReader.read(filePath)).isInstanceOf(FileNotFoundException.class);
     }
 
     @Test
-    void readPackages_withCorrectInput_shouldReturnCorrectOutput() {
+    void read_withCorrectInput_shouldReturnCorrectOutput() {
         String filePath = "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
 
-        List<ParcelForPackagingDto> parcels = defaultPackageReader.readPackages(filePath);
+        List<ParcelForPackagingDto> parcels = defaultPackageReader.read(filePath);
 
         assertThat(6).isEqualTo(parcels.size());
 

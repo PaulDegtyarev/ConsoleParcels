@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ru.liga.console_parcels.exception.FileNotFoundException;
 import ru.liga.console_parcels.entity.Truck;
-import ru.liga.console_parcels.service.impl.DefaultTruckToJsonWriterService;
+import ru.liga.console_parcels.exception.FileNotFoundException;
+import ru.liga.console_parcels.service.impl.RecordingServiceToJsonFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class DefaultTruckToJsonWriterServiceTest {
+public class RecordingServiceToJsonFileTest {
     @Mock
     private ObjectMapper objectMapper;
 
     @InjectMocks
-    private DefaultTruckToJsonWriterService truckToJsonWriterService;
+    private RecordingServiceToJsonFile truckToJsonWriterService;
 
     @BeforeEach
     void setUp() {

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Интерфейс для записи данных о грузовиках в JSON файл.
  */
-public interface TruckToJsonWriterService {
+public interface FileWriterService {
 
     /**
      * Записывает данные о грузовиках в JSON файл.

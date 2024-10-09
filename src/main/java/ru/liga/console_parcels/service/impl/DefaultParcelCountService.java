@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.ParcelCountDto;
 import ru.liga.console_parcels.dto.TruckParcelCountDto;
 import ru.liga.console_parcels.entity.Truck;
-import ru.liga.console_parcels.service.ParcelCountingService;
+import ru.liga.console_parcels.service.ParcelCountService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Log4j2
-public class DefaultParcelCountingService implements ParcelCountingService {
+public class DefaultParcelCountService implements ParcelCountService {
 
     /**
      * Подсчитывает количество посылок в каждом грузовике.
@@ -27,21 +27,23 @@ public class DefaultParcelCountingService implements ParcelCountingService {
      * @return Список DTO, содержащих информацию о количестве посылок в каждом грузовике.
      */
     @Override
-    public List<TruckParcelCountDto> countParcelsInTrucks(List<Truck> trucks) {
+    public List<TruckParcelCountDto> count(List<Truck> trucks) {
         log.info("Начало подсчета количества посылок в грузовиках. Количество грузовиков: {}", trucks.size());
 
+        int defaultNumberOfParcels = 0;
+        int increment = 1;
+        int indexOffset = 1;
         List<TruckParcelCountDto> truckParcelCounts = new ArrayList<>();
 
         for (int i = 0; i < trucks.size(); i++) {
             Truck truck = trucks.get(i);
-            log.debug("Обработка грузовика №{}...", i + 1);
 
             Map<String, Integer> parcelCountByShape = new HashMap<>();
             for (char[] row : truck.getSpace()) {
                 for (char cell : row) {
                     if (cell != ' ') {
                         String shape = String.valueOf(cell);
-                        parcelCountByShape.put(shape, parcelCountByShape.getOrDefault(shape, 0) + 1);
+                        parcelCountByShape.put(shape, parcelCountByShape.getOrDefault(shape, defaultNumberOfParcels) + increment);
                     }
                 }
             }
@@ -50,8 +52,8 @@ public class DefaultParcelCountingService implements ParcelCountingService {
                     .map(entry -> new ParcelCountDto(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
 
-            truckParcelCounts.add(new TruckParcelCountDto(i + 1, parcelCounts));
-            log.debug("Подсчет посылок в грузовике №{} завершен. Найдено {} типов посылок.", i + 1, parcelCounts.size());
+            truckParcelCounts.add(new TruckParcelCountDto(i + indexOffset, parcelCounts));
+
         }
 
         log.info("Подсчет количества посылок во всех грузовиках завершен. Найдено {} записей.", truckParcelCounts.size());

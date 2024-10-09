@@ -11,5 +11,5 @@ public interface ShapeParser {
      * @param shape Строка, представляющая форму посылки.
      * @return Двумерный массив символов, представляющий форму посылки.
      */
-    char[][] parseShape(String shape);
+    char[][] parse(String shape);
 }

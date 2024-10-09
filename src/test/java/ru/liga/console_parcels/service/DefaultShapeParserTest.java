@@ -9,7 +9,7 @@ public class DefaultShapeParserTest {
     private DefaultShapeParser shapeParser = new DefaultShapeParser();
 
     @Test
-    void parseShape_withValidInput_shouldReturnCorrectArray() {
+    void parse_withValidInput_shouldReturnCorrectArray() {
         String shape = "*** * * ***";
         char[][] expectedArray = {
                 {'*', '*', '*'},
@@ -18,31 +18,31 @@ public class DefaultShapeParserTest {
                 {'*', '*', '*'}
         };
 
-        char[][] resultArray = shapeParser.parseShape(shape);
+        char[][] resultArray = shapeParser.parse(shape);
 
         assertThat(resultArray)
                 .isDeepEqualTo(expectedArray);
     }
 
     @Test
-    void parseShape_withEmptyInput_shouldReturnEmptyArray() {
+    void parse_withEmptyInput_shouldReturnEmptyArray() {
         String shape = "";
         char[][] expectedArray = {{}};
 
-        char[][] resultArray = shapeParser.parseShape(shape);
+        char[][] resultArray = shapeParser.parse(shape);
 
         assertThat(resultArray)
                 .isEqualTo(expectedArray);
     }
 
     @Test
-    void parseShape_withSingleLineInput_shouldReturnCorrectArray() {
+    void parse_withSingleLineInput_shouldReturnCorrectArray() {
         String shape = "*****";
         char[][] expectedArray = {
                 {'*', '*', '*', '*', '*'}
         };
 
-        char[][] resultArray = shapeParser.parseShape(shape);
+        char[][] resultArray = shapeParser.parse(shape);
 
         assertThat(resultArray)
                 .isEqualTo(expectedArray);

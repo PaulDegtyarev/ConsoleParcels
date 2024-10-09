@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultPackagingManager implements PackagingManager {
     private final PackagingSelectionService packagingSelectionService;
-    private final TruckToJsonWriterService truckToJsonWriterService;
+    private final FileWriterService fileWriterService;
     private final ResultFormatter resultFormatter;
     private final PackageReader packageReader;
     private final ParcelRepository parcelRepository;
@@ -44,7 +44,7 @@ public class DefaultPackagingManager implements PackagingManager {
             parcelsForPackaging = convertParcelRequestToParcels(packRequestDto);
             log.info("Получено {} посылок из репозитория", parcelsForPackaging.size());
         } catch (ParcelNotFoundException parcelNotFoundException) {
-            parcelsForPackaging = packageReader.readPackages(packRequestDto.getInputData());
+            parcelsForPackaging = packageReader.read(packRequestDto.getInputData());
             log.info("Прочитано {} посылок из файла {}", parcelsForPackaging.size(), packRequestDto.getInputData());
         }
 
@@ -52,7 +52,7 @@ public class DefaultPackagingManager implements PackagingManager {
 
         trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
 
-        truckToJsonWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
+        fileWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
 
         return resultFormatter.convertPackagingResultsToString(trucks);
     }

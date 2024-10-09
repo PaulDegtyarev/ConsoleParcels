@@ -1,5 +1,6 @@
 package ru.liga.console_parcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,24 +22,11 @@ import java.util.List;
  */
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class DefaultParcelService implements ParcelService {
     private final ParcelRepository parcelRepository;
     private final ParcelServiceResponseFactory parcelServiceResponseFactory;
     private final ParcelRequestValidator parcelRequestValidator;
-
-    /**
-     * Конструктор с зависимостями.
-     *
-     * @param parcelRepository             Репозиторий посылок.
-     * @param parcelServiceResponseFactory Фабрика ответов сервиса посылок.
-     * @param parcelRequestValidator              Валидатор посылок.
-     */
-    @Autowired
-    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelRequestValidator parcelRequestValidator) {
-        this.parcelRepository = parcelRepository;
-        this.parcelServiceResponseFactory = parcelServiceResponseFactory;
-        this.parcelRequestValidator = parcelRequestValidator;
-    }
 
     /**
      * Возвращает список всех посылок.
