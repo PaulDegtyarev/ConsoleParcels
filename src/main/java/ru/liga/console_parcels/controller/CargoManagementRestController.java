@@ -26,6 +26,7 @@ public class CargoManagementRestController {
 
     @PostMapping("/pack")
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
+        log.info("Пользователь выбрал упаковку без файла.");
         return new ResponseEntity<>(packagingManager.packParcels(packRequest), HttpStatus.OK);
     }
 
@@ -34,6 +35,8 @@ public class CargoManagementRestController {
                                                @RequestParam("file") MultipartFile file,
                                                @RequestParam("algorithmChoice") UserAlgorithmChoice algorithmChoice,
                                                @RequestParam("filePathToWrite") String filePathToWrite) {
+        log.info("Пользователь выбрал упаковку с файлом.");
+
         Path path = fileDownloadService.download(file);
 
         String fullPath = path.toAbsolutePath().toString();
@@ -47,6 +50,8 @@ public class CargoManagementRestController {
 
     @PostMapping("/unpack")
     public ResponseEntity<String> unpack(@RequestParam("trucks") MultipartFile file) {
+        log.info("Пользователь выбрал распаковку.");
+
         Path path = fileDownloadService.download(file);
 
         String fullPath = path.toAbsolutePath().toString();

@@ -1,5 +1,6 @@
 package ru.liga.console_parcels.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -24,21 +25,10 @@ import ru.liga.console_parcels.service.UnPackagingManager;
  */
 @Log4j2
 @ShellComponent
+@RequiredArgsConstructor
 public class CargoManagementShellController {
-    private PackagingManager packagingManager;
-    private UnPackagingManager unPackagingManager;
-
-    /**
-     * Конструктор класса CargoManagementController.
-     *
-     * @param packagingManager   Менеджер для управления процессом упаковки.
-     * @param unPackagingManager Менеджер для управления процессом распаковки.
-     */
-    @Autowired
-    public CargoManagementShellController(PackagingManager packagingManager, UnPackagingManager unPackagingManager) {
-        this.packagingManager = packagingManager;
-        this.unPackagingManager = unPackagingManager;
-    }
+    private final PackagingManager packagingManager;
+    private final UnPackagingManager unPackagingManager;
 
     /**
      * Метод для упаковки посылок в грузовики.
@@ -56,7 +46,7 @@ public class CargoManagementShellController {
      */
     @ShellMethod
     public String pack(String trucks, String inputFilePath, UserAlgorithmChoice algorithmChoice, String filePathToWrite) {
-        log.info("Пользователь выбрал упаковку");
+        log.info("Пользователь выбрал упаковку.");
 
         PackRequestDto packRequestDto = new PackRequestDto(
                 trucks,

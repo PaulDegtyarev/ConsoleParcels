@@ -1,6 +1,7 @@
 package ru.liga.console_parcels.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.console_parcels.dto.ParcelRequestDto;
@@ -24,18 +25,10 @@ import java.util.stream.Collectors;
  * </p>
  */
 @ShellComponent
-public class ParcelControllerShellController {
-    private ParcelService parcelService;
-
-    /**
-     * Конструктор класса ParcelController.
-     *
-     * @param parcelService Сервис для управления посылками.
-     */
-    @Autowired
-    public ParcelControllerShellController(ParcelService parcelService) {
-        this.parcelService = parcelService;
-    }
+@Log4j2
+@RequiredArgsConstructor
+public class ParcelShellController {
+    private final ParcelService parcelService;
 
     /**
      * Метод для получения информации обо всех посылках.
@@ -43,7 +36,8 @@ public class ParcelControllerShellController {
      * @return Строка с информацией обо всех посылках.
      */
     @ShellMethod
-    public String findAllParcels() {
+    public String findAll() {
+        log.info("Пользователь выбрал достать все посылки.");
         return parcelService.findAllParcels()
                 .stream()
                 .map(ParcelResponseDto::toString)
@@ -57,7 +51,8 @@ public class ParcelControllerShellController {
      * @return Объект ParcelResponseDto, содержащий информацию о найденной посылке.
      */
     @ShellMethod
-    public ParcelResponseDto findParcelByName(String name) {
+    public ParcelResponseDto findByName(String name) {
+        log.info("Пользователь выбрал достать посылку по названию.");
         return parcelService.findParcelByName(name);
     }
 
@@ -70,7 +65,8 @@ public class ParcelControllerShellController {
      * @return Объект добавленной посылки (DTO).
      */
     @ShellMethod
-    public ParcelResponseDto addParcel(String name, String shape, char symbol) {
+    public ParcelResponseDto add(String name, String shape, char symbol) {
+        log.info("Пользователь выбрал добавить посылку.");
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
         return parcelService.addParcel(parcelRequestDto);
     }
@@ -84,7 +80,8 @@ public class ParcelControllerShellController {
      * @return Объект обновленной посылки (DTO).
      */
     @ShellMethod
-    public ParcelResponseDto updateParcelByParcelName(String nameOfSavedParcel, String newShape, char newSymbol) {
+    public ParcelResponseDto updateByName(String nameOfSavedParcel, String newShape, char newSymbol) {
+        log.info("Пользователь выбрал обновить посылку по ее названию.");
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
         return parcelService.updateParcelByName(parcelRequestDto);
     }
@@ -97,7 +94,8 @@ public class ParcelControllerShellController {
      * @return Объект обновленной посылки (DTO).
      */
     @ShellMethod
-    public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
+    public ParcelResponseDto updateSymbolByName(String nameOfSavedParcel, char newSymbol) {
+        log.info("Пользователь выбрал обновить символ посылки.");
         return parcelService.updateSymbolByParcelName(nameOfSavedParcel, newSymbol);
     }
 
@@ -109,7 +107,8 @@ public class ParcelControllerShellController {
      * @return Объект обновленной посылки (DTO).
      */
     @ShellMethod
-    public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String shape) {
+    public ParcelResponseDto updateShapeByName(String nameOfSavedParcel, String shape) {
+        log.info("Пользователь выбрал обновить форму посылки.");
         return parcelService.updateShapeByParcelName(nameOfSavedParcel, shape);
     }
 
@@ -119,7 +118,8 @@ public class ParcelControllerShellController {
      * @param nameOfParcelForDelete Имя посылки, которую необходимо удалить.
      */
     @ShellMethod
-    public void deleteParcelByParcelName(String nameOfParcelForDelete) {
+    public void deleteByName(String nameOfParcelForDelete) {
+        log.info("Пользователь выбрал удалить посылку.");
         parcelService.deleteParcelByParcelName(nameOfParcelForDelete);
     }
 }
