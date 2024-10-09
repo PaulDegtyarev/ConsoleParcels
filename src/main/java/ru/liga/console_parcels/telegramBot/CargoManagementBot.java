@@ -49,38 +49,50 @@ public class CargoManagementBot extends TelegramLongPollingBot {
     }
 
     private void handleTextMessage(Update update) {
+        int indexOfFirstWord = 0;
         String messageText = update.getMessage().getText();
         long chatId = update.getMessage().getChatId();
 
-        switch (messageText.split(" ")[0]) {
+        switch (messageText.split(" ")[indexOfFirstWord]) {
             case "/start":
-                sendMsg(chatId, "Привет! Я помогу тебе упаковать и распаковать грузы. Отправь мне файл с данными.");
+                sendMsg(chatId, """
+                        Привет! Я помогу тебе упаковать и распаковать грузы, а так же просмотреть, добавить, редактировать и удалить посылку.
+                        """);
                 break;
             case "/help":
-                sendMsg(chatId, "Используй команды /pack и /unpack для упаковки и распаковки. Отправь мне файлы с данными.");
+                sendMsg(chatId, """
+                        Используй команды /pack и /unpack для упаковки и распаковки;
+                        /all - просмотр все имеющихся посылок;
+                        /findByName - поиск посылки по названию;
+                        /add - добавить посылку;
+                        /updateByName - редактировать форму и символ посылки по ее названию;
+                        /updateSymbolByName - обновить символ посылки по ее названию;
+                        /updateShapeByName - обновить форму по названию;
+                        /deleteByName - удалить посылку по названию.
+                        """);
                 break;
             case "/pack":
                 handlePackCommand(chatId, messageText);
                 break;
-            case "/allParcels":
+            case "/all":
                 handleAllParcelsCommand(chatId);
                 break;
-            case "/findParcelByName":
+            case "/findByName":
                 handleFindParcelByNameCommand(chatId, messageText);
                 break;
-            case "/addParcel":
+            case "/add":
                 handleAddParcelCommand(chatId, messageText);
                 break;
-            case "/updateParcelByName":
+            case "/updateByName":
                 handleUpdateParcelByNameCommand(chatId, messageText);
                 break;
-            case "/updateSymbolByParcelName":
+            case "/updateSymbolByName":
                 handleUpdateSymbolByParcelNameCommand(chatId, messageText);
                 break;
-            case "/updateShapeByParcelName":
+            case "/updateShapeByName":
                 handleUpdateShapeByParcelNameCommand(chatId, messageText);
                 break;
-            case "/deleteParcelByParcelName":
+            case "/deleteByName":
                 handleDeleteParcelByParcelNameCommand(chatId, messageText);
                 break;
             default:
@@ -90,26 +102,26 @@ public class CargoManagementBot extends TelegramLongPollingBot {
     }
 
     private void handlePackCommand(long chatId, String messageText) {
-        final int INDEX_OF_FIRST_CHARACTER_OF_COMMAND_IN_MESSAGE = 6;
-        String commandInMessage = messageText.substring(INDEX_OF_FIRST_CHARACTER_OF_COMMAND_IN_MESSAGE);
+        int indexOfFirstCharacterOfCommand = 6;
+        String commandInMessage = messageText.substring(indexOfFirstCharacterOfCommand);
 
-        final int CORRECT_COMMAND_LENGTH_FOR_PACKAGING = 4;
-        final int POSITION_OF_TRUCKS_IN_MESSAGE = 0;
-        final int POSITION_OF_INPUT_DATA_IN_MESSAGE = 1;
-        final int POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE = 2;
-        final int POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE = 3;
+        int correctCommandLength = 4;
+        int indexOfTrucks = 0;
+        int indexOfInputData = 1;
+        int indexOfPackageAlgorithm = 2;
+        int indexOfOutputFilepath = 3;
 
         try {
             String[] parts = commandInMessage.split("; ");
-            if (parts.length != CORRECT_COMMAND_LENGTH_FOR_PACKAGING) {
-                sendMsg(chatId, "Неправильный формат команды. Пожалуйста, отправьте команду в формате '/pack 6x6 MAX_SPACE output_filepath.json; данные'.");
+            if (parts.length != correctCommandLength) {
+                sendMsg(chatId, "Неправильный формат команды. Пожалуйста, отправьте команду в формате '/pack 6x6; входные данные; MAX_SPACE; output_filepath.json; данные'.");
                 return;
             }
 
-            String trucks = parts[POSITION_OF_TRUCKS_IN_MESSAGE];
-            String inputData = parts[POSITION_OF_INPUT_DATA_IN_MESSAGE];
-            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
-            String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
+            String trucks = parts[indexOfTrucks];
+            String inputData = parts[indexOfInputData];
+            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[indexOfPackageAlgorithm]);
+            String filePathToWrite = parts[indexOfOutputFilepath];
 
             PackRequestDto packRequestDto = new PackRequestDto(trucks, inputData, algorithmChoice, filePathToWrite);
 
@@ -119,54 +131,52 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
             sendMsg(chatId, result);
         } catch (Exception e) {
-            log.error("Ошибка при упаковке", e);
-            sendMsg(chatId, "Произошла ошибка при упаковке. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleDocumentMessage(Update update) {
-        try {
-            Message message = update.getMessage();
-            long chatId = message.getChatId();
-            Document messageDocument = message.getDocument();
+        Message message = update.getMessage();
+        long chatId = message.getChatId();
+        Document messageDocument = message.getDocument();
 
+        try {
             org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(new GetFile(messageDocument.getFileId()));
             File file = downloadFile(telegramFile);
 
             log.info("Путь к файлу: {}", file.getAbsolutePath());
-            if (messageDocument.getFileName().endsWith(".txt")) {
+            String fileName = messageDocument.getFileName();
+            if (fileName.endsWith(".txt")) {
                 String caption = message.getCaption();
                 if (caption == null || caption.isEmpty()) {
                     sendMsg(chatId, "К текстовому файлу должна быть добавлена подпись с параметрами упаковки.");
                     return;
                 }
                 processTextFile(chatId, file, caption);
-            } else if (messageDocument.getFileName().endsWith(".json")) {
+            } else if (fileName.endsWith(".json")) {
                 processUnpackFiles(chatId, file);
-            } else {
-                sendMsg(chatId, "Файл получен. Отправьте второй файл.");
             }
-        } catch (TelegramApiException e) {
-            log.error("Ошибка при обработке документа", e);
+        } catch (Exception e) {
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void processTextFile(long chatId, File file, String messageText) {
-        final int CORRECT_COMMAND_LENGTH_FOR_PACKAGING = 3;
-        final int POSITION_OF_TRUCKS_IN_MESSAGE = 0;
-        final int POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE = 1;
-        final int POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE = 2;
+        int correctCommandLength = 3;
+        int indexOfTrucks = 0;
+        int indexOfPackageAlgorithm = 1;
+        int indexOfOutputFilepath = 2;
 
         try {
             String[] parts = messageText.split("; ");
-            if (parts.length != CORRECT_COMMAND_LENGTH_FOR_PACKAGING) {
-                sendMsg(chatId, "Неправильный формат сообщения. Пожалуйста, отправьте сообщение в формате '6x6' MAX_SPACE 'output_filepath.json'.");
+            if (parts.length != correctCommandLength) {
+                sendMsg(chatId, "Неправильный формат сообщения. Пожалуйста, отправьте сообщение в формате 6x6; MAX_SPACE; output_filepath.json.");
                 return;
             }
 
-            String trucks = parts[POSITION_OF_TRUCKS_IN_MESSAGE];
-            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
-            String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
+            String trucks = parts[indexOfTrucks];
+            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[indexOfPackageAlgorithm]);
+            String filePathToWrite = parts[indexOfOutputFilepath];
             String inputFilePath = file.getAbsolutePath();
 
             List<Truck> packedTrucks = packagingManager.packParcels(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
@@ -175,8 +185,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
             sendMsg(chatId, result);
         } catch (Exception e) {
-            log.error("Ошибка при упаковке", e);
-            sendMsg(chatId, "Произошла ошибка при упаковке. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
@@ -190,7 +199,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
             sendMsg(chatId, result);
         } catch (Exception e) {
-            log.error("Ошибка при распаковке", e);
+            sendMsg(chatId, e.getMessage());
         }
     }
 
@@ -199,102 +208,117 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             String allParcels = parcelService.findAllParcels().toString();
             sendMsg(chatId, allParcels);
         } catch (Exception e) {
-            log.error("Ошибка при получении всех посылок", e);
-            sendMsg(chatId, "Ошибка при получении всех посылок. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleFindParcelByNameCommand(long chatId, String messageText) {
-        messageText = messageText.substring(18);
+        int indexOfFirstCharOfInputData = 18;
+        int validPartsLength = 1;
+        int indexOfParcelName = 0;
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             String[] parts = messageText.split(" ");
-            if (parts.length < 1) {
-                sendMsg(chatId, "Пожалуйста, укажите имя посылки. Формат: /findParcelByName <имя>");
+            if (parts.length != validPartsLength) {
+                sendMsg(chatId, "Пожалуйста, укажите имя посылки. Формат: /findByName имя");
                 return;
             }
-            String parcelName = parts[0];
+            String parcelName = parts[indexOfParcelName];
             ParcelResponseDto parcel = parcelService.findParcelByName(parcelName);
             sendMsg(chatId, parcel.toString());
         } catch (Exception e) {
-            log.error("Ошибка при поиске посылки", e);
-            sendMsg(chatId, "Ошибка при поиске посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleAddParcelCommand(long chatId, String messageText) {
-        messageText = messageText.substring(11);
+        int indexOfFirstCharOfInputData = 11;
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             ParcelRequestDto parcelRequestDto = parseParcelRequestDto(messageText);
             ParcelResponseDto addedParcel = parcelService.addParcel(parcelRequestDto);
-            sendMsg(chatId, "Посылка добавлена: " + addedParcel.toString());
+            sendMsg(chatId, "Посылка добавлена:%n" + addedParcel.toString());
         } catch (Exception e) {
-            log.error("Ошибка при добавлении посылки", e);
-            sendMsg(chatId, "Ошибка при добавлении посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleUpdateParcelByNameCommand(long chatId, String messageText) {
-        messageText = messageText.substring(20);
+        int indexOfFirstCharOfInputData = 20;
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             ParcelRequestDto parcelRequestDto = parseParcelRequestDto(messageText);
             ParcelResponseDto updatedParcel = parcelService.updateParcelByName(parcelRequestDto);
-            sendMsg(chatId, "Посылка обновлена: " + updatedParcel.toString());
+            sendMsg(chatId, "Посылка обновлена:%n" + updatedParcel.toString());
         } catch (Exception e) {
-            log.error("Ошибка при обновлении посылки", e);
-            sendMsg(chatId, "Ошибка при обновлении посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleUpdateSymbolByParcelNameCommand(long chatId, String messageText) {
-        messageText = messageText.substring(26);
+        int indexOfFirstCharOfInputData = 26;
+        int validPartsLength = 2;
+        int indexOfName = 0;
+        int indexOfSymbol = 1;
+        int symbolPosition = 0;
+
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             String[] parts = messageText.split("; ");
-            if (parts.length < 2) {
-                sendMsg(chatId, "Пожалуйста, укажите имя и новый символ. Формат: /updateSymbolByParcelName <имя> <новый символ>");
+            if (parts.length != validPartsLength) {
+                sendMsg(chatId, "Пожалуйста, укажите имя и новый символ. Формат: /updateSymbolByName имя новый символ");
                 return;
             }
-            String parcelName = parts[0];
-            char newSymbol = parts[1].charAt(0);
+
+            String parcelName = parts[indexOfName];
+            char newSymbol = parts[indexOfSymbol].charAt(symbolPosition);
             ParcelResponseDto updatedParcel = parcelService.updateSymbolByParcelName(parcelName, newSymbol);
-            sendMsg(chatId, "Символ посылки обновлен: " + updatedParcel.toString());
+
+            sendMsg(chatId, "Символ посылки обновлен:%n" + updatedParcel.toString());
         } catch (Exception e) {
-            log.error("Ошибка при обновлении символа посылки", e);
-            sendMsg(chatId, "Ошибка при обновлении символа посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleUpdateShapeByParcelNameCommand(long chatId, String messageText) {
-        messageText = messageText.substring(25);
+        int indexOfFirstCharOfInputData = 25;
+        int validPartsLength = 2;
+        int indexOfName = 0;
+        int indexOfShape = 1;
+
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             String[] parts = messageText.split("; ");
-            if (parts.length < 2) {
-                sendMsg(chatId, "Пожалуйста, укажите имя и новую форму. Формат: /updateShapeByParcelName <имя> <новая форма>");
+            if (parts.length < validPartsLength) {
+                sendMsg(chatId, "Пожалуйста, укажите имя и новую форму. Формат: /updateShapeByName имя новая форма");
                 return;
             }
-            String parcelName = parts[0];
-            String newShape = parts[1];
+            String parcelName = parts[indexOfName];
+            String newShape = parts[indexOfShape];
             ParcelResponseDto updatedParcel = parcelService.updateShapeByParcelName(parcelName, newShape);
-            sendMsg(chatId, "Форма посылки обновлена: " + updatedParcel.toString());
+            sendMsg(chatId, "Форма посылки обновлена:%n" + updatedParcel.toString());
         } catch (Exception e) {
-            log.error("Ошибка при обновлении формы посылки", e);
-            sendMsg(chatId, "Ошибка при обновлении формы посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
     private void handleDeleteParcelByParcelNameCommand(long chatId, String messageText) {
-        messageText = messageText.substring(26);
+        int indexOfFirstCharOfInputData = 26;
+        int validPartsLength = 1;
+        int indexOfName = 0;
+
+        messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             String[] parts = messageText.split("; ");
-            if (parts.length < 1) {
-                sendMsg(chatId, "Пожалуйста, укажите имя посылки для удаления. Формат: /deleteParcelByParcelName <имя>");
+            if (parts.length < validPartsLength) {
+                sendMsg(chatId, "Пожалуйста, укажите имя посылки для удаления. Формат: /deleteByName имя");
                 return;
             }
-            String parcelName = parts[0];
+            String parcelName = parts[indexOfName];
             parcelService.deleteParcelByParcelName(parcelName);
             sendMsg(chatId, "Посылка удалена: " + parcelName);
         } catch (Exception e) {
-            log.error("Ошибка при удалении посылки", e);
-            sendMsg(chatId, "Ошибка при удалении посылки. Попробуйте снова.");
+            sendMsg(chatId, e.getMessage());
         }
     }
 
@@ -311,13 +335,19 @@ public class CargoManagementBot extends TelegramLongPollingBot {
     }
 
     private ParcelRequestDto parseParcelRequestDto(String data) {
+        int validPartsLength = 3;
+        int indexOfName = 0;
+        int indexOfShape = 1;
+        int indexOfSymbol = 2;
+        int symbolPosition = 0;
+
         String[] parts = data.split("; ");
-        if (parts.length < 3) {
+        if (parts.length < validPartsLength) {
             throw new IllegalArgumentException("Неправильный формат данных для посылки");
         }
-        String name = parts[0].trim();
-        String shape = parts[1].trim();
-        char symbol = parts[2].charAt(0);
+        String name = parts[indexOfName].trim();
+        String shape = parts[indexOfShape].trim();
+        char symbol = parts[indexOfSymbol].charAt(symbolPosition);
         return new ParcelRequestDto(name, shape, symbol);
     }
 }

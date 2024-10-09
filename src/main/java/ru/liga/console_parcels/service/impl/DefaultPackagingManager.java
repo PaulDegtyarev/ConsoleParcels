@@ -12,6 +12,7 @@ import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.repository.ParcelRepository;
 import ru.liga.console_parcels.service.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class DefaultPackagingManager implements PackagingManager {
     }
 
     private List<ParcelForPackagingDto> convertParcelRequestToParcels(PackRequestDto packRequestDto) {
-        return Arrays.stream(packRequestDto.getInputData()
+        return new ArrayList<>(Arrays.stream(packRequestDto.getInputData()
                         .split(","))
                 .toList()
                 .stream()
@@ -69,6 +70,6 @@ public class DefaultPackagingManager implements PackagingManager {
                             parcel.convertStringToCharArray(parcel.getShape())
                     );
                 })
-                .toList();
+                .toList());
     }
 }

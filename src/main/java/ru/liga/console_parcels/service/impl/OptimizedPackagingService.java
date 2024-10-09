@@ -39,16 +39,12 @@ public class OptimizedPackagingService implements TruckPackageService {
     public List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucksSize) {
         log.info("Начало процесса упаковки. Количество посылок: {}, размер грузовиков: {}", parcels.size(), trucksSize);
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
-        log.trace("Посылки отсортированы по площади в порядке убывания");
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
-        log.debug("Создано {} грузовиков для упаковки.", trucks.size());
 
         List<TruckParcelCountDto> truckParcelCounts = parcelCountService.count(trucks);
-        log.debug("Подсчитано количество посылок в каждом грузовике.");
 
         recordingService.write(truckParcelCounts);
-        log.info("Информация о количестве посылок в каждом грузовике успешно записана в JSON файл.");
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
@@ -58,9 +54,7 @@ public class OptimizedPackagingService implements TruckPackageService {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
         log.debug("Созданы грузовики: {}", trucks);
 
-        parcels.stream()
-                .peek(parcel -> log.trace("Обработка посылки с формой: {}", parcel.getShape()))
-                .forEach(parcel -> trucks.stream()
+        parcels.forEach(parcel -> trucks.stream()
                         .filter(truck -> truck.findPosition(parcel).isPresent())
                         .findFirst()
                         .ifPresentOrElse(truck -> {
