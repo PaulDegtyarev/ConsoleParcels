@@ -55,9 +55,7 @@ public class RecordingServiceToJsonFile implements FileWriterService {
 
             objectMapper.writeValue(Files.newOutputStream(path), data);
             log.info("Успешно записано {} грузовиков в файл {}", trucks.size(), filePath);
-
         } catch (IOException e) {
-            log.error("Ошибка при записи JSON файла: {}", e.getMessage(), e);
             throw new FileWriteException("Ошибка при работе с JSON файлом: " + filePath);
         }
     }
