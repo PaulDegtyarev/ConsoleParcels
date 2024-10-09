@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.PackagingManager;
 import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
@@ -59,7 +60,9 @@ public class CargoManagementShellController {
                 filePathToWrite
         );
 
-        return packagingManager.packParcels(packRequestDto);
+        List<Truck> packedTrucks = packagingManager.packParcels(packRequestDto);
+
+        return resultFormatter.convertPackagingResultsToString(packedTrucks);
     }
 
     /**

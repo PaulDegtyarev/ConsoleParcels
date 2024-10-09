@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.FileDownloadService;
 import ru.liga.console_parcels.service.PackagingManager;
@@ -31,7 +32,12 @@ public class CargoManagementRestController {
     @PostMapping("/pack")
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
         log.info("Пользователь выбрал упаковку без файла.");
-        return new ResponseEntity<>(packagingManager.packParcels(packRequest), HttpStatus.OK);
+
+        List<Truck> packedTrucks = packagingManager.packParcels(packRequest);
+
+        String response = resultFormatter.convertPackagingResultsToString(packedTrucks);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/pack/file")
@@ -47,9 +53,11 @@ public class CargoManagementRestController {
 
         PackRequestDto packRequest = new PackRequestDto(trucks, fullPath, algorithmChoice, filePathToWrite);
 
-        String packedTruck = packagingManager.packParcels(packRequest);
+        List<Truck> packedTrucks = packagingManager.packParcels(packRequest);
 
-        return new ResponseEntity<>(packedTruck, HttpStatus.OK);
+        String response = resultFormatter.convertPackagingResultsToString(packedTrucks);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/unpack")

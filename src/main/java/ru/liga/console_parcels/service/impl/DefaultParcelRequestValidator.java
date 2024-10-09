@@ -52,7 +52,6 @@ public class DefaultParcelRequestValidator implements ParcelRequestValidator {
     @Override
     public boolean isThereSymbolThatIsNotSpecified(ParcelRequestDto parcelRequestDto) {
         for (char c : parcelRequestDto.getShape().toCharArray()) {
-            log.info("Проверка символа {}", c);
             if (c != parcelRequestDto.getSymbol() && c != ' ') {
                 return true;
             }

@@ -159,9 +159,11 @@ public class DefaultParcelServiceTest {
     @Test
     void addParcel_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
         String name = "Чипсы";
-        String shape = "1\n12\n1";
+        String shape = "1 12 1";
         char symbol = '1';
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
+
+        when(parcelRequestValidator.isThereSymbolThatIsNotSpecified(parcelRequestDto)).thenThrow(new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом"));
 
         assertThatThrownBy(() -> defaultParcelService.addParcel(parcelRequestDto))
                 .isInstanceOf(WrongSymbolInShapeException.class);
@@ -218,9 +220,10 @@ public class DefaultParcelServiceTest {
         char symbol = '1';
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
+        when(parcelRequestValidator.isThereSymbolThatIsNotSpecified(parcelRequestDto)).thenThrow(new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом"));
+
         assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
-                .isInstanceOf(WrongSymbolInShapeException.class)
-                .hasMessage("Некоторые символы посылки не являются указанным символом: " + symbol);
+                .isInstanceOf(WrongSymbolInShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));
     }

@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.liga.console_parcels.dto.*;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.service.PackagingManager;
 import ru.liga.console_parcels.service.ParcelService;
@@ -111,7 +112,11 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
 
             PackRequestDto packRequestDto = new PackRequestDto(trucks, inputData, algorithmChoice, filePathToWrite);
-            String result = packagingManager.packParcels(packRequestDto);
+
+            List<Truck> packedTrucks = packagingManager.packParcels(packRequestDto);
+
+            String result = resultFormatter.convertPackagingResultsToString(packedTrucks);
+
             sendMsg(chatId, result);
         } catch (Exception e) {
             log.error("Ошибка при упаковке", e);
@@ -164,7 +169,10 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
             String inputFilePath = file.getAbsolutePath();
 
-            String result = packagingManager.packParcels(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
+            List<Truck> packedTrucks = packagingManager.packParcels(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
+
+            String result = resultFormatter.convertPackagingResultsToString(packedTrucks);
+
             sendMsg(chatId, result);
         } catch (Exception e) {
             log.error("Ошибка при упаковке", e);

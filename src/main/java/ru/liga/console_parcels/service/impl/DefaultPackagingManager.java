@@ -24,7 +24,6 @@ import java.util.List;
 public class DefaultPackagingManager implements PackagingManager {
     private final PackagingSelectionService packagingSelectionService;
     private final FileWriterService fileWriterService;
-    private final ResultFormatter resultFormatter;
     private final PackageReader packageReader;
     private final ParcelRepository parcelRepository;
 
@@ -35,7 +34,7 @@ public class DefaultPackagingManager implements PackagingManager {
      * @return Строка с результатами упаковки.
      */
     @Override
-    public String packParcels(PackRequestDto packRequestDto) {
+    public List<Truck> packParcels(PackRequestDto packRequestDto) {
         TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
         log.debug("Выбран сервис для упаковки: {}", truckPackageService.getClass().getSimpleName());
 
@@ -48,13 +47,11 @@ public class DefaultPackagingManager implements PackagingManager {
             log.info("Прочитано {} посылок из файла {}", parcelsForPackaging.size(), packRequestDto.getInputData());
         }
 
-        List<Truck> trucks;
-
-        trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
+        List<Truck> trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
 
         fileWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
 
-        return resultFormatter.convertPackagingResultsToString(trucks);
+        return trucks;
     }
 
     private List<ParcelForPackagingDto> convertParcelRequestToParcels(PackRequestDto packRequestDto) {
