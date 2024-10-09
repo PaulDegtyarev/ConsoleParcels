@@ -2,8 +2,6 @@ package ru.liga.console_parcels.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.liga.console_parcels.factory.PackagingServiceFactory;
-import ru.liga.console_parcels.factory.impl.DefaultPackagingServiceFactory;
 import ru.liga.console_parcels.model.UserAlgorithmChoice;
 import ru.liga.console_parcels.service.impl.DefaultPackagingSelectionService;
 import ru.liga.console_parcels.service.impl.OptimizedPackagingService;

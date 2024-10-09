@@ -3,7 +3,6 @@ package ru.liga.console_parcels.service.impl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.liga.console_parcels.factory.PackagingServiceFactory;
 import ru.liga.console_parcels.model.UserAlgorithmChoice;
 import ru.liga.console_parcels.service.PackagingSelectionService;
 import ru.liga.console_parcels.service.PackagingService;
