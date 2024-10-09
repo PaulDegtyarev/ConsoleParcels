@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Класс для представления посылки.
@@ -21,6 +22,7 @@ public class Parcel {
     @Column(name = "name")
     private String name;
 
+    @Setter
     @Column(name = "shape")
     private String shape;
 
@@ -35,15 +37,6 @@ public class Parcel {
     public void updateShapeWithNewSymbol(String shape, char newSymbol) {
         this.shape = shape;
         this.symbol = newSymbol;
-    }
-
-    /**
-     * Обновляет форму посылки.
-     *
-     * @param newShape Новая матрица символов для формы посылки.
-     */
-    public void updateShape(String newShape) {
-        this.shape = newShape;
     }
 
     /**

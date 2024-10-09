@@ -291,7 +291,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void updateShapeByParcelName_withValidInput_shouldUpdateShape() {
+    void updateShapeByParcelName_withValidInput_shouldSetShape() {
         String name = "Чипсы";
         char symbol = '1';
         String newShape = "111 111";
@@ -313,7 +313,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void updateShapeByParcelName_withNonExistentParcel_shouldThrowParcelNotFoundException() {
+    void setShapeByParcelName_withNonExistentParcel_shouldThrowParcelNotFoundException() {
         String name = "Некорректное имя";
         String newShape = "22 22";
 
@@ -327,7 +327,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void updateShapeByParcelName_withBlankShape_shouldThrowInvalidShapeException() {
+    void setShapeByParcelName_withBlankShape_shouldThrowInvalidShapeException() {
         String name = "Чипсы";
         String newShape = "   ";
 
