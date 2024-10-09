@@ -2,7 +2,7 @@ package ru.liga.console_parcels.formatter.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.formatter.PrintResultFormatter;
 import ru.liga.console_parcels.model.Truck;
 
@@ -52,12 +52,12 @@ public class DefaultPrintResultFormatter implements PrintResultFormatter {
      * @return Строка с результатами распаковки.
      */
     @Override
-    public StringBuilder transferUnpackingResultsToConsole(List<UnPackedTruckDto> unPackedTrucks) {
+    public StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks) {
         StringBuilder builder = new StringBuilder();
 
-        for (UnPackedTruckDto unPackedTruck : unPackedTrucks) {
+        for (UnpackedTruckDto unPackedTruck : unPackedTrucks) {
             int truckId = unPackedTruck.getTruckId();
-            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCounts();
+            Map<String, Integer> parcelCounts = unPackedTruck.getPackageCountMap();
             List<List<String>> packageLayout = unPackedTruck.getPackageLayout();
 
             log.debug("Генерация строки для грузовика ID: {}", truckId);

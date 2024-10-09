@@ -2,7 +2,7 @@ package ru.liga.console_parcels.formatter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.formatter.impl.DefaultPrintResultFormatter;
 
 import java.util.Arrays;
@@ -24,8 +24,8 @@ public class DefaultPrintResultFormatterTest {
 
     @Test
     void transferUnpackingResultsToConsole_withValidUnPackedTrucks_shouldFormatCorrectly() {
-        UnPackedTruckDto unpackedTruck1 = mock(UnPackedTruckDto.class);
-        UnPackedTruckDto unpackedTruck2 = mock(UnPackedTruckDto.class);
+        UnpackedTruckDto unpackedTruck1 = mock(UnpackedTruckDto.class);
+        UnpackedTruckDto unpackedTruck2 = mock(UnpackedTruckDto.class);
 
         when(unpackedTruck1.getTruckId()).thenReturn(1);
         when(unpackedTruck1.getPackageLayout()).thenReturn(Arrays.asList(
@@ -37,7 +37,7 @@ public class DefaultPrintResultFormatterTest {
         packageCounts1.put("1", 1);
         packageCounts1.put("2", 2);
         packageCounts1.put("3", 3);
-        when(unpackedTruck1.getPackageCounts()).thenReturn(packageCounts1);
+        when(unpackedTruck1.getPackageCountMap()).thenReturn(packageCounts1);
 
         when(unpackedTruck2.getTruckId()).thenReturn(2);
         when(unpackedTruck2.getPackageLayout()).thenReturn(Arrays.asList(
@@ -49,9 +49,9 @@ public class DefaultPrintResultFormatterTest {
         packageCounts2.put("4", 1);
         packageCounts2.put("5", 2);
         packageCounts2.put("6", 3);
-        when(unpackedTruck2.getPackageCounts()).thenReturn(packageCounts2);
+        when(unpackedTruck2.getPackageCountMap()).thenReturn(packageCounts2);
 
-        List<UnPackedTruckDto> unpackedTrucks = List.of(unpackedTruck1, unpackedTruck2);
+        List<UnpackedTruckDto> unpackedTrucks = List.of(unpackedTruck1, unpackedTruck2);
 
         StringBuilder result = formatter.transferUnpackingResultsToConsole(unpackedTrucks);
 

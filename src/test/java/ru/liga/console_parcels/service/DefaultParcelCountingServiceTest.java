@@ -28,7 +28,7 @@ public class DefaultParcelCountingServiceTest {
         List<Truck> trucks = List.of(new Truck(3, 3));
         List<TruckParcelCountDto> result = defaultParcelCountingService.countParcelsInTrucks(trucks);
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getParcels()).isEmpty();
+        assertThat(result.get(0).getParcelCounts()).isEmpty();
     }
 
     @Test
@@ -41,8 +41,8 @@ public class DefaultParcelCountingServiceTest {
         List<TruckParcelCountDto> result = defaultParcelCountingService.countParcelsInTrucks(trucks);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getTruck()).isEqualTo(1);
-        assertThat(result.get(0).getParcels()).hasSize(1)
+        assertThat(result.get(0).getTruckId()).isEqualTo(1);
+        assertThat(result.get(0).getParcelCounts()).hasSize(1)
                 .extracting(ParcelCountDto::getForm, ParcelCountDto::getQuantity)
                 .containsExactly(tuple("A", 6));
     }
@@ -58,8 +58,8 @@ public class DefaultParcelCountingServiceTest {
         List<TruckParcelCountDto> result = defaultParcelCountingService.countParcelsInTrucks(trucks);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getTruck()).isEqualTo(1);
-        assertThat(result.get(0).getParcels()).hasSize(3)
+        assertThat(result.get(0).getTruckId()).isEqualTo(1);
+        assertThat(result.get(0).getParcelCounts()).hasSize(3)
                 .extracting(ParcelCountDto::getForm, ParcelCountDto::getQuantity)
                 .containsExactlyInAnyOrder(tuple("A", 1), tuple("B", 1), tuple("C", 1));
     }
@@ -77,13 +77,13 @@ public class DefaultParcelCountingServiceTest {
 
         assertThat(result).hasSize(2);
 
-        assertThat(result.get(0).getTruck()).isEqualTo(1);
-        assertThat(result.get(0).getParcels()).hasSize(1)
+        assertThat(result.get(0).getTruckId()).isEqualTo(1);
+        assertThat(result.get(0).getParcelCounts()).hasSize(1)
                 .extracting(ParcelCountDto::getForm, ParcelCountDto::getQuantity)
                 .containsExactly(tuple("A", 1));
 
-        assertThat(result.get(1).getTruck()).isEqualTo(2);
-        assertThat(result.get(1).getParcels()).hasSize(1)
+        assertThat(result.get(1).getTruckId()).isEqualTo(2);
+        assertThat(result.get(1).getParcelCounts()).hasSize(1)
                 .extracting(ParcelCountDto::getForm, ParcelCountDto::getQuantity)
                 .containsExactly(tuple("B", 1));
     }

@@ -1,6 +1,6 @@
 package ru.liga.console_parcels.service;
 
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface UnPackagingService {
      * @param truckFilePath       Путь к файлу с данными грузовиков.
      * @return Список DTO с данными о распаковке грузовиков.
      */
-    List<UnPackedTruckDto> unpackTruck(String truckFilePath);
+    List<UnpackedTruckDto> unpackTruck(String truckFilePath);
 }

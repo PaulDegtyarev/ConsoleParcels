@@ -21,8 +21,8 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UnPackedTruckDto {
+public class UnpackedTruckDto {
     private int truckId;
-    private Map<String, Integer> packageCounts;
+    private Map<String, Integer> packageCountMap;
     private List<List<String>> packageLayout;
 }

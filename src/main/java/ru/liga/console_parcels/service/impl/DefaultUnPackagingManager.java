@@ -3,7 +3,7 @@ package ru.liga.console_parcels.service.impl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.formatter.PrintResultFormatter;
 import ru.liga.console_parcels.service.UnPackagingManager;
 import ru.liga.console_parcels.service.UnPackagingService;
@@ -42,7 +42,7 @@ public class DefaultUnPackagingManager implements UnPackagingManager {
     public String unpackParcels(String truckFilePath) {
         log.info("Начало процесса распаковки");
 
-        List<UnPackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(truckFilePath);
+        List<UnpackedTruckDto> unpackedTrucks = unPackagingService.unpackTruck(truckFilePath);
         log.info("Распаковка завершена. Распаковано {} машин", unpackedTrucks.size());
 
         log.info("Начало печати результатов распаковки для {} грузовиков", unpackedTrucks.size());

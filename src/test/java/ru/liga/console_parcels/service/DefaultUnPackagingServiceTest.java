@@ -1,7 +1,7 @@
 package ru.liga.console_parcels.service;
 
 import org.junit.jupiter.api.Test;
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
 import ru.liga.console_parcels.service.impl.DefaultUnPackagingService;
 
@@ -17,11 +17,11 @@ public class DefaultUnPackagingServiceTest {
     void unpackTruck_withValidInput_shouldReturnValidOutput() {
         String truckFilePath = "src/test/resources/input/valid-input-trucks.json";
 
-        List<UnPackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath);
+        List<UnpackedTruckDto> result = unPackagingService.unpackTruck(truckFilePath);
 
         assertThat(result.size()).isEqualTo(1);
 
-        UnPackedTruckDto unPackedTruck = result.get(0);
+        UnpackedTruckDto unPackedTruck = result.get(0);
         assertThat(unPackedTruck.getTruckId()).isEqualTo(1);
 
         List<List<String>> packageLayout = unPackedTruck.getPackageLayout();

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.liga.console_parcels.dto.UnPackedTruckDto;
+import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
 import ru.liga.console_parcels.service.UnPackagingService;
 
@@ -27,12 +27,12 @@ public class DefaultUnPackagingService implements UnPackagingService {
      * @return Список DTO с данными о распаковке грузовиков.
      */
     @Override
-    public List<UnPackedTruckDto> unpackTruck(String truckFilePath) {
+    public List<UnpackedTruckDto> unpackTruck(String truckFilePath) {
         log.info("Начало процесса распаковки грузовиков из файлов: {}", truckFilePath);
 
         JsonNode trucksNode = readJsonFile(truckFilePath).get("trucks");
 
-        List<UnPackedTruckDto> unPackedTrucks = new ArrayList<>();
+        List<UnpackedTruckDto> unPackedTrucks = new ArrayList<>();
         for (JsonNode truckNode : trucksNode) {
             int truckId = truckNode.get("truckId").asInt();
             JsonNode packagesNode = truckNode.get("packages");
@@ -43,7 +43,7 @@ public class DefaultUnPackagingService implements UnPackagingService {
             Map<String, Integer> parcelCounts = calculateParcelCounts(packageLayout);
             log.trace("Количество посылок каждого типа:\n{}", parcelCounts);
 
-            unPackedTrucks.add(new UnPackedTruckDto(truckId, parcelCounts, packageLayout));
+            unPackedTrucks.add(new UnpackedTruckDto(truckId, parcelCounts, packageLayout));
             log.debug("Обработан грузовик с ID: {}", truckId);
         }
 
