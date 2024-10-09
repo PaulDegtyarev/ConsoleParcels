@@ -1,7 +1,7 @@
 package ru.liga.console_parcels.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Класс DTO для представления посылки, готовой к упаковке.
@@ -13,11 +13,11 @@ import lombok.Getter;
  * </p>
  */
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ParcelForPackagingDto {
     private final int height;
     private final int width;
-    private char[][] shape;
+    private final char[][] shape;
 
     /**
      * Метод для получения площади посылки.

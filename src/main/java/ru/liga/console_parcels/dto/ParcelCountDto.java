@@ -1,8 +1,7 @@
 package ru.liga.console_parcels.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Класс DTO для представления количества посылок определенной формы.
@@ -13,9 +12,8 @@ import lombok.NoArgsConstructor;
  * </p>
  */
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ParcelCountDto {
-    private String form;
-    private int quantity;
+    private final String form;
+    private final int quantity;
 }

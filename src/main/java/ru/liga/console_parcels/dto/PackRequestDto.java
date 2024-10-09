@@ -2,9 +2,8 @@ package ru.liga.console_parcels.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import ru.liga.console_parcels.model.UserAlgorithmChoice;
 
 /**
@@ -17,11 +16,14 @@ import ru.liga.console_parcels.model.UserAlgorithmChoice;
  * </p>
  */
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PackRequestDto {
-    @NotBlank private String trucks;
-    @NotBlank private String inputData;
-    @NotNull private UserAlgorithmChoice algorithmChoice;
-    @NotBlank private String filePathToWrite;
+    @NotBlank
+    private final String trucks;
+    @NotBlank
+    private final String inputData;
+    @NotNull
+    private final UserAlgorithmChoice algorithmChoice;
+    @NotBlank
+    private final String filePathToWrite;
 }

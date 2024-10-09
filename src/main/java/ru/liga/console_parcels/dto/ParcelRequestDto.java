@@ -21,7 +21,6 @@ public class ParcelRequestDto {
     private final String shape;
     private final char symbol;
 
-
     /**
      * Переопределение метода toString для представления объекта в виде строки.
      *

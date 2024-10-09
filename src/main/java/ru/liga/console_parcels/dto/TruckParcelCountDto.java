@@ -1,8 +1,7 @@
 package ru.liga.console_parcels.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -15,9 +14,8 @@ import java.util.List;
  * </p>
  */
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class TruckParcelCountDto {
-    private int truckId;
-    private List<ParcelCountDto> parcelCounts;
+    private final int truckId;
+    private final List<ParcelCountDto> parcelCounts;
 }
