@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.ParcelRequestDto;
 import ru.liga.console_parcels.dto.ParcelResponseDto;
+import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.exception.ParcelNameConflictException;
 import ru.liga.console_parcels.exception.ParcelNotFoundException;
 import ru.liga.console_parcels.exception.WrongSymbolInShapeException;
 import ru.liga.console_parcels.factory.ParcelServiceResponseFactory;
-import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.repository.ParcelRepository;
 import ru.liga.console_parcels.service.ParcelService;
-import ru.liga.console_parcels.service.ParcelValidator;
+import ru.liga.console_parcels.service.ParcelRequestValidator;
 
 import java.util.List;
 
@@ -24,20 +24,20 @@ import java.util.List;
 public class DefaultParcelService implements ParcelService {
     private final ParcelRepository parcelRepository;
     private final ParcelServiceResponseFactory parcelServiceResponseFactory;
-    private final ParcelValidator parcelValidator;
+    private final ParcelRequestValidator parcelRequestValidator;
 
     /**
      * Конструктор с зависимостями.
      *
      * @param parcelRepository             Репозиторий посылок.
      * @param parcelServiceResponseFactory Фабрика ответов сервиса посылок.
-     * @param parcelValidator              Валидатор посылок.
+     * @param parcelRequestValidator              Валидатор посылок.
      */
     @Autowired
-    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelValidator parcelValidator) {
+    public DefaultParcelService(ParcelRepository parcelRepository, ParcelServiceResponseFactory parcelServiceResponseFactory, ParcelRequestValidator parcelRequestValidator) {
         this.parcelRepository = parcelRepository;
         this.parcelServiceResponseFactory = parcelServiceResponseFactory;
-        this.parcelValidator = parcelValidator;
+        this.parcelRequestValidator = parcelRequestValidator;
     }
 
     /**
@@ -83,12 +83,12 @@ public class DefaultParcelService implements ParcelService {
         String name = parcelRequestDto.getName();
 
         String shape = parcelRequestDto.getShape();
-        parcelValidator.validateParcelShape(shape);
+        parcelRequestValidator.validateParcelShape(shape);
 
         char symbol = parcelRequestDto.getSymbol();
-        parcelValidator.validateParcelSymbol(symbol);
+        parcelRequestValidator.validateParcelSymbol(symbol);
 
-        if (parcelRequestDto.isThereSymbolThatIsNotSpecified()) {
+        if (parcelRequestValidator.isThereSymbolThatIsNotSpecified(parcelRequestDto)) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + symbol);
         }
 
@@ -110,7 +110,7 @@ public class DefaultParcelService implements ParcelService {
      * Обновляет посылку по имени.
      *
      * @param parcelRequestDto Данные для обновления посылки.
-     * @return DTO с информацией о обновленной посылке.
+     * @return DTO с информацией об обновленной посылке.
      * @throws ParcelNotFoundException     Если посылка не найдена.
      * @throws WrongSymbolInShapeException Если форма посылки содержит недопустимые символы.
      */
@@ -120,12 +120,12 @@ public class DefaultParcelService implements ParcelService {
         String nameOfSavedParcel = parcelRequestDto.getName();
 
         String shape = parcelRequestDto.getShape();
-        parcelValidator.validateParcelShape(shape);
+        parcelRequestValidator.validateParcelShape(shape);
 
         char newSymbol = parcelRequestDto.getSymbol();
-        parcelValidator.validateParcelSymbol(newSymbol);
+        parcelRequestValidator.validateParcelSymbol(newSymbol);
 
-        if (parcelRequestDto.isThereSymbolThatIsNotSpecified()) {
+        if (parcelRequestValidator.isThereSymbolThatIsNotSpecified(parcelRequestDto)) {
             throw new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом: " + newSymbol);
         }
 
@@ -152,7 +152,7 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol) {
         log.info("Начинается обновление символа посылки с названием: {}, новый символ: {}", nameOfSavedParcel, newSymbol);
-        parcelValidator.validateParcelSymbol(newSymbol);
+        parcelRequestValidator.validateParcelSymbol(newSymbol);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
         Parcel parcelWithUpdateSymbol = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
@@ -180,7 +180,7 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape) {
         log.info("Начинается обновление формы посылки с названием: {}, новая форма: {}", nameOfSavedParcel, newShape);
-        parcelValidator.validateParcelShape(newShape);
+        parcelRequestValidator.validateParcelShape(newShape);
 
         String trimmedNameOfSavedParcel = nameOfSavedParcel.trim().toLowerCase();
         Parcel parcelWithUpdateShape = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)

@@ -35,7 +35,7 @@ public class DefaultParcelServiceTest {
     private ParcelServiceResponseFactory parcelServiceResponseFactory;
 
     @Mock
-    private ParcelValidator parcelValidator;
+    private ParcelRequestValidator parcelRequestValidator;
 
     @Mock
     private ShapeParser shapeParser;
@@ -232,7 +232,7 @@ public class DefaultParcelServiceTest {
         char symbol = ' ';
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(name, shape, symbol);
 
-        doThrow(new InvalidShapeException("Форма посылки не может быть пустой")).when(parcelValidator).validateParcelShape(shape);
+        doThrow(new InvalidShapeException("Форма посылки не может быть пустой")).when(parcelRequestValidator).validateParcelShape(shape);
 
         assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
                 .isInstanceOf(InvalidShapeException.class);
@@ -282,7 +282,7 @@ public class DefaultParcelServiceTest {
         String name = "чипсы";
         char newSymbol = ' ';
 
-        doThrow(new InvalidCharacterException("Нельзя сделать символ пробелом")).when(parcelValidator).validateParcelSymbol(newSymbol);
+        doThrow(new InvalidCharacterException("Нельзя сделать символ пробелом")).when(parcelRequestValidator).validateParcelSymbol(newSymbol);
 
         assertThatThrownBy(() -> defaultParcelService.updateSymbolByParcelName(name, newSymbol))
                 .isInstanceOf(InvalidCharacterException.class);
@@ -331,7 +331,7 @@ public class DefaultParcelServiceTest {
         String name = "Чипсы";
         String newShape = "   ";
 
-        doThrow(new InvalidShapeException("Новая форма не может быть пробелами")).when(parcelValidator).validateParcelShape(newShape);
+        doThrow(new InvalidShapeException("Новая форма не может быть пробелами")).when(parcelRequestValidator).validateParcelShape(newShape);
 
         assertThatThrownBy(() -> defaultParcelService.updateShapeByParcelName(name, newShape))
                 .isInstanceOf(InvalidShapeException.class);

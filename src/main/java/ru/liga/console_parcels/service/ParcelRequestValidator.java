@@ -1,12 +1,13 @@
 package ru.liga.console_parcels.service;
 
+import ru.liga.console_parcels.dto.ParcelRequestDto;
 import ru.liga.console_parcels.exception.InvalidCharacterException;
 import ru.liga.console_parcels.exception.InvalidShapeException;
 
 /**
  * Интерфейс для валидации посылок.
  */
-public interface ParcelValidator {
+public interface ParcelRequestValidator {
     /**
      * Проверяет валидность формы посылки.
      *
@@ -22,4 +23,6 @@ public interface ParcelValidator {
      * @throws InvalidCharacterException Если символ посылки невалиден.
      */
     void validateParcelSymbol(char symbol);
+
+    boolean isThereSymbolThatIsNotSpecified(ParcelRequestDto parcelRequestDto);
 }

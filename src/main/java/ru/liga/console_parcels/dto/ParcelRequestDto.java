@@ -21,20 +21,6 @@ public class ParcelRequestDto {
     private final String shape;
     private final char symbol;
 
-    /**
-     * Метод для проверки наличия в форме посылки символов, отличных от указанного.
-     *
-     * @return true, если в форме посылки есть символы, отличные от указанного символа и пробела, иначе false.
-     */
-    public boolean isThereSymbolThatIsNotSpecified() {
-        for (char c : shape.toCharArray()) {
-            log.info("Проверка символа {}", c);
-            if (c != symbol && c != ' ') {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Переопределение метода toString для представления объекта в виде строки.

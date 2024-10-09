@@ -3,13 +3,13 @@ package ru.liga.console_parcels.service;
 import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.exception.InvalidCharacterException;
 import ru.liga.console_parcels.exception.InvalidShapeException;
-import ru.liga.console_parcels.service.impl.DefaultParcelValidator;
+import ru.liga.console_parcels.service.impl.DefaultParcelRequestValidator;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class DefaultParcelValidatorTest {
-    private DefaultParcelValidator parcelValidator = new DefaultParcelValidator();
+public class DefaultParcelRequestValidatorTest {
+    private DefaultParcelRequestValidator parcelValidator = new DefaultParcelRequestValidator();
 
     @Test
     void validateParcelShape_withValidInput_shouldReturn() {
