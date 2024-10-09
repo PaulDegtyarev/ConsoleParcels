@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * Интерфейс для форматирования результатов упаковки.
  */
-public interface PrintResultFormatter {
+public interface ResultFormatter {
     /**
      * Форматирует результаты упаковки в строку.
      *
      * @param trucks Список грузовиков.
      * @return Строка с результатами упаковки.
      */
-    StringBuilder transferPackagingResultsToConsole(List<Truck> trucks);
+    String convertPackagingResultsToString(List<Truck> trucks);
 
     /**
      * Форматирует результаты распаковки в строку.
@@ -23,5 +23,5 @@ public interface PrintResultFormatter {
      * @param unPackedTrucks Список распакованных грузовиков.
      * @return Строка с результатами распаковки.
      */
-    StringBuilder transferUnpackingResultsToConsole(List<UnpackedTruckDto> unPackedTrucks);
+    String convertUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks);
 }

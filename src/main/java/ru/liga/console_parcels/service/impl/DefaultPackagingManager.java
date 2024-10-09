@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.exception.ParcelNotFoundException;
-import ru.liga.console_parcels.formatter.PrintResultFormatter;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.model.Truck;
 import ru.liga.console_parcels.repository.ParcelRepository;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class DefaultPackagingManager implements PackagingManager {
     private PackagingSelectionService packagingSelectionService;
     private TruckToJsonWriterService truckToJsonWriterService;
-    private PrintResultFormatter printResultFormatter;
+    private ResultFormatter resultFormatter;
     private PackageReader packageReader;
     private ParcelRepository parcelRepository;
 
@@ -33,15 +33,15 @@ public class DefaultPackagingManager implements PackagingManager {
      *
      * @param packagingSelectionService Сервис выбора алгоритма упаковки.
      * @param truckToJsonWriterService  Сервис записи данных о грузовиках в JSON.
-     * @param printResultFormatter      Форматировщик результатов упаковки.
+     * @param resultFormatter      Форматировщик результатов упаковки.
      * @param packageReader             Чтение посылок из файла.
      * @param parcelRepository          Репозиторий посылок.
      */
     @Autowired
-    public DefaultPackagingManager(PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, PrintResultFormatter printResultFormatter, PackageReader packageReader, ParcelRepository parcelRepository) {
+    public DefaultPackagingManager(PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, ResultFormatter resultFormatter, PackageReader packageReader, ParcelRepository parcelRepository) {
         this.packagingSelectionService = packagingSelectionService;
         this.truckToJsonWriterService = truckToJsonWriterService;
-        this.printResultFormatter = printResultFormatter;
+        this.resultFormatter = resultFormatter;
         this.packageReader = packageReader;
         this.parcelRepository = parcelRepository;
     }
@@ -93,6 +93,6 @@ public class DefaultPackagingManager implements PackagingManager {
         log.info("Запись результатов упаковки в JSON завершена");
 
         log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
-        return printResultFormatter.transferPackagingResultsToConsole(trucks).toString();
+        return resultFormatter.convertPackagingResultsToString(trucks).toString();
     }
 }

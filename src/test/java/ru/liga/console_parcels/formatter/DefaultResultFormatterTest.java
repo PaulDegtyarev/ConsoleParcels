@@ -3,7 +3,7 @@ package ru.liga.console_parcels.formatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
-import ru.liga.console_parcels.formatter.impl.DefaultPrintResultFormatter;
+import ru.liga.console_parcels.formatter.impl.DefaultResultFormatter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,16 +14,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DefaultPrintResultFormatterTest {
-    private PrintResultFormatter formatter;
+public class DefaultResultFormatterTest {
+    private ResultFormatter formatter;
 
     @BeforeEach
     void setUp() {
-        formatter = new DefaultPrintResultFormatter();
+        formatter = new DefaultResultFormatter();
     }
 
     @Test
-    void transferUnpackingResultsToConsole_withValidUnPackedTrucks_shouldFormatCorrectly() {
+    void convertUnpackingResultsToString_withValidUnPackedTrucks_shouldFormatCorrectly() {
         UnpackedTruckDto unpackedTruck1 = mock(UnpackedTruckDto.class);
         UnpackedTruckDto unpackedTruck2 = mock(UnpackedTruckDto.class);
 
@@ -53,7 +53,7 @@ public class DefaultPrintResultFormatterTest {
 
         List<UnpackedTruckDto> unpackedTrucks = List.of(unpackedTruck1, unpackedTruck2);
 
-        StringBuilder result = formatter.transferUnpackingResultsToConsole(unpackedTrucks);
+        String result = formatter.convertUnpackingResultsToString(unpackedTrucks);
 
         String expectedOutput = """
                 Грузовик 1:
@@ -78,6 +78,6 @@ public class DefaultPrintResultFormatterTest {
                 
                 """;
 
-        assertThat(result.toString()).isEqualTo(expectedOutput);
+        assertThat(result).isEqualTo(expectedOutput);
     }
 }
