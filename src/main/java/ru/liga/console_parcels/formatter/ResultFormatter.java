@@ -6,11 +6,11 @@ import ru.liga.console_parcels.entity.Truck;
 import java.util.List;
 
 /**
- * Интерфейс для форматирования результатов упаковки.
+ * Интерфейс для форматирования результатов.
  */
 public interface ResultFormatter {
     /**
-     * Форматирует результаты упаковки в строку.
+     * Переводит результаты упаковки в строку.
      *
      * @param trucks Список грузовиков.
      * @return Строка с результатами упаковки.
@@ -18,9 +18,9 @@ public interface ResultFormatter {
     String convertPackagingResultsToString(List<Truck> trucks);
 
     /**
-     * Форматирует результаты распаковки в строку.
+     * Переводит результаты распаковки в строку.
      *
-     * @param unPackedTrucks Список распакованных грузовиков.
+     * @param unPackedTrucks Список DTO распакованных грузовиков.
      * @return Строка с результатами распаковки.
      */
     String convertUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks);

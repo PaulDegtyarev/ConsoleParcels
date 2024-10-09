@@ -3,24 +3,17 @@ package ru.liga.console_parcels.formatter.impl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
-import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.entity.Truck;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * Форматирует результаты упаковки и распаковки в строку для вывода в консоль.
- */
+
 @Log4j2
 @Service
 public class DefaultResultFormatter implements ResultFormatter {
-    /**
-     * Форматирует результаты упаковки в строку.
-     *
-     * @param trucks Список грузовиков.
-     * @return Строка с результатами упаковки.
-     */
+
     @Override
     public String convertPackagingResultsToString(List<Truck> trucks) {
         int indexOffset = 1;
@@ -39,12 +32,6 @@ public class DefaultResultFormatter implements ResultFormatter {
         return result.toString();
     }
 
-    /**
-     * Форматирует результаты распаковки в строку.
-     *
-     * @param unPackedTrucks Список распакованных грузовиков.
-     * @return Строка с результатами распаковки.
-     */
     @Override
     public String convertUnpackingResultsToString(List<UnpackedTruckDto> unPackedTrucks) {
         StringBuilder result = new StringBuilder();
