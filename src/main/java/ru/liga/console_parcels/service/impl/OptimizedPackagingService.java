@@ -1,7 +1,8 @@
 package ru.liga.console_parcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.dto.TruckParcelCountDto;
@@ -9,7 +10,7 @@ import ru.liga.console_parcels.exception.PackingException;
 import ru.liga.console_parcels.factory.TruckFactory;
 import ru.liga.console_parcels.model.Point;
 import ru.liga.console_parcels.model.Truck;
-import ru.liga.console_parcels.service.PackagingService;
+import ru.liga.console_parcels.service.TruckPackageService;
 import ru.liga.console_parcels.service.ParcelCountingService;
 import ru.liga.console_parcels.service.ParcelQuantityRecordingService;
 
@@ -20,24 +21,12 @@ import java.util.List;
  */
 @Log4j2
 @Service
-public class OptimizedPackagingService implements PackagingService {
-    private TruckFactory truckFactory;
-    private ParcelCountingService parcelCountingService;
-    private ParcelQuantityRecordingService parcelQuantityRecordingService;
-
-    /**
-     * Конструктор сервиса с зависимостями.
-     *
-     * @param truckFactory                   Фабрика грузовиков.
-     * @param parcelCountingService          Сервис подсчета посылок.
-     * @param parcelQuantityRecordingService Сервис записи количества посылок.
-     */
-    @Autowired
-    public OptimizedPackagingService(TruckFactory truckFactory, ParcelCountingService parcelCountingService, ParcelQuantityRecordingService parcelQuantityRecordingService) {
-        this.truckFactory = truckFactory;
-        this.parcelCountingService = parcelCountingService;
-        this.parcelQuantityRecordingService = parcelQuantityRecordingService;
-    }
+@Qualifier("MAX_SPACE")
+@RequiredArgsConstructor
+public class OptimizedPackagingService implements TruckPackageService {
+    private final TruckFactory truckFactory;
+    private final ParcelCountingService parcelCountingService;
+    private final ParcelQuantityRecordingService parcelQuantityRecordingService;
 
     /**
      * Упаковывает посылки в грузовики.

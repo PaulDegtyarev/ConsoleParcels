@@ -9,7 +9,7 @@ import java.util.List;
  * Интерфейс для упаковки посылок в грузовики.
  * Определяет методы для упаковки посылок в грузовики заданного размера.
  */
-public interface PackagingService {
+public interface TruckPackageService {
     /**
      * Упаковывает посылки в грузовики.
      *

@@ -10,7 +10,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-public class DefaultUnPackagingServiceTest {
+public class DefaultUnTruckPackageServiceTest {
     private UnPackagingService unPackagingService = new DefaultUnPackagingService();
 
     @Test

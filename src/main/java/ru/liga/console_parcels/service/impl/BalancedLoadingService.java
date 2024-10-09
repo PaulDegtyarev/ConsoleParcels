@@ -1,7 +1,8 @@
 package ru.liga.console_parcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.dto.TruckParcelCountDto;
@@ -10,7 +11,7 @@ import ru.liga.console_parcels.factory.TruckFactory;
 import ru.liga.console_parcels.model.Point;
 import ru.liga.console_parcels.model.Truck;
 import ru.liga.console_parcels.model.TruckPlacement;
-import ru.liga.console_parcels.service.PackagingService;
+import ru.liga.console_parcels.service.TruckPackageService;
 import ru.liga.console_parcels.service.ParcelCountingService;
 import ru.liga.console_parcels.service.ParcelQuantityRecordingService;
 
@@ -24,25 +25,12 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 @Service
-public class BalancedLoadingService implements PackagingService {
-    private TruckFactory truckFactory;
-    private ParcelCountingService parcelCountingService;
-    private ParcelQuantityRecordingService parcelQuantityRecordingService;
-
-    /**
-     * Конструктор сервиса с зависимостями.
-     *
-     * @param truckFactory                   Фабрика грузовиков.
-     * @param parcelCountingService          Сервис подсчета посылок.
-     * @param parcelQuantityRecordingService Сервис записи количества посылок.
-     */
-    @Autowired
-    public BalancedLoadingService(TruckFactory truckFactory, ParcelCountingService parcelCountingService, ParcelQuantityRecordingService parcelQuantityRecordingService) {
-        this.truckFactory = truckFactory;
-        this.parcelCountingService = parcelCountingService;
-        this.parcelQuantityRecordingService = parcelQuantityRecordingService;
-        log.info("BalancedLoadingService инициализирован");
-    }
+@Qualifier("EVEN_LOADING")
+@RequiredArgsConstructor
+public class BalancedLoadingService implements TruckPackageService {
+    private final TruckFactory truckFactory;
+    private final ParcelCountingService parcelCountingService;
+    private final ParcelQuantityRecordingService parcelQuantityRecordingService;
 
     /**
      * Упаковывает посылки в грузовики.

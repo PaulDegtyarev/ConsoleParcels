@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class OptimizedPackagingServiceTest {
+public class OptimizedTruckPackageServiceTest {
     @InjectMocks
     private OptimizedPackagingService service;
 

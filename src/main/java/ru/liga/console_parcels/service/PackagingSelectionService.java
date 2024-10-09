@@ -12,5 +12,5 @@ public interface PackagingSelectionService {
      * @param algorithmChoice Выбранный алгоритм упаковки.
      * @return Сервис упаковки, соответствующий выбранному алгоритму.
      */
-    PackagingService selectPackagingService(UserAlgorithmChoice algorithmChoice);
+    TruckPackageService selectPackagingService(UserAlgorithmChoice algorithmChoice);
 }

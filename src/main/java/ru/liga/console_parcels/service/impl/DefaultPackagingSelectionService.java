@@ -1,13 +1,13 @@
 package ru.liga.console_parcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.model.UserAlgorithmChoice;
 import ru.liga.console_parcels.service.PackagingSelectionService;
-import ru.liga.console_parcels.service.PackagingService;
+import ru.liga.console_parcels.service.TruckPackageService;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,25 +15,10 @@ import java.util.Map;
  */
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class DefaultPackagingSelectionService implements PackagingSelectionService {
-    private PackagingServiceFactory packagingServiceFactory;
-    private Map<UserAlgorithmChoice, PackagingService> serviceMap = new HashMap<>();
-
-    /**
-     * Конструктор с зависимостью от фабрики сервисов упаковки.
-     *
-     * @param packagingServiceFactory Фабрика сервисов упаковки.
-     */
     @Autowired
-    public DefaultPackagingSelectionService(PackagingServiceFactory packagingServiceFactory) {
-        this.packagingServiceFactory = packagingServiceFactory;
-        initializeServiceMap();
-    }
-
-    private void initializeServiceMap() {
-        serviceMap.put(UserAlgorithmChoice.MAX_SPACE, packagingServiceFactory.createOptimizedPackagingService());
-        serviceMap.put(UserAlgorithmChoice.EVEN_LOADING, packagingServiceFactory.createSinglePackagingService());
-    }
+    private final Map<UserAlgorithmChoice, TruckPackageService> serviceMap;
 
     /**
      * Выбирает сервис упаковки на основе выбранного алгоритма.
@@ -42,7 +27,7 @@ public class DefaultPackagingSelectionService implements PackagingSelectionServi
      * @return Сервис упаковки, соответствующий выбранному алгоритму.
      */
     @Override
-    public PackagingService selectPackagingService(UserAlgorithmChoice algorithmChoice) {
+    public TruckPackageService selectPackagingService(UserAlgorithmChoice algorithmChoice) {
         log.debug("Начинается выбор сервис для упаковки по номеру алгоритма: {}", algorithmChoice);
 
         return serviceMap.get(algorithmChoice);

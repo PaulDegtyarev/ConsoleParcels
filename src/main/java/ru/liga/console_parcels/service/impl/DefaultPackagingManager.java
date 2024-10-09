@@ -56,8 +56,8 @@ public class DefaultPackagingManager implements PackagingManager {
     public String packParcels(PackRequestDto packRequestDto) {
         log.info("Начало процесса упаковки");
 
-        PackagingService packagingService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
-        log.debug("Выбран сервис для упаковки: {}", packagingService.getClass().getSimpleName());
+        TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
+        log.debug("Выбран сервис для упаковки: {}", truckPackageService.getClass().getSimpleName());
 
         List<ParcelForPackagingDto> parcelsForPackaging;
         try {
@@ -86,7 +86,7 @@ public class DefaultPackagingManager implements PackagingManager {
         List<Truck> trucks;
 
         log.info("Начинается упаковка {} машин из файла {}", packRequestDto.getTrucks(), packRequestDto.getInputData());
-        trucks = packagingService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
+        trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
         log.info("Упаковка завершена. Упаковано {} грузовиков", trucks.size());
 
         truckToJsonWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
