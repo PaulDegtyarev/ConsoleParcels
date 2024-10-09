@@ -6,19 +6,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.dto.TruckParcelCountDto;
-import ru.liga.console_parcels.exception.PackingException;
-import ru.liga.console_parcels.factory.TruckFactory;
 import ru.liga.console_parcels.entity.ParcelPosition;
 import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.entity.TruckPlacement;
-import ru.liga.console_parcels.service.TruckPackageService;
+import ru.liga.console_parcels.exception.PackingException;
+import ru.liga.console_parcels.factory.TruckFactory;
 import ru.liga.console_parcels.service.ParcelCountingService;
 import ru.liga.console_parcels.service.ParcelQuantityRecordingService;
+import ru.liga.console_parcels.service.TruckPackageService;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для упаковки посылок со сбалансированной загрузкой грузовиков.
@@ -44,56 +43,46 @@ public class BalancedLoadingService implements TruckPackageService {
         log.info("Начало упаковки посылок. Количество посылок: {}, размер грузовиков: {}", parcels.size(), trucksSize);
 
         parcels.sort((p1, p2) -> Integer.compare(p2.getArea(), p1.getArea()));
-        log.debug("Посылки отсортированы по площади в порядке убывания");
-
-        log.trace("Отсортированные посылки: {}", parcels);
 
         List<Truck> trucks = loadTrucks(parcels, trucksSize);
         log.info("Загрузка грузовиков завершена. Количество использованных грузовиков: {}", trucks.size());
 
         List<TruckParcelCountDto> truckParcelCounts = parcelCountingService.countParcelsInTrucks(trucks);
-        log.debug("Подсчет посылок в грузовиках завершен");
 
         parcelQuantityRecordingService.writeParcelCountToJsonFile(truckParcelCounts);
-        log.info("Запись количества посылок в JSON-файл завершена");
 
         log.info("Упаковка завершена успешно. Все посылки размещены.");
         return trucks;
     }
 
-    private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcels, String trucksSize) {
+    private List<Truck> loadTrucks(List<ParcelForPackagingDto> parcelForPackaging, String trucksSize) {
         List<Truck> trucks = truckFactory.createTrucks(trucksSize);
-        log.debug("Создано {} грузовиков", trucks.size());
 
-        for (int i = 0; i < parcels.size(); i++) {
-            ParcelForPackagingDto parcel = parcels.get(i);
-            log.debug("Обработка посылки {}/{}: {}", i + 1, parcels.size(), parcel);
-
-            Optional<TruckPlacement> bestPlacement = trucks.stream()
-                    .map(truck -> {
-                        Optional<ParcelPosition> position = truck.findPosition(parcel);
-                        return position.map(point -> new TruckPlacement(truck, point));
-                    })
-                    .flatMap(Optional::stream)
-                    .min(Comparator.comparingInt(tp -> tp.getTruck().getUsedSpace()));
-
-            if (bestPlacement.isPresent()) {
-                TruckPlacement truckPlacement = bestPlacement.get();
-                Truck truck = truckPlacement.getTruck();
-                ParcelPosition position = truckPlacement.getPosition();
-                truck.place(parcel, position.getX(), position.getY());
-                log.info("Посылка размещена в грузовике {} на позиции ({}, {})",
-                        trucks.indexOf(truck) + 1, position.getX(), position.getY());
-            } else {
-                log.error("Не удалось разместить посылку: {}", parcel);
-                throw new PackingException("Не удалось разместить посылку: " + parcel);
-            }
+        for (ParcelForPackagingDto parcel : parcelForPackaging) {
+            placeParcelInBestPosition(trucks, parcel);
         }
 
-        log.debug("Загрузка грузовиков завершена. Состояние грузовиков: {}",
-                trucks.stream().map(t -> "Грузовик " + (trucks.indexOf(t) + 1) + ": " + t.getUsedSpace() + " занято")
-                        .collect(Collectors.joining(", ")));
-
         return trucks;
+    }
+
+    private void placeParcelInBestPosition(List<Truck> trucks, ParcelForPackagingDto parcelForPackaging) {
+        int indexOffset = 1;
+
+        trucks.stream()
+                .map(truck -> {
+                    Optional<ParcelPosition> position = truck.findPosition(parcelForPackaging);
+                    return position.map(point -> new TruckPlacement(truck, point));
+                })
+                .flatMap(Optional::stream)
+                .min(Comparator.comparingInt(tp -> tp.getTruck().getUsedSpace()))
+                .ifPresentOrElse(bestPlacement -> {
+                    Truck truck = bestPlacement.getTruck();
+                    ParcelPosition position = bestPlacement.getPosition();
+                    truck.place(parcelForPackaging, position.getX(), position.getY());
+                    log.info("Посылка размещена в грузовике {} на позиции ({}, {})",
+                            trucks.indexOf(truck) + indexOffset, position.getX(), position.getY());
+                }, () -> {
+                    throw new PackingException("Не удалось разместить посылку: " + parcelForPackaging);
+                });
     }
 }

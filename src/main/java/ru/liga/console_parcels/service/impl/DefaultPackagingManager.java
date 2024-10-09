@@ -1,50 +1,32 @@
 package ru.liga.console_parcels.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
-import ru.liga.console_parcels.exception.ParcelNotFoundException;
-import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.entity.Truck;
+import ru.liga.console_parcels.exception.ParcelNotFoundException;
+import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.repository.ParcelRepository;
 import ru.liga.console_parcels.service.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Реализация менеджера упаковки посылок.
  */
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class DefaultPackagingManager implements PackagingManager {
-    private PackagingSelectionService packagingSelectionService;
-    private TruckToJsonWriterService truckToJsonWriterService;
-    private ResultFormatter resultFormatter;
-    private PackageReader packageReader;
-    private ParcelRepository parcelRepository;
-
-    /**
-     * Конструктор с зависимостями.
-     *
-     * @param packagingSelectionService Сервис выбора алгоритма упаковки.
-     * @param truckToJsonWriterService  Сервис записи данных о грузовиках в JSON.
-     * @param resultFormatter      Форматировщик результатов упаковки.
-     * @param packageReader             Чтение посылок из файла.
-     * @param parcelRepository          Репозиторий посылок.
-     */
-    @Autowired
-    public DefaultPackagingManager(PackagingSelectionService packagingSelectionService, TruckToJsonWriterService truckToJsonWriterService, ResultFormatter resultFormatter, PackageReader packageReader, ParcelRepository parcelRepository) {
-        this.packagingSelectionService = packagingSelectionService;
-        this.truckToJsonWriterService = truckToJsonWriterService;
-        this.resultFormatter = resultFormatter;
-        this.packageReader = packageReader;
-        this.parcelRepository = parcelRepository;
-    }
+    private final PackagingSelectionService packagingSelectionService;
+    private final TruckToJsonWriterService truckToJsonWriterService;
+    private final ResultFormatter resultFormatter;
+    private final PackageReader packageReader;
+    private final ParcelRepository parcelRepository;
 
     /**
      * Упаковывает посылки согласно запросу.
@@ -54,45 +36,42 @@ public class DefaultPackagingManager implements PackagingManager {
      */
     @Override
     public String packParcels(PackRequestDto packRequestDto) {
-        log.info("Начало процесса упаковки");
-
         TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
         log.debug("Выбран сервис для упаковки: {}", truckPackageService.getClass().getSimpleName());
 
         List<ParcelForPackagingDto> parcelsForPackaging;
         try {
-            String[] inputDataElements = packRequestDto.getInputData().split(",");
-            List<String> parcelNames = Arrays.stream(inputDataElements)
-                    .map(String::trim)
-                    .toList();
-
-            parcelsForPackaging = parcelNames.stream()
-                    .map(parcelName -> {
-                        Parcel parcel = parcelRepository.findParcelByName(parcelName.trim().toLowerCase())
-                                .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
-                        return new ParcelForPackagingDto(
-                                parcel.convertStringToCharArray(parcel.getShape()).length,
-                                parcel.convertStringToCharArray(parcel.getShape())[0].length,
-                                parcel.convertStringToCharArray(parcel.getShape())
-                        );
-                    })
-                    .collect(Collectors.toList());
+            parcelsForPackaging = convertParcelRequestToParcels(packRequestDto);
             log.info("Получено {} посылок из репозитория", parcelsForPackaging.size());
         } catch (ParcelNotFoundException parcelNotFoundException) {
             parcelsForPackaging = packageReader.readPackages(packRequestDto.getInputData());
-            log.debug("Прочитано {} посылок из файла {}", parcelsForPackaging.size(), packRequestDto.getInputData());
+            log.info("Прочитано {} посылок из файла {}", parcelsForPackaging.size(), packRequestDto.getInputData());
         }
 
         List<Truck> trucks;
 
-        log.info("Начинается упаковка {} машин из файла {}", packRequestDto.getTrucks(), packRequestDto.getInputData());
         trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
-        log.info("Упаковка завершена. Упаковано {} грузовиков", trucks.size());
 
         truckToJsonWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
-        log.info("Запись результатов упаковки в JSON завершена");
 
-        log.info("Начало печати результатов упаковки для {} грузовиков", trucks.size());
-        return resultFormatter.convertPackagingResultsToString(trucks).toString();
+        return resultFormatter.convertPackagingResultsToString(trucks);
+    }
+
+    private List<ParcelForPackagingDto> convertParcelRequestToParcels(PackRequestDto packRequestDto) {
+        return Arrays.stream(packRequestDto.getInputData()
+                        .split(","))
+                .toList()
+                .stream()
+                .map(String::trim)
+                .map(parcelName -> {
+                    Parcel parcel = parcelRepository.findParcelByName(parcelName.trim().toLowerCase())
+                            .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
+                    return new ParcelForPackagingDto(
+                            parcel.convertStringToCharArray(parcel.getShape()).length,
+                            parcel.convertStringToCharArray(parcel.getShape())[0].length,
+                            parcel.convertStringToCharArray(parcel.getShape())
+                    );
+                })
+                .toList();
     }
 }
