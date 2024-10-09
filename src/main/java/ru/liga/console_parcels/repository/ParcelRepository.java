@@ -7,20 +7,20 @@ import ru.liga.console_parcels.entity.Parcel;
 import java.util.Optional;
 
 /**
- * Интерфейс для работы с репозиторием посылок.
+ * Репозиторий посылок.
  */
 @Repository
 public interface ParcelRepository extends JpaRepository<Parcel, String> {
     /**
-     * Находит посылку по имени.
+     * Находит посылку по названию.
      *
      * @param name Имя посылки.
-     * @return Опциональная посылка, если она найдена, иначе пустой опционал.
+     * @return Optional посылки
      */
     Optional<Parcel> findParcelByName(String name);
 
     /**
-     * Проверяет наличие посылки по имени.
+     * Проверяет наличие посылки по названию.
      *
      * @param name Имя посылки.
      * @return {@code true}, если посылка существует, иначе {@code false}.
