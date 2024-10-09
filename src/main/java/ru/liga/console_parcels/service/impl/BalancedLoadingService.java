@@ -26,7 +26,6 @@ import java.util.Optional;
 public class BalancedLoadingService implements TruckPackageService {
     private final TruckFactory truckFactory;
 
-
     /**
      * Равномерно упаковывает посылки в грузовики.
      *

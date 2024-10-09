@@ -6,9 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.exception.PackingException;
 import ru.liga.console_parcels.factory.TruckFactory;
-import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.impl.OptimizedPackagingService;
 
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -28,16 +26,10 @@ public class OptimizedTruckPackageServiceTest {
     @Mock
     private TruckFactory truckFactory;
 
-    @Mock
-    private ParcelCountService parcelCountService;
-
-    @Mock
-    private RecordingService recordingService;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new OptimizedPackagingService(truckFactory, parcelCountService, recordingService);
+        service = new OptimizedPackagingService(truckFactory);
     }
 
     @Test

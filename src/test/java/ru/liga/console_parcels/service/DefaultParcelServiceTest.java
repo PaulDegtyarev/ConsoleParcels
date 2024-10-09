@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.liga.console_parcels.dto.ParcelRequestDto;
 import ru.liga.console_parcels.dto.ParcelResponseDto;
+import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.exception.*;
 import ru.liga.console_parcels.factory.ParcelServiceResponseFactory;
-import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.repository.ParcelRepository;
 import ru.liga.console_parcels.service.impl.DefaultParcelService;
 

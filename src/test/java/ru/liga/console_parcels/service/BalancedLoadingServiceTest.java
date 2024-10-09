@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.exception.PackingException;
 import ru.liga.console_parcels.factory.TruckFactory;
-import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.impl.BalancedLoadingService;
 
 import java.util.ArrayList;
@@ -15,8 +15,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BalancedLoadingServiceTest {
@@ -26,13 +24,10 @@ public class BalancedLoadingServiceTest {
     @Mock
     private TruckFactory truckFactory;
 
-    @Mock
-    private ParcelCountService parcelCountService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new BalancedLoadingService(truckFactory, parcelCountService);
+        service = new BalancedLoadingService(truckFactory);
     }
 
     @Test
@@ -51,7 +46,6 @@ public class BalancedLoadingServiceTest {
         List<Truck> result = service.packPackages(parcels, "6x6");
 
         assertThat(result).hasSize(2);
-        verify(parcelCountService).count(result);
     }
 
     @Test

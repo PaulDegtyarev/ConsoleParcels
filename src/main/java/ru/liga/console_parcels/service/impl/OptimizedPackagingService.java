@@ -23,7 +23,6 @@ import java.util.List;
 public class OptimizedPackagingService implements TruckPackageService {
     private final TruckFactory truckFactory;
 
-
     /**
      * Упаковывает посылки в грузовики, заполняя как можно больше свободного места.
      *
