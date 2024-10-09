@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * Класс для представления грузовика с возможностью упаковки посылок.
+ * Класс сущности грузовика с возможностью упаковки посылок.
  */
 @Getter
 public class Truck {
@@ -34,7 +34,7 @@ public class Truck {
     /**
      * Размещает посылку в указанной позиции.
      *
-     * @param parcel Посылка для размещения.
+     * @param parcel DTO посылки для размещения.
      * @param x      Координата X начальной позиции.
      * @param y      Координата Y начальной позиции.
      */
@@ -53,8 +53,8 @@ public class Truck {
     /**
      * Находит позицию для размещения посылки.
      *
-     * @param parcel Посылка для размещения.
-     * @return Опциональная позиция (Point), если посылка может быть размещена, иначе пустой опционал.
+     * @param parcel DTO посылки для размещения.
+     * @return Optional (Point), если посылка может быть размещена, иначе пустой Optional.
      */
     public Optional<ParcelPosition> findPosition(ParcelForPackagingDto parcel) {
         for (int y = height - parcel.getHeight(); y >= 0; y--) {

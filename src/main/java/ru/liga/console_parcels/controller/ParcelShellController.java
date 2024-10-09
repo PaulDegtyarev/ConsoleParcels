@@ -11,18 +11,7 @@ import ru.liga.console_parcels.service.ParcelService;
 import java.util.stream.Collectors;
 
 /**
- * Контроллер для управления операциями с посылками.
- *
- * <p>
- * Этот контроллер отвечает за выполнение различных операций с посылками,
- * таких как поиск, добавление, обновление и удаление. Он использует сервис
- * {@link ParcelService} для выполнения этих операций.
- * </p>
- *
- * <p>
- * Контроллер интегрирован с Spring Shell, что позволяет вызывать его методы
- * через командную строку.
- * </p>
+ * Контроллер для управления операциями с посылками через консоль.
  */
 @ShellComponent
 @Log4j2
@@ -48,7 +37,7 @@ public class ParcelShellController {
      * Метод для поиска посылки по имени.
      *
      * @param name Имя посылки.
-     * @return Объект ParcelResponseDto, содержащий информацию о найденной посылке.
+     * @return ParcelResponseDto, содержащий информацию о найденной посылке.
      */
     @ShellMethod
     public ParcelResponseDto findByName(String name) {
@@ -61,8 +50,8 @@ public class ParcelShellController {
      *
      * @param name   Имя посылки.
      * @param shape  Форма посылки.
-     * @param symbol Символ, представляющий посылку.
-     * @return Объект добавленной посылки (DTO).
+     * @param symbol Символ, из которого будет состоять форма посылки.
+     * @return (DTO) добавленной посылки.
      */
     @ShellMethod
     public ParcelResponseDto add(String name, String shape, char symbol) {
@@ -77,7 +66,7 @@ public class ParcelShellController {
      * @param nameOfSavedParcel Имя существующей посылки.
      * @param newShape          Новая форма посылки.
      * @param newSymbol         Новый символ, представляющий посылку.
-     * @return Объект обновленной посылки (DTO).
+     * @return DTO обновленной посылки.
      */
     @ShellMethod
     public ParcelResponseDto updateByName(String nameOfSavedParcel, String newShape, char newSymbol) {
@@ -90,8 +79,8 @@ public class ParcelShellController {
      * Метод для обновления символа посылки по имени.
      *
      * @param nameOfSavedParcel Имя существующей посылки.
-     * @param newSymbol         Новый символ, представляющий посылку.
-     * @return Объект обновленной посылки (DTO).
+     * @param newSymbol         Новый символ, из которого будет состоять форма посылки.
+     * @return DTO обновленной посылки.
      */
     @ShellMethod
     public ParcelResponseDto updateSymbolByName(String nameOfSavedParcel, char newSymbol) {
@@ -104,7 +93,7 @@ public class ParcelShellController {
      *
      * @param nameOfSavedParcel Имя существующей посылки.
      * @param shape             Новая форма посылки.
-     * @return Объект обновленной посылки (DTO).
+     * @return DTO обновленной посылки.
      */
     @ShellMethod
     public ParcelResponseDto updateShapeByName(String nameOfSavedParcel, String shape) {
@@ -115,7 +104,7 @@ public class ParcelShellController {
     /**
      * Метод для удаления посылки по имени.
      *
-     * @param nameOfParcelForDelete Имя посылки, которую необходимо удалить.
+     * @param nameOfParcelForDelete Имя посылки для удаления.
      */
     @ShellMethod
     public void deleteByName(String nameOfParcelForDelete) {

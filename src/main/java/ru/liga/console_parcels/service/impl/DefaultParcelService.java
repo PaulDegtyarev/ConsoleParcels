@@ -107,8 +107,8 @@ public class DefaultParcelService implements ParcelService {
         log.info("Начинается обновление посылки с данными: {}", parcelRequestDto);
         String nameOfSavedParcel = parcelRequestDto.getName();
 
-        String shape = parcelRequestDto.getShape();
-        parcelRequestValidator.validateParcelShape(shape);
+        String newShape = parcelRequestDto.getShape();
+        parcelRequestValidator.validateParcelShape(newShape);
 
         char newSymbol = parcelRequestDto.getSymbol();
         parcelRequestValidator.validateParcelSymbol(newSymbol);
@@ -121,8 +121,8 @@ public class DefaultParcelService implements ParcelService {
         Parcel parcelToUpdate = parcelRepository.findParcelByName(trimmedNameOfSavedParcel)
                 .orElseThrow(() -> new ParcelNotFoundException("Посылка с названием " + nameOfSavedParcel + " не найдена"));
 
-        shape = shape.replace(" ", "\n");
-        parcelToUpdate.updateShapeWithNewSymbol(shape, newSymbol);
+        newShape = newShape.replace(" ", "\n");
+        parcelToUpdate.updateShapeWithNewSymbol(newShape, newSymbol);
         parcelRepository.save(parcelToUpdate);
 
         log.info("Посылка успешно обновлена: {}", parcelToUpdate);

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Класс для представления точки, на которой находится посылка.
+ * Класс сущности точки, на которой находится посылка.
  */
 @Getter
 @RequiredArgsConstructor

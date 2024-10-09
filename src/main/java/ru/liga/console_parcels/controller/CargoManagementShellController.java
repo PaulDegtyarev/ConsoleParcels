@@ -15,17 +15,7 @@ import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 import java.util.List;
 
 /**
- * Контроллер для управления процессами упаковки и распаковки грузов.
- *
- * <p>
- * Этот контроллер отвечает за управление операциями по упаковке и распаковке грузов
- * на основе выбора пользователя и предоставленных файлов. Он использует сервисы
- * {@link PackagingManager} для упаковки и {@link TruckParcelsUnpackingService} для распаковки.
- * </p>
- *
- * <p>
- * Контроллер интегрирован с Spring Shell для взаимодействия через командную строку.
- * </p>
+ * Контроллер для управления процессами упаковки и распаковки грузов через консоль.
  */
 @Log4j2
 @ShellComponent
@@ -38,25 +28,20 @@ public class CargoManagementShellController {
     /**
      * Метод для упаковки посылок в грузовики.
      *
-     * <p>
-     * Этот метод обрабатывает запрос на упаковку посылок в грузовики на основе
-     * предоставленных данных и выбора алгоритма пользователем.
-     * </p>
-     *
-     * @param trucks          Строка, представляющая информацию о грузовиках.
-     * @param inputFilePath   Путь к файлу с информацией о посылках.
-     * @param algorithmChoice Выбор алгоритма пользователя для упаковки.
-     * @param filePathToWrite Путь к файлу, где будет записан результат.
+     * @param trucks           Строка, представляющая информацию о грузовиках.
+     * @param inputFilePath    Путь к файлу в формате .txt с информацией о посылках.
+     * @param packageAlgorithm Выбор алгоритма пользователя для упаковки.
+     * @param filePathToWrite  Путь к файлу в формате .json, где будет записан результат.
      * @return Строка с результатом операции упаковки.
      */
     @ShellMethod
-    public String pack(String trucks, String inputFilePath, TruckPackageAlgorithm algorithmChoice, String filePathToWrite) {
+    public String pack(String trucks, String inputFilePath, TruckPackageAlgorithm packageAlgorithm, String filePathToWrite) {
         log.info("Пользователь выбрал упаковку.");
 
         PackRequestDto packRequestDto = new PackRequestDto(
                 trucks,
                 inputFilePath,
-                algorithmChoice,
+                packageAlgorithm,
                 filePathToWrite
         );
 
@@ -68,12 +53,7 @@ public class CargoManagementShellController {
     /**
      * Метод для распаковки посылок из грузовиков.
      *
-     * <p>
-     * Этот метод обрабатывает запрос на распаковку посылок из грузовиков на основе
-     * предоставленных файлов.
-     * </p>
-     *
-     * @param truckFilePath       Путь к файлу с информацией о грузовиках.
+     * @param truckFilePath Путь к файлу в формате .json с информацией о грузовиках для распаковки.
      * @return Строка с результатом операции распаковки.
      */
     @ShellMethod

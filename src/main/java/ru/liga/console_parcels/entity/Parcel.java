@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Класс для представления посылки.
+ * Класс сущности посылки.
  */
 @Getter
 @AllArgsConstructor
@@ -30,12 +30,13 @@ public class Parcel {
     private char symbol;
 
     /**
-     * Обновляет форму посылки и символ, используемый для представления посылки.
+     * Обновляет форму посылки и символ, из которого состоит форма посылки.
      *
+     * @param newShape  Новая форма посылки.
      * @param newSymbol Новый символ для представления посылки.
      */
-    public void updateShapeWithNewSymbol(String shape, char newSymbol) {
-        this.shape = shape;
+    public void updateShapeWithNewSymbol(String newShape, char newSymbol) {
+        this.shape = newShape;
         this.symbol = newSymbol;
     }
 
@@ -54,11 +55,11 @@ public class Parcel {
     /**
      * Преобразует строку в матрицу символов.
      *
-     * @param str Строка для преобразования.
+     * @param inputString Строка для преобразования.
      * @return Матрица символов.
      */
-    public char[][] convertStringToCharArray(String str) {
-        String[] rows = str.split("\n");
+    public char[][] convertStringToCharArray(String inputString) {
+        String[] rows = inputString.split("\n");
         char[][] charArray = new char[rows.length][];
         for (int i = 0; i < rows.length; i++) {
             charArray[i] = rows[i].toCharArray();

@@ -14,6 +14,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class ParcelCountDto {
-    private final String form;
+    private final String shape;
     private final int quantity;
 }

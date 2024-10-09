@@ -11,8 +11,18 @@ import ru.liga.console_parcels.service.ParcelService;
 import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 import ru.liga.console_parcels.telegramBot.CargoManagementBot;
 
+/**
+ * Конфигурационный класс для настройки и регистрации Telegram-бота.
+ */
 @Configuration
 public class BotConfig {
+    /**
+     * Создает и настраивает экземпляр {@link TelegramBotsApi} для регистрации бота.
+     *
+     * @param cargoManagementBot экземпляр бота для управления грузами
+     * @return настроенный {@link TelegramBotsApi} с зарегистрированным ботом
+     * @throws TelegramApiException если возникает ошибка при регистрации бота
+     */
     @Bean
     public TelegramBotsApi telegramBotsApi(CargoManagementBot cargoManagementBot) throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
@@ -20,6 +30,15 @@ public class BotConfig {
         return telegramBotsApi;
     }
 
+    /**
+     * Создает и настраивает экземпляр {@link CargoManagementBot} с необходимыми зависимостями.
+     *
+     * @param packagingManager             менеджер упаковки
+     * @param truckParcelsUnpackingService сервис для распаковки посылок из грузовика
+     * @param parcelService                сервис для работы с посылками
+     * @param resultFormatter              форматтер результатов
+     * @return настроенный экземпляр {@link CargoManagementBot}
+     */
     @Bean
     public CargoManagementBot cargoManagementBot(PackagingManager packagingManager, TruckParcelsUnpackingService truckParcelsUnpackingService, ParcelService parcelService, ResultFormatter resultFormatter) {
         return new CargoManagementBot(packagingManager, truckParcelsUnpackingService, parcelService, resultFormatter);

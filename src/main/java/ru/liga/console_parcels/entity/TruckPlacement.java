@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Класс для представления информации о размещении посылки в грузовике.
+ * Класс для представления информации о месте размещения посылки в грузовике.
  */
 @Getter
 @RequiredArgsConstructor

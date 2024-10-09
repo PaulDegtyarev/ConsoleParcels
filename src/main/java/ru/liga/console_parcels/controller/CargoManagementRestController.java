@@ -19,6 +19,9 @@ import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * REST-контроллер для управления грузами, предоставляет API для упаковки и распаковки грузовиков.
+ */
 @RestController
 @Log4j2
 @RequestMapping("/trucks")
@@ -29,6 +32,12 @@ public class CargoManagementRestController {
     private final FileDownloadService fileDownloadService;
     private final ResultFormatter resultFormatter;
 
+    /**
+     * Обрабатывает запрос на упаковку без использования файла.
+     *
+     * @param packRequest запрос на упаковку, содержащий информацию о грузовиках и посылках
+     * @return строковое представление результатов упаковки и статус 200 (OK)
+     */
     @PostMapping("/pack")
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
         log.info("Пользователь выбрал упаковку без файла.");
@@ -40,10 +49,19 @@ public class CargoManagementRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Обрабатывает запрос на упаковку с использованием файла.
+     *
+     * @param trucks строковое представление грузовиков
+     * @param file файл в формате .txt с данными для упаковки
+     * @param packageAlgorithm выбор алгоритма упаковки
+     * @param filePathToWrite путь к файлу в формате .json для записи результатов упаковки
+     * @return строковое представление результатов упаковки и статус 200 (OK)
+     */
     @PostMapping("/pack/file")
     public ResponseEntity<String> packWithFile(@RequestParam("trucks") String trucks,
                                                @RequestParam("file") MultipartFile file,
-                                               @RequestParam("algorithmChoice") TruckPackageAlgorithm algorithmChoice,
+                                               @RequestParam("packageAlgorithm") TruckPackageAlgorithm packageAlgorithm,
                                                @RequestParam("filePathToWrite") String filePathToWrite) {
         log.info("Пользователь выбрал упаковку с файлом.");
 
@@ -51,7 +69,7 @@ public class CargoManagementRestController {
 
         String fullPath = path.toAbsolutePath().toString();
 
-        PackRequestDto packRequest = new PackRequestDto(trucks, fullPath, algorithmChoice, filePathToWrite);
+        PackRequestDto packRequest = new PackRequestDto(trucks, fullPath, packageAlgorithm, filePathToWrite);
 
         List<Truck> packedTrucks = packagingManager.packParcels(packRequest);
 
@@ -60,6 +78,12 @@ public class CargoManagementRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Обрабатывает запрос на распаковку.
+     *
+     * @param file файл в формате .json с данными для распаковки
+     * @return строковое представление результатов распаковки и статус 200 (OK)
+     */
     @PostMapping("/unpack")
     public ResponseEntity<String> unpack(@RequestParam("trucks") MultipartFile file) {
         log.info("Пользователь выбрал распаковку.");

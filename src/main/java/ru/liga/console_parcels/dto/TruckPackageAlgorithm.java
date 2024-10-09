@@ -1,7 +1,7 @@
 package ru.liga.console_parcels.dto;
 
 /**
- * Перечисление для выбора алгоритма упаковки посылок.
+ * Перечисление возможных алгоритмов для упаковки посылок.
  */
 public enum TruckPackageAlgorithm {
     /**
