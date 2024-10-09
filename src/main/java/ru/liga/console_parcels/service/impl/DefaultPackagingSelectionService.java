@@ -10,9 +10,6 @@ import ru.liga.console_parcels.service.TruckPackageService;
 
 import java.util.Map;
 
-/**
- * Реализация сервиса для выбора алгоритма упаковки посылок.
- */
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -20,15 +17,9 @@ public class DefaultPackagingSelectionService implements PackagingSelectionServi
     @Autowired
     private final Map<TruckPackageAlgorithm, TruckPackageService> serviceMap;
 
-    /**
-     * Выбирает сервис упаковки на основе выбранного алгоритма.
-     *
-     * @param algorithmChoice Выбранный алгоритм упаковки.
-     * @return Сервис упаковки, соответствующий выбранному алгоритму.
-     */
     @Override
     public TruckPackageService selectPackagingService(TruckPackageAlgorithm algorithmChoice) {
-        log.debug("Начинается выбор сервис для упаковки по номеру алгоритма: {}", algorithmChoice);
+        log.debug("Начинается выбор сервис для упаковки названию алгоритма: {}", algorithmChoice);
 
         return serviceMap.get(algorithmChoice);
     }

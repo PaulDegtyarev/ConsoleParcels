@@ -29,13 +29,10 @@ public class BalancedLoadingServiceTest {
     @Mock
     private ParcelCountService parcelCountService;
 
-    @Mock
-    private RecordingService recordingService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new BalancedLoadingService(truckFactory, parcelCountService, recordingService);
+        service = new BalancedLoadingService(truckFactory, parcelCountService);
     }
 
     @Test
@@ -55,7 +52,6 @@ public class BalancedLoadingServiceTest {
 
         assertThat(result).hasSize(2);
         verify(parcelCountService).count(result);
-        verify(recordingService).write(any());
     }
 
     @Test

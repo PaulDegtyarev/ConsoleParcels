@@ -43,7 +43,7 @@ public class RecordingServiceToJsonFileTest {
 
         File filePath = new File("src/test/resources/input/test-json-to-write.json");
 
-        truckToJsonWriterService.writeTruckToJson(List.of(truck), filePath.toString());
+        truckToJsonWriterService.write(List.of(truck), filePath.toString());
 
         verify(objectMapper, times(1)).writeValue(any(OutputStream.class), any());
 
@@ -51,10 +51,10 @@ public class RecordingServiceToJsonFileTest {
     }
 
     @Test
-    void writeTruckToJson_withNonExistentFile_shouldThrowFileNotFoundException() {
+    void write_withNonExistentFile_shouldThrowFileNotFoundException() {
         Truck truck = mock(Truck.class);
         String invalidFilePath = "some/non_existent_directory/trucks.json";
 
-        assertThrows(FileNotFoundException.class, () -> truckToJsonWriterService.writeTruckToJson(List.of(truck), invalidFilePath));
+        assertThrows(FileNotFoundException.class, () -> truckToJsonWriterService.write(List.of(truck), invalidFilePath));
     }
 }

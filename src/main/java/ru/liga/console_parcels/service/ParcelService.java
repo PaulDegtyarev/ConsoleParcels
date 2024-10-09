@@ -13,14 +13,14 @@ public interface ParcelService {
     /**
      * Возвращает список всех посылок.
      *
-     * @return Строка с информацией о всех посылках.
+     * @return Список DTO всех посылок.
      */
     List<ParcelResponseDto> findAllParcels();
 
     /**
-     * Находит посылку по имени.
+     * Находит посылку по названии.
      *
-     * @param name Имя посылки.
+     * @param name название посылки.
      * @return DTO с информацией о посылке.
      */
     ParcelResponseDto findParcelByName(String name);
@@ -34,33 +34,33 @@ public interface ParcelService {
     ParcelResponseDto addParcel(ParcelRequestDto parcelRequestDto);
 
     /**
-     * Обновляет посылку по имени.
+     * Обновляет посылку по названию.
      *
      * @param parcelRequestDto Данные для обновления посылки.
      * @return DTO с информацией об обновленной посылке.
      */
-    ParcelResponseDto updateParcelByName(ParcelRequestDto parcelRequestDto);
+    ParcelResponseDto updateByName(ParcelRequestDto parcelRequestDto);
 
     /**
-     * Обновляет символ посылки по имени.
+     * Обновляет символ посылки по названию.
      *
-     * @param nameOfSavedParcel Имя посылки.
+     * @param nameOfSavedParcel Название посылки.
      * @param newSymbol         Новый символ для посылки.
      * @return DTO с информацией об обновленной посылке.
      */
     ParcelResponseDto updateSymbolByParcelName(String nameOfSavedParcel, char newSymbol);
 
     /**
-     * Обновляет форму посылки по имени.
+     * Обновляет форму посылки по названию.
      *
-     * @param nameOfSavedParcel Имя посылки.
+     * @param nameOfSavedParcel Название посылки.
      * @param newShape          Новая форма для посылки.
      * @return DTO с информацией об обновленной посылке.
      */
     ParcelResponseDto updateShapeByParcelName(String nameOfSavedParcel, String newShape);
 
     /**
-     * Удаляет посылку по имени.
+     * Удаляет посылку по названию.
      *
      * @param nameOfParcelForDelete Имя посылки для удаления.
      */

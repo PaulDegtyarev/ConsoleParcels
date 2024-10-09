@@ -72,7 +72,7 @@ public class ParcelShellController {
     public ParcelResponseDto updateByName(String nameOfSavedParcel, String newShape, char newSymbol) {
         log.info("Пользователь выбрал обновить посылку по ее названию.");
         ParcelRequestDto parcelRequestDto = new ParcelRequestDto(nameOfSavedParcel, newShape, newSymbol);
-        return parcelService.updateParcelByName(parcelRequestDto);
+        return parcelService.updateByName(parcelRequestDto);
     }
 
     /**

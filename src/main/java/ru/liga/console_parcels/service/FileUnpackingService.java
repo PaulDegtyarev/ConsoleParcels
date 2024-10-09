@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Интерфейс для сервиса распаковки грузовиков.
  */
-public interface FileUnpackakingService {
+public interface FileUnpackingService {
 
     /**
      * Распаковывает грузовики из файлов и формирует данные о распаковке.

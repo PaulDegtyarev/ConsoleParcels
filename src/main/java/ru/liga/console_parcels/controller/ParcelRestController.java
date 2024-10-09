@@ -68,7 +68,7 @@ public class ParcelRestController {
     @PutMapping()
     public ResponseEntity<ParcelResponseDto> updateByName(@RequestBody ParcelRequestDto parcelRequest) {
         log.info("Пользователь выбрал обновить посылку по ее названию.");
-        return new ResponseEntity<>(parcelService.updateParcelByName(parcelRequest), HttpStatus.OK);
+        return new ResponseEntity<>(parcelService.updateByName(parcelRequest), HttpStatus.OK);
     }
 
     /**

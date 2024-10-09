@@ -8,7 +8,6 @@ import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.entity.Parcel;
 import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.exception.ParcelNotFoundException;
-import ru.liga.console_parcels.formatter.ResultFormatter;
 import ru.liga.console_parcels.repository.ParcelRepository;
 import ru.liga.console_parcels.service.*;
 
@@ -16,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Реализация менеджера упаковки посылок.
- */
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -28,14 +24,8 @@ public class DefaultPackagingManager implements PackagingManager {
     private final PackageReader packageReader;
     private final ParcelRepository parcelRepository;
 
-    /**
-     * Упаковывает посылки согласно запросу.
-     *
-     * @param packRequestDto Запрос на упаковку.
-     * @return Строка с результатами упаковки.
-     */
     @Override
-    public List<Truck> packParcels(PackRequestDto packRequestDto) {
+    public List<Truck> pack(PackRequestDto packRequestDto) {
         TruckPackageService truckPackageService = packagingSelectionService.selectPackagingService(packRequestDto.getAlgorithmChoice());
         log.debug("Выбран сервис для упаковки: {}", truckPackageService.getClass().getSimpleName());
 
@@ -50,12 +40,13 @@ public class DefaultPackagingManager implements PackagingManager {
 
         List<Truck> trucks = truckPackageService.packPackages(parcelsForPackaging, packRequestDto.getTrucks());
 
-        fileWriterService.writeTruckToJson(trucks, packRequestDto.getFilePathToWrite());
+        fileWriterService.write(trucks, packRequestDto.getFilePathToWrite());
 
         return trucks;
     }
 
     private List<ParcelForPackagingDto> convertParcelRequestToParcels(PackRequestDto packRequestDto) {
+        int indexOfWidth = 0;
         return new ArrayList<>(Arrays.stream(packRequestDto.getInputData()
                         .split(","))
                 .toList()
@@ -66,7 +57,7 @@ public class DefaultPackagingManager implements PackagingManager {
                             .orElseThrow(() -> new ParcelNotFoundException("Посылка с именем " + parcelName + " не найдена."));
                     return new ParcelForPackagingDto(
                             parcel.convertStringToCharArray(parcel.getShape()).length,
-                            parcel.convertStringToCharArray(parcel.getShape())[0].length,
+                            parcel.convertStringToCharArray(parcel.getShape())[indexOfWidth].length,
                             parcel.convertStringToCharArray(parcel.getShape())
                     );
                 })

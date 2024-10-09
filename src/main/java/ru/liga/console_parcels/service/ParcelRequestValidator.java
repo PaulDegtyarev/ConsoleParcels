@@ -5,7 +5,7 @@ import ru.liga.console_parcels.exception.InvalidCharacterException;
 import ru.liga.console_parcels.exception.InvalidShapeException;
 
 /**
- * Интерфейс для валидации посылок.
+ * Интерфейс для валидации входящих данных о посылках.
  */
 public interface ParcelRequestValidator {
     /**
@@ -24,5 +24,11 @@ public interface ParcelRequestValidator {
      */
     void validateParcelSymbol(char symbol);
 
+    /**
+     * Проверяет, есть ли символ, который не указан в списке допустимых символов.
+     *
+     * @param parcelRequestDto Запрос на добавление или обновление посылки.
+     * @return {@code true}, если в запросе есть символ, который не был указан, иначе {@code false}.
+     */
     boolean isThereSymbolThatIsNotSpecified(ParcelRequestDto parcelRequestDto);
 }

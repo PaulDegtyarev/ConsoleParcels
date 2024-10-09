@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.exception.FileNotFoundException;
 import ru.liga.console_parcels.exception.FileWriteException;
-import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.FileWriterService;
 
 import java.io.IOException;
@@ -31,12 +31,12 @@ public class RecordingServiceToJsonFile implements FileWriterService {
      * Записывает данные о грузовиках в JSON файл.
      *
      * @param trucks   Список грузовиков.
-     * @param filePath Путь к файлу для записи.
+     * @param filePath Путь к файлу в формате .json для записи.
      * @throws FileNotFoundException Если файл не существует.
      * @throws FileWriteException    Если произошла ошибка при записи файла.
      */
     @Override
-    public void writeTruckToJson(List<Truck> trucks, String filePath) {
+    public void write(List<Truck> trucks, String filePath) {
         log.info("Начало процесса записи грузовиков в JSON файл: {}", filePath);
 
         Path path = Paths.get(filePath);

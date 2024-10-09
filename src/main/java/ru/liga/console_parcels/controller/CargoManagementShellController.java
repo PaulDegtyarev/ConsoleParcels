@@ -45,7 +45,7 @@ public class CargoManagementShellController {
                 filePathToWrite
         );
 
-        List<Truck> packedTrucks = packagingManager.packParcels(packRequestDto);
+        List<Truck> packedTrucks = packagingManager.pack(packRequestDto);
 
         return resultFormatter.convertPackagingResultsToString(packedTrucks);
     }

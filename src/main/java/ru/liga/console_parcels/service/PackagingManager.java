@@ -6,15 +6,14 @@ import ru.liga.console_parcels.entity.Truck;
 import java.util.List;
 
 /**
- * Интерфейс для управления упаковкой посылок.
+ * Интерфейс для управления упаковкой.
  */
 public interface PackagingManager {
-    List<Truck> packParcels(PackRequestDto packRequestDto);
     /**
      * Упаковывает посылки согласно запросу.
      *
      * @param packRequestDto Запрос на упаковку.
-     * @return Строка с результатами упаковки.
+     * @return Список упакованных грузовиков.
      */
-
+    List<Truck> pack(PackRequestDto packRequestDto);
 }

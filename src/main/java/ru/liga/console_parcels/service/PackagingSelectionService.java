@@ -3,7 +3,7 @@ package ru.liga.console_parcels.service;
 import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 
 /**
- * Интерфейс для выбора сервиса упаковки посылок.
+ * Интерфейс, который выбирает сервис для упаковки посылок.
  */
 public interface PackagingSelectionService {
     /**

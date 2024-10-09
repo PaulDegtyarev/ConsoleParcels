@@ -53,8 +53,6 @@ public class OptimizedTruckPackageServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(1);
-        verify(parcelCountService).count(result);
-        verify(recordingService).write(anyList());
     }
 
     @Test

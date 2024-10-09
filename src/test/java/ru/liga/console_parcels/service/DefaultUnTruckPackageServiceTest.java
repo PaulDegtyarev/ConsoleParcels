@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
-import ru.liga.console_parcels.service.impl.JsonFileUnpackakingService;
+import ru.liga.console_parcels.service.impl.JsonFileUnpackingService;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class DefaultUnTruckPackageServiceTest {
-    private FileUnpackakingService fileUnpackakingService = new JsonFileUnpackakingService(
+    private FileUnpackingService fileUnpackakingService = new JsonFileUnpackingService(
             new ObjectMapper()
     );
 

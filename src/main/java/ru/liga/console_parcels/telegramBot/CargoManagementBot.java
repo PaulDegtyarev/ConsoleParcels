@@ -20,6 +20,10 @@ import ru.liga.console_parcels.service.TruckParcelsUnpackingService;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Класс, реализующий бота для управления грузами.
+ * Использует Telegram API для обработки входящих сообщений и команд.
+ */
 @Component
 @Log4j2
 @RequiredArgsConstructor
@@ -125,7 +129,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
             PackRequestDto packRequestDto = new PackRequestDto(trucks, inputData, algorithmChoice, filePathToWrite);
 
-            List<Truck> packedTrucks = packagingManager.packParcels(packRequestDto);
+            List<Truck> packedTrucks = packagingManager.pack(packRequestDto);
 
             String result = resultFormatter.convertPackagingResultsToString(packedTrucks);
 
@@ -179,7 +183,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             String filePathToWrite = parts[indexOfOutputFilepath];
             String inputFilePath = file.getAbsolutePath();
 
-            List<Truck> packedTrucks = packagingManager.packParcels(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
+            List<Truck> packedTrucks = packagingManager.pack(new PackRequestDto(trucks, inputFilePath, algorithmChoice, filePathToWrite));
 
             String result = resultFormatter.convertPackagingResultsToString(packedTrucks);
 
@@ -248,7 +252,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
         messageText = messageText.substring(indexOfFirstCharOfInputData);
         try {
             ParcelRequestDto parcelRequestDto = parseParcelRequestDto(messageText);
-            ParcelResponseDto updatedParcel = parcelService.updateParcelByName(parcelRequestDto);
+            ParcelResponseDto updatedParcel = parcelService.updateByName(parcelRequestDto);
             sendMsg(chatId, "Посылка обновлена:%n" + updatedParcel.toString());
         } catch (Exception e) {
             sendMsg(chatId, e.getMessage());

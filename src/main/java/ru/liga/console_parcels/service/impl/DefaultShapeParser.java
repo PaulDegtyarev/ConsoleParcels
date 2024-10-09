@@ -4,22 +4,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.service.ShapeParser;
 
-/**
- * Реализация парсера формы посылок.
- */
 @Service
 @Log4j2
 public class DefaultShapeParser implements ShapeParser {
-
-    /**
-     * Парсит форму посылки из строки.
-     *
-     * @param shape Строка, представляющая форму посылки.
-     * @return Двумерный массив символов, представляющий форму посылки.
-     */
     @Override
     public char[][] parse(String shape) {
-        log.debug("Начинается парсинг формы: {}", shape);
+        log.info("Начинается парсинг формы: {}", shape);
         String[] lines = shape.split(" ");
         int height = lines.length;
         int maxWidth = 0;
@@ -38,7 +28,7 @@ public class DefaultShapeParser implements ShapeParser {
             }
         }
 
-        log.debug("Результат парсинга формы:\n{}", (Object[]) shapeArray);
+        log.info("Результат парсинга формы:\n{}", (Object[]) shapeArray);
         return shapeArray;
     }
 }

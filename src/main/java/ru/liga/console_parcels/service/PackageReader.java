@@ -1,6 +1,7 @@
 package ru.liga.console_parcels.service;
 
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
+import ru.liga.console_parcels.exception.FileNotFoundException;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ public interface PackageReader {
      * Читает посылки из файла.
      *
      * @param filename Имя файла с данными посылок.
-     * @return Список посылок для упаковки.
-     * @throws ru.liga.console_parcels.exception.FileNotFoundException Если произошла ошибка при чтении файла.
+     * @return Список посылок.
+     * @throws FileNotFoundException Если произошла ошибка при чтении файла.
      */
     List<ParcelForPackagingDto> read(String filename);
 }

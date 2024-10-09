@@ -173,7 +173,7 @@ public class DefaultParcelServiceTest {
 
 
     @Test
-    void updateParcelByName_withValidInput_shouldUpdateParcel() {
+    void updateParcelByName_withValidInput_shouldUpdate() {
         String name = "Чипсы";
         String shape = "999 999 999";
         char symbol = '9';
@@ -185,7 +185,7 @@ public class DefaultParcelServiceTest {
         ParcelResponseDto expectedResponse = new ParcelResponseDto("Чипсы", "999\n999\n999", '9');
         when(parcelServiceResponseFactory.createServiceResponse(any(Parcel.class))).thenReturn(expectedResponse);
 
-        ParcelResponseDto result = defaultParcelService.updateParcelByName(parcelRequestDto);
+        ParcelResponseDto result = defaultParcelService.updateByName(parcelRequestDto);
 
         assertThat(result).isEqualTo(expectedResponse);
         assertThat(result.getName()).isEqualTo(name);
@@ -197,7 +197,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void updateParcelByName_withInvalidName_shouldThrowParcelNotFoundException() {
+    void updateParcelByName_withInvalidName_shouldThrowNotFoundException() {
         String name = "Некорректное имя";
         String shape = "1";
         char symbol = '1';
@@ -205,7 +205,7 @@ public class DefaultParcelServiceTest {
 
         when(parcelRepository.findParcelByName(name.trim().toLowerCase())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
+        assertThatThrownBy(() -> defaultParcelService.updateByName(parcelRequestDto))
                 .isInstanceOf(ParcelNotFoundException.class)
                 .hasMessage("Посылка с названием " + name + " не найдена");
 
@@ -214,7 +214,7 @@ public class DefaultParcelServiceTest {
     }
 
     @Test
-    void updateParcelByName_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
+    void updateByName_withInvalidShapeSymbol_shouldThrowWrongSymbolInShapeException() {
         String name = "Чипсы";
         String shape = "111\n121\n111";
         char symbol = '1';
@@ -222,14 +222,14 @@ public class DefaultParcelServiceTest {
 
         when(parcelRequestValidator.isThereSymbolThatIsNotSpecified(parcelRequestDto)).thenThrow(new WrongSymbolInShapeException("Некоторые символы посылки не являются указанным символом"));
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
+        assertThatThrownBy(() -> defaultParcelService.updateByName(parcelRequestDto))
                 .isInstanceOf(WrongSymbolInShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));
     }
 
     @Test
-    void updateParcelByName_withInvalidShape_shouldThrowInvalidShapeException() {
+    void updateByName_withInvalidShape_shouldThrowInvalidShapeException() {
         String name = "Чипсы";
         String shape = "  ";
         char symbol = ' ';
@@ -237,7 +237,7 @@ public class DefaultParcelServiceTest {
 
         doThrow(new InvalidShapeException("Форма посылки не может быть пустой")).when(parcelRequestValidator).validateParcelShape(shape);
 
-        assertThatThrownBy(() -> defaultParcelService.updateParcelByName(parcelRequestDto))
+        assertThatThrownBy(() -> defaultParcelService.updateByName(parcelRequestDto))
                 .isInstanceOf(InvalidShapeException.class);
 
         verify(parcelRepository, never()).save(any(Parcel.class));

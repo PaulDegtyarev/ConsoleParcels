@@ -8,28 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.exception.FileReadException;
-import ru.liga.console_parcels.service.FileUnpackakingService;
+import ru.liga.console_parcels.service.FileUnpackingService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 /**
- * Реализация сервиса для распаковки грузовиков.
+ * Реализация сервиса для распаковки грузовиков в формате .json.
  */
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class JsonFileUnpackakingService implements FileUnpackakingService {
+public class JsonFileUnpackingService implements FileUnpackingService {
     @Autowired
     private final ObjectMapper objectMapper;
 
-    /**
-     * Распаковывает грузовики из файлов и формирует данные о распаковке.
-     *
-     * @param truckFilePath Путь к файлу с данными грузовиков.
-     * @return Список DTO с данными о распаковке грузовиков.
-     */
     @Override
     public List<UnpackedTruckDto> unpackTruck(String truckFilePath) {
         log.info("Начало процесса распаковки грузовиков из файлов: {}", truckFilePath);

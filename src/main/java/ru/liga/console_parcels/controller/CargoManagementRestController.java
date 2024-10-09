@@ -42,7 +42,7 @@ public class CargoManagementRestController {
     public ResponseEntity<String> packWithoutFile(@RequestBody @Valid PackRequestDto packRequest) {
         log.info("Пользователь выбрал упаковку без файла.");
 
-        List<Truck> packedTrucks = packagingManager.packParcels(packRequest);
+        List<Truck> packedTrucks = packagingManager.pack(packRequest);
 
         String response = resultFormatter.convertPackagingResultsToString(packedTrucks);
 
@@ -71,7 +71,7 @@ public class CargoManagementRestController {
 
         PackRequestDto packRequest = new PackRequestDto(trucks, fullPath, packageAlgorithm, filePathToWrite);
 
-        List<Truck> packedTrucks = packagingManager.packParcels(packRequest);
+        List<Truck> packedTrucks = packagingManager.pack(packRequest);
 
         String response = resultFormatter.convertPackagingResultsToString(packedTrucks);
 
