@@ -1,4 +1,4 @@
-package ru.liga.console_parcels.model;
+package ru.liga.console_parcels.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class TruckPlacement {
     private Truck truck;
-    private Point position;
+    private ParcelPosition position;
 }

@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.liga.console_parcels.exception.FileNotFoundException;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.impl.DefaultTruckToJsonWriterService;
 
 import java.io.File;

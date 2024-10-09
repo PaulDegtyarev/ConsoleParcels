@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
 
 /**
  * Класс DTO для запроса на упаковку посылок.
@@ -23,7 +22,7 @@ public class PackRequestDto {
     @NotBlank
     private final String inputData;
     @NotNull
-    private final UserAlgorithmChoice algorithmChoice;
+    private final TruckPackageAlgorithm algorithmChoice;
     @NotBlank
     private final String filePathToWrite;
 }

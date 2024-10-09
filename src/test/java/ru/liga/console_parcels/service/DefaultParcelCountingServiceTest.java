@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.dto.ParcelCountDto;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.dto.TruckParcelCountDto;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.impl.DefaultParcelCountingService;
 
 import java.util.ArrayList;

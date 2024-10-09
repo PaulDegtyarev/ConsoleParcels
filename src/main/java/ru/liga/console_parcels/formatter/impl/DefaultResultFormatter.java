@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
 import ru.liga.console_parcels.formatter.ResultFormatter;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 
 import java.util.List;
 import java.util.Map;
@@ -74,7 +74,7 @@ public class DefaultResultFormatter implements ResultFormatter {
         }
 
         truckLayout.append("+")
-                .append("+".repeat(truck.getTruckWidth()))
+                .append("+".repeat(truck.getWidth()))
                 .append("+\n");
 
         return truckLayout.toString();

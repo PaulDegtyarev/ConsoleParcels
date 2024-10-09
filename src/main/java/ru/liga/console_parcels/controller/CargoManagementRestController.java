@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.console_parcels.dto.PackRequestDto;
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
+import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.service.FileDownloadService;
 import ru.liga.console_parcels.service.PackagingManager;
 import ru.liga.console_parcels.service.UnPackagingManager;
@@ -33,7 +33,7 @@ public class CargoManagementRestController {
     @PostMapping("/pack/file")
     public ResponseEntity<String> packWithFile(@RequestParam("trucks") String trucks,
                                                @RequestParam("file") MultipartFile file,
-                                               @RequestParam("algorithmChoice") UserAlgorithmChoice algorithmChoice,
+                                               @RequestParam("algorithmChoice") TruckPackageAlgorithm algorithmChoice,
                                                @RequestParam("filePathToWrite") String filePathToWrite) {
         log.info("Пользователь выбрал упаковку с файлом.");
 

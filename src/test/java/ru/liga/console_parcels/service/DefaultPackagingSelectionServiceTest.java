@@ -1,22 +1,16 @@
 package ru.liga.console_parcels.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.liga.console_parcels.config.AppConfig;
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
+import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.service.impl.DefaultPackagingSelectionService;
-import ru.liga.console_parcels.service.impl.OptimizedPackagingService;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -32,14 +26,14 @@ class DefaultPackagingSelectionServiceTest {
     PackagingSelectionService packagingSelectionService;
 
     @MockBean
-    Map<UserAlgorithmChoice, TruckPackageService> serviceMap;
+    Map<TruckPackageAlgorithm, TruckPackageService> serviceMap;
 
     @Test
     void selectPackagingService_withValidInput_shouldReturnValidOutput() {
-        UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.MAX_SPACE;
+        TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.MAX_SPACE;
         TruckPackageService mockService = mock(TruckPackageService.class);
 
-        when(serviceMap.get(any(UserAlgorithmChoice.class))).thenReturn(mockService);
+        when(serviceMap.get(any(TruckPackageAlgorithm.class))).thenReturn(mockService);
 
         TruckPackageService actualResponse = packagingSelectionService.selectPackagingService(algorithmChoice);
 

@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
 import ru.liga.console_parcels.exception.PackingException;
 import ru.liga.console_parcels.factory.TruckFactory;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.impl.BalancedLoadingService;
 
 import java.util.ArrayList;

@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.liga.console_parcels.dto.PackRequestDto;
 import ru.liga.console_parcels.dto.ParcelRequestDto;
 import ru.liga.console_parcels.dto.ParcelResponseDto;
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
+import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.service.PackagingManager;
 import ru.liga.console_parcels.service.ParcelService;
 import ru.liga.console_parcels.service.UnPackagingManager;
@@ -113,7 +113,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
 
             String trucks = parts[POSITION_OF_TRUCKS_IN_MESSAGE];
             String inputData = parts[POSITION_OF_INPUT_DATA_IN_MESSAGE];
-            UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
+            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
             String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
 
             PackRequestDto packRequestDto = new PackRequestDto(trucks, inputData, algorithmChoice, filePathToWrite);
@@ -166,7 +166,7 @@ public class CargoManagementBot extends TelegramLongPollingBot {
             }
 
             String trucks = parts[POSITION_OF_TRUCKS_IN_MESSAGE];
-            UserAlgorithmChoice algorithmChoice = UserAlgorithmChoice.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
+            TruckPackageAlgorithm algorithmChoice = TruckPackageAlgorithm.valueOf(parts[POSITION_OF_ALGORITHM_CHOICE_IN_MESSAGE]);
             String filePathToWrite = parts[POSITION_OF_OUTPUT_FILEPATH_IN_MESSAGE];
             String inputFilePath = file.getAbsolutePath();
 

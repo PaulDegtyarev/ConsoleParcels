@@ -3,6 +3,8 @@ package ru.liga.console_parcels.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.console_parcels.dto.ParcelForPackagingDto;
+import ru.liga.console_parcels.entity.ParcelPosition;
+import ru.liga.console_parcels.entity.Truck;
 
 import java.util.Optional;
 
@@ -21,12 +23,12 @@ public class TruckTest {
         ParcelForPackagingDto smallParcel = new ParcelForPackagingDto(1, 1, new char[][]{{'1'}});
         ParcelForPackagingDto mediumParcel = new ParcelForPackagingDto(2, 2, new char[][]{{'2', '2'}, {'2', '2'}});
 
-        Optional<Point> positionSmall = truck.findPosition(smallParcel);
+        Optional<ParcelPosition> positionSmall = truck.findPosition(smallParcel);
         assertThat(positionSmall.isPresent()).isTrue(); // Убедимся, что позиция найдена
         assertThat(positionSmall.get().getX()).isEqualTo(0);
         assertThat(positionSmall.get().getY()).isEqualTo(4);
 
-        Optional<Point> positionMedium = truck.findPosition(mediumParcel);
+        Optional<ParcelPosition> positionMedium = truck.findPosition(mediumParcel);
         assertThat(positionMedium.isPresent()).isTrue(); // Убедимся, что позиция найдена
         assertThat(positionMedium.get().getX()).isEqualTo(0);
         assertThat(positionMedium.get().getY()).isEqualTo(3);

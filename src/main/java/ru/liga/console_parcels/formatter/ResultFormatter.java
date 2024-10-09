@@ -1,7 +1,7 @@
 package ru.liga.console_parcels.formatter;
 
 import ru.liga.console_parcels.dto.UnpackedTruckDto;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 
 import java.util.List;
 

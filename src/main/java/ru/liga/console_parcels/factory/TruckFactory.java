@@ -1,6 +1,6 @@
 package ru.liga.console_parcels.factory;
 
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 
 import java.util.List;
 

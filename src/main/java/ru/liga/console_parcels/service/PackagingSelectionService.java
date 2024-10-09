@@ -1,6 +1,6 @@
 package ru.liga.console_parcels.service;
 
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
+import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 
 /**
  * Интерфейс для выбора сервиса упаковки посылок.
@@ -12,5 +12,5 @@ public interface PackagingSelectionService {
      * @param algorithmChoice Выбранный алгоритм упаковки.
      * @return Сервис упаковки, соответствующий выбранному алгоритму.
      */
-    TruckPackageService selectPackagingService(UserAlgorithmChoice algorithmChoice);
+    TruckPackageService selectPackagingService(TruckPackageAlgorithm algorithmChoice);
 }

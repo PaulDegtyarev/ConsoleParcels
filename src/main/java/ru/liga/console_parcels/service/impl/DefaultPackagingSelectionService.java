@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.liga.console_parcels.model.UserAlgorithmChoice;
+import ru.liga.console_parcels.dto.TruckPackageAlgorithm;
 import ru.liga.console_parcels.service.PackagingSelectionService;
 import ru.liga.console_parcels.service.TruckPackageService;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DefaultPackagingSelectionService implements PackagingSelectionService {
     @Autowired
-    private final Map<UserAlgorithmChoice, TruckPackageService> serviceMap;
+    private final Map<TruckPackageAlgorithm, TruckPackageService> serviceMap;
 
     /**
      * Выбирает сервис упаковки на основе выбранного алгоритма.
@@ -27,7 +27,7 @@ public class DefaultPackagingSelectionService implements PackagingSelectionServi
      * @return Сервис упаковки, соответствующий выбранному алгоритму.
      */
     @Override
-    public TruckPackageService selectPackagingService(UserAlgorithmChoice algorithmChoice) {
+    public TruckPackageService selectPackagingService(TruckPackageAlgorithm algorithmChoice) {
         log.debug("Начинается выбор сервис для упаковки по номеру алгоритма: {}", algorithmChoice);
 
         return serviceMap.get(algorithmChoice);

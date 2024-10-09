@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.liga.console_parcels.exception.FileNotFoundException;
 import ru.liga.console_parcels.exception.FileWriteException;
-import ru.liga.console_parcels.model.Truck;
+import ru.liga.console_parcels.entity.Truck;
 import ru.liga.console_parcels.service.TruckToJsonWriterService;
 
 import java.io.IOException;

@@ -1,9 +1,9 @@
-package ru.liga.console_parcels.model;
+package ru.liga.console_parcels.dto;
 
 /**
  * Перечисление для выбора алгоритма упаковки посылок.
  */
-public enum UserAlgorithmChoice {
+public enum TruckPackageAlgorithm {
     /**
      * Алгоритм, который максимально использует пространство грузовика.
      */
