@@ -14,6 +14,7 @@ public interface TruckPackageService {
      * Упаковывает посылки в грузовики.
      *
      * @param parcels Список посылок для упаковки
+     * @param trucks Строка с размерами грузовиков
      */
     List<Truck> packPackages(List<ParcelForPackagingDto> parcels, String trucks);
 }
