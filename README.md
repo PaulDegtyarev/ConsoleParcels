@@ -54,4 +54,4 @@
 
 2. **Запустите приложение с помощью Maven:**
    ```bash
-   mvn exec:java -Dexec.mainClass="ru.liga.console_parcels.ConsoleParcelsApplication"
+   mvn exec:java -Dexec.mainClass="ru.liga.cargomanagement.ConsoleParcelsApplication"
