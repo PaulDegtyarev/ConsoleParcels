@@ -18,7 +18,7 @@ public class DefaultUnTruckPackageServiceTest {
 
     @Test
     void unpackTruck_withValidInput_shouldReturnValidOutput() {
-        String truckFilePath = "src/test/resources/input/valid-input-trucks.json";
+        String truckFilePath = "src/test/resources/input/valid_input_trucks.json";
 
         List<UnpackedTruckDto> result = fileUnpackakingService.unpackTruck(truckFilePath);
 

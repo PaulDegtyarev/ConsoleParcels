@@ -23,7 +23,7 @@ public class DefaultPackageReaderTest {
 
     @Test
     void read_withCorrectInput_shouldReturnCorrectOutput() {
-        String filePath = "src/test/resources/input/valid-input-data-for-optimized-loading-service.txt";
+        String filePath = "src/test/resources/input/valid_input_data_for_optimized_loading_service.txt";
 
         List<ParcelForPackagingDto> parcels = defaultPackageReader.read(filePath);
 

@@ -41,7 +41,7 @@ public class RecordingServiceToJsonFileTest {
                 {'3', '3', '3'}
         });
 
-        File filePath = new File("src/test/resources/input/test-json-to-write.json");
+        File filePath = new File("src/test/resources/input/test_json_to_write.json");
 
         truckToJsonWriterService.write(List.of(truck), filePath.toString());
 
