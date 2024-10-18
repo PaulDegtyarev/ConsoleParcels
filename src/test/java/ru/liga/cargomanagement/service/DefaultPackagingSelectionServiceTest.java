@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.liga.cargomanagement.config.AppConfig;
-import ru.liga.cargomanagement.dto.TruckPackageAlgorithm;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 import ru.liga.cargomanagement.service.impl.DefaultPackagingSelectionService;
 
 import java.util.Map;

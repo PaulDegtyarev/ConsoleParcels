@@ -1,6 +1,6 @@
 package ru.liga.cargomanagement.service;
 
-import ru.liga.cargomanagement.dto.TruckPackageAlgorithm;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 
 /**
  * Интерфейс, который выбирает сервис для упаковки посылок.

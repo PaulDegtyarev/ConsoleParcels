@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.liga.cargomanagement.dto.TruckPackageAlgorithm;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 import ru.liga.cargomanagement.service.TruckPackageService;
 
 import java.util.HashMap;

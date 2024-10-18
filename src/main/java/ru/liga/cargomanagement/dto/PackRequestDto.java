@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 
 /**
  * Класс DTO для запроса на упаковку посылок.

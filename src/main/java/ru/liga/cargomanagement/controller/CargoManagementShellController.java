@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.liga.cargomanagement.dto.PackRequestDto;
-import ru.liga.cargomanagement.dto.TruckPackageAlgorithm;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 import ru.liga.cargomanagement.dto.UnpackedTruckDto;
 import ru.liga.cargomanagement.entity.Truck;
 import ru.liga.cargomanagement.formatter.ResultFormatter;

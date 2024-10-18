@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.cargomanagement.dto.PackRequestDto;
-import ru.liga.cargomanagement.dto.TruckPackageAlgorithm;
+import ru.liga.cargomanagement.dto.enums.TruckPackageAlgorithm;
 import ru.liga.cargomanagement.dto.UnpackedTruckDto;
 import ru.liga.cargomanagement.entity.Truck;
 import ru.liga.cargomanagement.formatter.ResultFormatter;

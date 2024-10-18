@@ -1,4 +1,4 @@
-package ru.liga.cargomanagement.dto;
+package ru.liga.cargomanagement.dto.enums;
 
 /**
  * Перечисление возможных алгоритмов для упаковки посылок.
